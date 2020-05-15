@@ -1,0 +1,7 @@
+flask
+flask-SQLAlchemy
+mysqlclient
+flask-whooshalchemy
+flask-security
+passlib
+flask-wtf
