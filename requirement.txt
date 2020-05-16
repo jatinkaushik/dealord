@@ -5,3 +5,5 @@ flask-whooshalchemy
 flask-security
 passlib
 flask-wtf
+flask_script
+flask_praetorian
