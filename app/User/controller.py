@@ -16,11 +16,10 @@ def check_token(username, password):
     db.session.add(user_token)
     db.session.commit()
 
-    return ret
+    return ret['access_token']
 
 def login(json_data):
-    check_username = User.query.filter_by(
-        username=json_data['login']).first()
+    check_username = User.query.filter_by(username=json_data['login']).first()
     check_email = User.query.filter_by(email=json_data['login']).first()
     check_phone = User.query.filter_by(phone=json_data['login']).first()
     # password = sha256_crypt.encrypt(request.json['password'])
