@@ -3,7 +3,7 @@ from flask_praetorian import Praetorian
 import json
 import datetime
 from app import app
-from app.User import User, Token
+from app.v1.user import User, Token
 from app import db
 
 guard = Praetorian(app)
@@ -44,12 +44,13 @@ def login(json_data):
 
 def register(json_data):
     try:
-        users_model = User(username=json_data['username'], email=json_data['email'],
+        users_model = User(username=json_data['username'],name=json_data['name'], email=json_data['email'],
                            password=sha256_crypt.encrypt(json_data['password']), phone=json_data['phone'])
         check_username = User.query.filter_by(
             username=json_data['username']).first()
         check_email = User.query.filter_by(email=json_data['email']).first()
         check_phone = User.query.filter_by(phone=json_data['phone']).first()
+    
 
         if not check_username:
             if not check_email:

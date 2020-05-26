@@ -1,4 +1,5 @@
 from app import db
+from app.v1.product import *
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -6,7 +7,9 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     phone = db.Column(db.String(20), unique=True)
     password = db.Column(db.String(1000))
-    token_s = db.relationship('Token', backref='user')
+    token_rel = db.relationship('Token', backref='user')
+    category_rel = db.relationship('Category', backref='user')
+    name=db.Column(db.String(50))
 
     @property
     def rolenames(self):
@@ -37,6 +40,7 @@ class Token(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tokens = db.Column(db.String(1000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_at = db.Column(db.DateTime)
 
 # class RegistrationForm(Form):
 #     username = TextField('Username', [validators.Length(min=4, max=20)])

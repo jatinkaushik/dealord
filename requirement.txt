@@ -9,3 +9,4 @@ flask_script
 flask_praetorian
 gunicorn
 flask-cors
+flask-migrate
