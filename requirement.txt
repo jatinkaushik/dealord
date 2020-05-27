@@ -10,3 +10,5 @@ flask_praetorian
 gunicorn
 flask-cors
 flask-migrate
+Werkzeug
+jwt

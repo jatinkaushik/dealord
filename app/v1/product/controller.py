@@ -23,8 +23,16 @@ def create_sub_category(json_data):
     except:
         return 'Something Went Wrong'  
 
-def fetch_category(json_data):
-    pass
+def fetch_category():
+    data = Category.query.all()
+    output = []
+    for i in data:
+        obj = {
+            "name": i.name
+        }
+        output.append(obj)
+    
+    return output
     # check_category = Category.query.filter_by(name=json_data['name']).first()  
 
     # if check_category:

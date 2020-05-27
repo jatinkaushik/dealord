@@ -1,60 +1,53 @@
-from passlib.hash import sha256_crypt
-from flask_praetorian import Praetorian
 import json
 import datetime
 from app import app
 from app.v1.user import User, Token
 from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
 
-guard = Praetorian(app)
-guard.init_app(app, User)
+
 
 def check_token(username, password):
-    user = guard.authenticate(username, password)
-    ret = {'access_token': guard.encode_jwt_token(user)}
-    user_token = Token(tokens=ret['access_token'], user=user)
-    db.session.add(user_token)
-    db.session.commit()
+    if check_password_hash(username.password, password):
+        token = jwt.encode({'id' : username.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, app.config['SECRET_KEY'])
+        return token.decode('UTF-8')
+    else:
+        return "password_is_incorrect"
 
-    return ret['access_token']
+def login(auth):
+    check_username = User.query.filter_by(username=auth.username).first()
+    check_email = User.query.filter_by(email=auth.username).first()
+    check_phone = User.query.filter_by(phone=auth.username).first()
+    password = auth.password
 
-def login(json_data):
-    check_username = User.query.filter_by(username=json_data['login']).first()
-    check_email = User.query.filter_by(email=json_data['login']).first()
-    check_phone = User.query.filter_by(phone=json_data['login']).first()
-    # password = sha256_crypt.encrypt(request.json['password'])
-    password = json_data['password']
-    login_token = {
-        "error": "AuthenticationError",
-        "message": "The username is incorrect",
-        "status_code": 401
-    }
     if check_username:
         username = check_username.username
-        login_token = check_token(username, password)
+        token = check_token(check_username, password)
     elif check_email:
         username = check_email.username
-        login_token = check_token(username, password)
+        token = check_token(check_email, password)
     elif check_phone:
         username = check_phone.username
-        login_token = check_token(username, password)
+        token = check_token(check_phone, password)
+    else:
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
     
-    return login_token
+    return json.dumps({'token' : token})
 
 
 def register(json_data):
     try:
-        users_model = User(username=json_data['username'],name=json_data['name'], email=json_data['email'],
-                           password=sha256_crypt.encrypt(json_data['password']), phone=json_data['phone'])
-        check_username = User.query.filter_by(
-            username=json_data['username']).first()
+        check_username = User.query.filter_by(username=json_data['username']).first()
         check_email = User.query.filter_by(email=json_data['email']).first()
         check_phone = User.query.filter_by(phone=json_data['phone']).first()
-    
 
         if not check_username:
             if not check_email:
                 if not check_phone:
+                    hashed_password = generate_password_hash(json_data['password'], method='sha256')
+                    users_model = User(username=json_data['username'],name=json_data['name'], email=json_data['email'],
+                            password=hashed_password, phone=json_data['phone'])
                     db.session.add(users_model)
                     db.session.commit()
                     return 'Done'
@@ -63,6 +56,6 @@ def register(json_data):
             else:
                 return 'email_exists'
         else:
-            return 'username_exists'
+            return 'username_exists'   
     except:
         return 'Something Went Wrong'

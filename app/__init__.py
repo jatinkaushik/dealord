@@ -5,6 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 # import NestedBlueprint
 
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flask:bhuvnesh@curesee.in/flask'
 app.config['SECRET_KEY'] = 'Dealord'
@@ -18,4 +19,5 @@ migrate = Migrate(app,db)
 
 from app.v1 import *
 # from app.User.route import blu_user
+# from .token_required import token_required
 app.register_blueprint(blu_v1)

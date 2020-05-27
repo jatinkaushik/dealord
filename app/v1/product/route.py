@@ -5,6 +5,31 @@ from app import app
 from flask_cors import CORS, cross_origin
 from app.NestedBlueprint import NestedBlueprint
 from app.v1 import blu_v1
+from functools import wraps
+import jwt
+# from app.v1.user import User
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+
+        if not token:
+            return jsonify({'message' : 'Token is missing!'}), 401
+
+        try: 
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            from app.v1.user import User as JK
+            current_user = JK.query.filter_by(id=data['id']).first()
+        except:
+            return jsonify({'message' : 'Token is invalid!'}), 401
+
+        return f(current_user, *args, **kwargs)
+
+    return decorated
 
 blu_product = NestedBlueprint(blu_v1, '/product')
 
@@ -29,9 +54,10 @@ def create_sub_category_route():
 #Fatch category
 @blu_product.route('/category', methods=["POST"])
 @cross_origin()
-def fetch_category_route():
+@token_required
+def fetch_category_route(current_user):
     json_data = request.json
-    status = fetch_category(json_data)
+    status = fetch_category()
     
     return json.dumps(status)
 
