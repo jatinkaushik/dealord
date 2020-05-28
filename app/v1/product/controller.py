@@ -2,29 +2,74 @@ import json
 from app import app, db
 from app.v1.product import Category, Sub_Category, Sub_Category_Feature, Features_Datatype, Products , Integer_Features, Date_Features, Boolean_Features, String_Features, Double_Features,Extra_Features,Varient
 # from app. import Category
+from app.v1.user.model import *
 
-#To make a New Category
-def create_category(json_data): 
+#-------------------- User Category Check ----------------------
+
+def check_current_user_category_id(current_user, cat_id):
+    temp = False 
+    for i in  current_user.category_rel:
+        if i.id == cat_id:
+            temp = True
+    return temp
+
+#--------------------- User SubCategory Check --------------------
+def check_current_user_subcategory_id(current_user, sub_cat_id):
+    sub_cat = Sub_Category.query.filter_by(id='sub_cat_id').first()
+    temp = False
+    if sub_cat:
+        temp = check_current_user_category_id(current_user, sub_cat.category_id)
+    return temp
+    
+
+
+#============================= Category =========================
+
+#------------------To make a New Category-----------------------
+
+def create_category(current_user, json_data): 
     try:
-        category_model = Category(name=json_data['name'], parent=json_data['parent'], user_id=json_data['user_id']) 
+        category_model = Category(name=json_data['name'], parent=json_data['parent'], user_id=current_user.id) 
         db.session.add(category_model)
         db.session.commit()
         return 'Done'
     except:
         return 'Something Went Wrong'
 
- #To make a New Sub_Category
-def create_sub_category(json_data):
-    try:
-        sub_category_model = Sub_Category(name=json_data['name'], category_id=json_data['category_id']) 
-        db.session.add(sub_category_model)
-        db.session.commit()
-        return 'Done'
-    except:
-        return 'Something Went Wrong'  
+#-------------------- Delete Category-------------------
 
-def fetch_category():
-    data = Category.query.all()
+def delete_category(current_user, json_data):
+    try:
+        if check_current_user_category_id(current_user, json_data['id']):
+            category_search = Category.query.filter_by(id=json_data['id']).first()
+            db.session.delete(category_search)
+            db.session.commit()
+            return 'Category Deleted'
+        else:
+            return json.dumps("category not belong to you")    
+    except:
+        return 'Something Went Wrong'
+
+#--------------------- Edit SubCategory Name ----------------------
+
+def edit_category(current_user, json_data):
+    try:
+        if check_current_user_category_id(current_user, json_data['id']):
+            category_search = Category.query.filter_by(id=json_data['id']).first()
+            category_search.name = json_data['name']
+            db.session.add(category_search)
+            db.session.commit()
+            return 'Category Edited'
+        else:
+            return json.dumps("category not belong to you")
+
+    except:
+        return 'Something Went Wrong'
+
+#----------------------- Fetch Category ------------------
+
+def fetch_category(current_user):
+    data = current_user.category_rel
     output = []
     for i in data:
         obj = {
@@ -38,17 +83,68 @@ def fetch_category():
     # if check_category:
     #     return "Done"
 
-def fetch_sub_category(json_data):
-    try:
-        check_sub_category = Sub_Category.query.filter_by(id = json_data['id']).first()
-        db.session.add(check_sub_category)
-        db.session.commit()
-        return json.dumps(check_sub_category)
+#==================== Sub Category ==============================
 
+#----------------To make a New Sub_Category---------------
+
+def create_sub_category(json_data):
+    try:
+        sub_category_model = Sub_Category(name=json_data['name'], category_id=json_data['category_id']) 
+        db.session.add(sub_category_model)
+        db.session.commit()
+        return 'Done'
+    except:
+        return 'Something Went Wrong'  
+
+#--------------------Fetch Sub Category-------------------
+
+def fetch_sub_category(current_user, json_data):
+    try:
+        if check_current_user_category_id(current_user, json_data['category_id']):
+            sub_categories = Sub_Category.query.filter_by(category_id = json_data['category_id']).first()
+            return json.dumps(sub_categories)
+        else:
+            return json.dumps("category not belong to you")
     except:
         return 'Something Went Wrong'     
 
-# To add features
+#--------------------Delete Sub Category-------------------
+
+def delete_sub_category(current_user, json_data):
+    try:
+        if check_current_user_category_id(current_user, json_data['category_id']):
+            subcategory_search = Sub_Category.query.filter_by(id=json_data['id']).first()
+            db.session.delete(subcategory_search)
+            db.session.commit()
+            return 'SubCategory Deleted'
+        else:
+            return json.dumps("sub category not belong to you")    
+    except:
+        return 'Something Went Wrong'
+
+
+#--------------------- Edit SubCategory Name ----------------------
+
+def edit_subcategory(current_user, json_data):
+    try:
+        if check_current_user_subcategory_id(current_user, json_data['id']):
+            subcategory_search = Sub_Category.query.filter_by(id=json_data['id']).first()
+            subcategory_search.name = json_data['name']
+            db.session.add(subcategory_search)
+            db.session.commit()
+            return 'SubCategory Edited'
+        else:
+            return json.dumps("category not belong to you")
+
+    except:
+        return 'Something Went Wrong'
+
+
+
+#===================== Sub Category Features====================
+
+#---------------------- To add features ----------------------
+
 def feature_func(json_data): 
     try:
         feature_model = Sub_Category_Feature(name=json_data['name'], features_datatype_id=json_data['feature_type'], sub_category_id=json_data['sub_category_id'], units=json_data['units']) 
@@ -58,23 +154,59 @@ def feature_func(json_data):
     except:
         return 'Something Went Wrong'
 
-# Features DataType
-def get_sub_category_features(json_data):
-    # try:
-    check_type = Sub_Category_Feature.query.filter_by(sub_category_id=json_data['sub_category_id'])
-    subcat_features = {
-        "features": []
-    }
-    for i in check_type:
-        obj = {
-            "name": i.name,
-            "type": i.features_datatype_id,
-            "units": i.units
-        }
-        subcat_features["features"].append(obj)
-    return json.dumps(subcat_features)
-    # except:
-    #     "something went wrong"
+#---------------- Delete Sub Category Feature -------------------
+
+def delete_sub_category_features(current_user, json_data):
+    try:
+        if check_current_user_subcategory_id(current_user, json_data['sub_category_id']):
+            sub_category_features = Sub_Category_Feature.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
+            db.session.delete(sub_category_features)
+            db.session.commit()
+            return 'Feature Delete'
+    except:
+        return 'Something Went Wrong'
+
+#---------------- Edit Sub Category Feature -------------------
+
+def edit_subcategory_features(current_user, json_data):
+    try:
+        if check_current_user_subcategory_id(current_user, json_data['id']):
+            subcategory_feature_search = Sub_Category_Feature.query.filter_by(id=json_data['id']).first()
+            subcategory_feature_search.name = json_data['name']
+            db.session.add(subcategory_feature_search)
+            db.session.commit()
+            return 'SubCategory Feature Edited'
+        else:
+            return json.dumps("category not belong to you")
+
+    except:
+        return 'Something Went Wrong'
+
+#-------------------- SubCategory Data Features ---------------------
+
+def fetch_sub_category_features(current_user, json_data):
+    try:
+        if check_current_user_subcategory_id(current_user, json_data['sub_category_id']):
+            check_type = Sub_Category_Feature.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
+            subcat_features = {
+                "features": []
+            }
+            for i in check_type:
+                obj = {
+                    "id" : i.id,
+                    "name": i.name,
+                    "type": i.features_datatype_id,
+                    "units": i.units
+                }
+                subcat_features["features"].append(obj)
+            return json.dumps(subcat_features)
+        else: 
+            return json.dumps("Subcategory not belong to you")
+        
+    except:
+        "something went wrong"
+
+
 
 def feature_datatypefunc(json_data):
     try:
@@ -84,6 +216,65 @@ def feature_datatypefunc(json_data):
         return "Done"
     except:
         "something went wrong"
+
+#-------------------- Integer Datatype Features ---------------
+
+def add_integer_feature(json_data):
+    try:
+        add_integer = Integer_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        db.session.add(add_integer)
+        db.session.commit()
+        return add_integer
+    except: 
+        "something went wrong"
+
+#-------------------- String Datatype Features ---------------
+
+def add_string_feature(json_data):
+    try:
+        add_string = String_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        db.session.add(add_string)
+        db.session.commit()
+        return add_string
+    except: 
+        "something went wrong"
+
+#-------------------- Double Datatype Features ---------------
+
+def add_double_feature(json_data):
+    try:
+        add_double = Double_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        db.session.add(add_double)
+        db.session.commit()
+        return add_double
+    except:
+        "something went wrong"
+
+#-------------------- Boolean Datatype Features ---------------
+
+def add_boolean_feature(json_data):
+    try:
+        add_boolean = Boolean_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        db.session.add(add_boolean)
+        db.session.commit()
+        return add_boolean
+    except:
+        "something went wrong"        
+
+#-------------------- Datetime Datatype Features ---------------
+
+def add_date_features(json_data):
+    try:
+        add_date = Date_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        db.session.add(add_date)
+        db.session.commit()
+        return add_date
+    except:
+        "something went wrong"
+
+#===================== Product =====================================
+
+#------------------ Add Product ----------------------------
 
 def add_product(json_data):
     for i in json_data['product']:
@@ -95,52 +286,7 @@ def add_product(json_data):
         except:
             "something went wrong"
         
-    
-
-def add_integer_feature(json_data):
-    try:
-        add_integer = Integer_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
-        db.session.add(add_integer)
-        db.session.commit()
-        return add_integer
-    except: 
-        "something went wrong"
-
-def add_string_feature(json_data):
-    try:
-        add_string = String_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
-        db.session.add(add_string)
-        db.session.commit()
-        return add_string
-    except: 
-        "something went wrong"
-
-def add_double_feature(json_data):
-    try:
-        add_double = Double_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
-        db.session.add(add_double)
-        db.session.commit()
-        return add_double
-    except:
-        "something went wrong"
-
-def add_boolean_feature(json_data):
-    try:
-        add_boolean = Boolean_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
-        db.session.add(add_boolean)
-        db.session.commit()
-        return add_boolean
-    except:
-        "something went wrong"        
-
-def add_date_features(json_data):
-    try:
-        add_date = Date_Features(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
-        db.session.add(add_date)
-        db.session.commit()
-        return add_date
-    except:
-        "something went wrong"
+#-------------------Product Features ------------------------
 
 def add_product_data(json_data):
     try:
@@ -173,6 +319,7 @@ def add_product_data(json_data):
     except:
         "something went wrong"    
 
+#--------------------Extra Features For Product -----------------
 
 def extra_features(json_data):
     try:
@@ -183,6 +330,7 @@ def extra_features(json_data):
     except:
         "something went wrong"    
 
+#--------------------- To Add Varient ----------------------------
 def add_varient(json_data):
     try:
         add_varient_data = Varient(sub_category_feature_id=json_data['sub_category_feature_id'], product_id = json_data['product_id'])
