@@ -1,5 +1,5 @@
-from flask import render_template, flash, request, url_for, redirect, session, jsonify
-from .controller import login, register
+from flask import render_template, flash, request, url_for, redirect, session, jsonify, make_response
+from .controller import login, register, user_info
 import json
 from app import app
 import datetime
@@ -10,6 +10,7 @@ from .model import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 import jwt
+from app.v1.product.route import token_required
 
 blu_user = NestedBlueprint(blu_v1, '/user')
 
@@ -57,3 +58,11 @@ def login_page():
 
     login_token = login(auth)
     return login_token
+
+@blu_user.route('/user', methods=["GET"])
+@cross_origin()
+@token_required
+def user_data(current_user):
+    user = user_info(current_user)
+
+    return json.dumps(user)

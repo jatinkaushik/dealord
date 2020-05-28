@@ -5,12 +5,13 @@ from app.v1.user import User, Token
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
+from flask import make_response
 
 
 
-def check_token(username, password):
-    if check_password_hash(username.password, password):
-        token = jwt.encode({'id' : username.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, app.config['SECRET_KEY'])
+def check_token(user, password):
+    if check_password_hash(user.password, password):
+        token = jwt.encode({'id' : user.id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=300)}, app.config['SECRET_KEY'])
         return token.decode('UTF-8')
     else:
         return "password_is_incorrect"
@@ -36,6 +37,7 @@ def login(auth):
     return json.dumps({'token' : token})
 
 
+
 def register(json_data):
     try:
         check_username = User.query.filter_by(username=json_data['username']).first()
@@ -50,7 +52,8 @@ def register(json_data):
                             password=hashed_password, phone=json_data['phone'])
                     db.session.add(users_model)
                     db.session.commit()
-                    return 'Done'
+                    token = check_token(users_model, json_data['password'])
+                    return {'token' : token}
                 else:
                     return 'phone_exists'
             else:
@@ -59,3 +62,10 @@ def register(json_data):
             return 'username_exists'   
     except:
         return 'Something Went Wrong'
+
+def user_info(current_user):
+    user = {}
+    user["id"] = current_user.id
+    user["name"] = current_user.name
+    user["email"] = current_user.email
+    return user
