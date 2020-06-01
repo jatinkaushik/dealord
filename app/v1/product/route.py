@@ -1,4 +1,4 @@
-from flask import render_template, flash, request, url_for, redirect, session, jsonify
+from flask import render_template, flash, request, url_for, redirect, session, jsonify , make_response
 from app.v1.product.controller import *
 import json
 from app import app
@@ -57,6 +57,11 @@ def create_category_route(current_user):
 @token_required
 def fetch_category_route(current_user):
     status = fetch_category(current_user)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "category_not_found":
+        return make_response('Category not found', 204)
     
     return json.dumps(status)
 
@@ -67,23 +72,34 @@ def fetch_category_route(current_user):
 def delete_category_route(current_user):
     json_data = request.json
     status = delete_category(current_user,json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "category_not_found":
+        return make_response('Category not found', 204)
 
     return json.dumps(status)
 
-#--------------------- Edit Category Name ----------------------
+#--------------------- Edit Category Name ---------------------
+
 @blu_product.route('/category', methods = ["PUT"])
 @cross_origin()
 @token_required
 def edit_category_route(current_user):
     json_data = request.json
     status = edit_category(current_user, json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "category_not_found":
+        return make_response('Category not found', 204)
 
     return json.dumps(status)
 
 
 #===============================Sub category=======================
 
-#----------------------create New Sub category---------------
+#----------------------create New Sub category-----------------
 
 @blu_product.route('/subcategory', methods=["POST"])
 @cross_origin()
@@ -95,7 +111,7 @@ def create_sub_category_route(current_user):
     return json.dumps(create_status)
 
 
-#---------------------Fetch Sub category------------------
+#---------------------Fetch Sub category-----------------------
 
 @blu_product.route('/subcategory', methods=["GET"])
 @cross_origin()
@@ -103,10 +119,15 @@ def create_sub_category_route(current_user):
 def fetch_sub_category_route(current_user):
     json_data = request.json
     status = fetch_sub_category(current_user,json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "subcategory_not_found":
+        return make_response('Subcategory not found', 204)
     
     return json.dumps(status)
 
-#------------------------Delete subcategory----------------------   
+#------------------------Delete subcategory--------------------   
 
 @blu_product.route('/subcategory', methods=["DELETE"])
 @cross_origin()
@@ -114,10 +135,15 @@ def fetch_sub_category_route(current_user):
 def delete_subcategory_route(current_user):
     json_data = request.json
     status = delete_sub_category(current_user,json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "subcategory_not_found":
+        return make_response('Subcategory not found', 204)
     
     return json.dumps(status)
 
-#--------------------- Edit SubCategory Name ----------------------
+#--------------------- Edit SubCategory Name ------------------
 
 @blu_product.route('/subcategory', methods = ["PUT"])
 @cross_origin()
@@ -125,6 +151,11 @@ def delete_subcategory_route(current_user):
 def edit_subcategory_route(current_user):
     json_data = request.json
     status = edit_subcategory(current_user, json_data)
+    if status == "user_check_fail":
+       return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+    
+    if status == "subcategory_not_found":
+        return make_response('Subcategory not found', 204)
 
     return json.dumps(status)
 
@@ -143,7 +174,7 @@ def add_features():
 
     return json.dumps(status)  
 
-#-------------------To fetch SubCategory features-------------
+#-------------------To fetch SubCategory features--------------
 
 @blu_product.route('/subcategoryfeatures', methods=["GET"])
 @cross_origin()
@@ -151,10 +182,15 @@ def add_features():
 def fetch_features(current_user):
     json_data = request.json
     status = fetch_sub_category_features(current_user,json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "subcategory_feature_not_found":
+        return make_response('Subcategory Fearture not found', 204)
 
     return status
 
-#---------------------Delete subcategory Features----------------------   
+#---------------------Delete subcategory Features--------------   
 
 @blu_product.route('/subcategoryfeatures', methods=["DELETE"])
 @cross_origin()
@@ -162,10 +198,14 @@ def fetch_features(current_user):
 def delete_subcategory_features_route(current_user, json_data):
     json_data = request.json
     status = delete_sub_category_features(current_user, json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
+    if status == "subcategory_feature_not_found":
+        return make_response('Subcategory Fearture not found', 204)
     return status
 
-#-------------------Edit subcategory Features-------------------------
+#-------------------Edit subcategory Features------------------
 
 @blu_product.route('/subcategoryfeatures', methods = ["PUT"])
 @cross_origin()
@@ -173,10 +213,14 @@ def delete_subcategory_features_route(current_user, json_data):
 def edit_subcategory_featuresroute(current_user):
     json_data = request.json
     status = edit_subcategory_features(current_user, json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
 
+    if status == "subcategory_feature_not_found":
+        return make_response('Subcategory Fearture not found', 204)
     return json.dumps(status)
 
-#-------------- To make Type of Datatype Features-----------
+#-------------- To make Type of Datatype Features--------------
 
 @blu_product.route('/featuredatatype', methods=["POST"])
 @cross_origin()
@@ -189,9 +233,9 @@ def feature_datatyperoute():
 
 #======================= Product =================================
 
-#-------------------- Add Product ----------------------------
+#-------------------- Add Product -----------------------------
 
-@blu_product.route('/addproductdata',methods=["POST"])
+@blu_product.route('/productdata',methods=["POST"])
 @cross_origin()
 @token_required
 def addproductdataroute():
@@ -200,7 +244,22 @@ def addproductdataroute():
 
     return status
 
-#------------------- TO add extra Fearture -------------------
+#------------------ Product fetch -----------------------------
+@blu_product.route('/productdata',methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_product():
+    json_data =request.json
+    status = add_product_data(json_data)
+    if status == "user_check_fail":
+        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+
+    if status == "product_not_found":
+        return make_response('Product not found', 204)
+
+    return status
+
+#------------------- TO add extra Fearture --------------------
 
 @blu_product.route('/addextrafeature', methods=["POST"])
 @cross_origin()
@@ -211,7 +270,7 @@ def addextrafeature_route():
 
     return status
 
-#--------------------- To add Varient ---------------------
+#--------------------- To add Varient -------------------------
 
 @blu_product.route('/addvarient', methods=["POST"])
 @cross_origin()

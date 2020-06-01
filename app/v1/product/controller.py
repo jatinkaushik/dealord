@@ -42,11 +42,13 @@ def delete_category(current_user, json_data):
     try:
         if check_current_user_category_id(current_user, json_data['id']):
             category_search = Category.query.filter_by(id=json_data['id']).first()
+            if not category_search:
+                return "category_not_found"
             db.session.delete(category_search)
             db.session.commit()
             return 'Category Deleted'
         else:
-            return json.dumps("category not belong to you")    
+            return "user_check_fail"    
     except:
         return 'Something Went Wrong'
 
@@ -56,12 +58,14 @@ def edit_category(current_user, json_data):
     try:
         if check_current_user_category_id(current_user, json_data['id']):
             category_search = Category.query.filter_by(id=json_data['id']).first()
+            if not category_search:
+                return "category_not_found"
             category_search.name = json_data['name']
             db.session.add(category_search)
             db.session.commit()
             return 'Category Edited'
         else:
-            return json.dumps("category not belong to you")
+            return "user_check_fail"
 
     except:
         return 'Something Went Wrong'
@@ -102,9 +106,11 @@ def fetch_sub_category(current_user, json_data):
     try:
         if check_current_user_category_id(current_user, json_data['category_id']):
             sub_categories = Sub_Category.query.filter_by(category_id = json_data['category_id']).first()
+            if not sub_categories:
+                return "subcategory_not_found"
             return json.dumps(sub_categories)
         else:
-            return json.dumps("category not belong to you")
+            return "user_check_fail"
     except:
         return 'Something Went Wrong'     
 
@@ -114,11 +120,14 @@ def delete_sub_category(current_user, json_data):
     try:
         if check_current_user_category_id(current_user, json_data['category_id']):
             subcategory_search = Sub_Category.query.filter_by(id=json_data['id']).first()
+            if not subcategory_search:
+                return "subcategory_not_found"
             db.session.delete(subcategory_search)
             db.session.commit()
+
             return 'SubCategory Deleted'
         else:
-            return json.dumps("sub category not belong to you")    
+            return "user_check_fail"    
     except:
         return 'Something Went Wrong'
 
@@ -129,12 +138,14 @@ def edit_subcategory(current_user, json_data):
     try:
         if check_current_user_subcategory_id(current_user, json_data['id']):
             subcategory_search = Sub_Category.query.filter_by(id=json_data['id']).first()
+            if not subcategory_search:
+                return "subcategory_not_found"
             subcategory_search.name = json_data['name']
             db.session.add(subcategory_search)
             db.session.commit()
             return 'SubCategory Edited'
         else:
-            return json.dumps("category not belong to you")
+            return "user_check_fail"
 
     except:
         return 'Something Went Wrong'
@@ -160,9 +171,13 @@ def delete_sub_category_features(current_user, json_data):
     try:
         if check_current_user_subcategory_id(current_user, json_data['sub_category_id']):
             sub_category_features = Sub_Category_Feature.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
+            if not subcategory_feature_search:
+                return "subcategory_feature_not_found"
             db.session.delete(sub_category_features)
             db.session.commit()
             return 'Feature Delete'
+        else:
+            return "user_check_fail"
     except:
         return 'Something Went Wrong'
 
@@ -172,12 +187,14 @@ def edit_subcategory_features(current_user, json_data):
     try:
         if check_current_user_subcategory_id(current_user, json_data['id']):
             subcategory_feature_search = Sub_Category_Feature.query.filter_by(id=json_data['id']).first()
+            if not subcategory_feature_search:
+                return "subcategory_feature_not_found"
             subcategory_feature_search.name = json_data['name']
             db.session.add(subcategory_feature_search)
             db.session.commit()
             return 'SubCategory Feature Edited'
         else:
-            return json.dumps("category not belong to you")
+            return "user_check_fail"
 
     except:
         return 'Something Went Wrong'
@@ -201,12 +218,12 @@ def fetch_sub_category_features(current_user, json_data):
                 subcat_features["features"].append(obj)
             return json.dumps(subcat_features)
         else: 
-            return json.dumps("Subcategory not belong to you")
+            return "user_check_fail"
         
     except:
         "something went wrong"
 
-
+#----------------- Add Datatype ---------------------------- 
 
 def feature_datatypefunc(json_data):
     try:
@@ -319,6 +336,23 @@ def add_product_data(json_data):
     except:
         "something went wrong"    
 
+#-----------------------Fetch Product -------------------------
+
+def fetch_product(current_user,json_data):
+    try:
+        if check_current_user_subcategory_id(current_user, json_data['sub_category_id']):   
+            fetch_product_obj = Products.query.filter_by(id=json_data['product_id']).first()
+
+            if not fetch_product_obj:
+                return "product_not_found"
+
+            return "to_decide" 
+        else:
+            return "user_check_fail"
+    except:
+        "something went wrong"
+
+
 #--------------------Extra Features For Product -----------------
 
 def extra_features(json_data):
@@ -331,6 +365,7 @@ def extra_features(json_data):
         "something went wrong"    
 
 #--------------------- To Add Varient ----------------------------
+
 def add_varient(json_data):
     try:
         add_varient_data = Varient(sub_category_feature_id=json_data['sub_category_feature_id'], product_id = json_data['product_id'])
