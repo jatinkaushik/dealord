@@ -20,7 +20,6 @@ def check_current_user_subcategory_id(current_user, sub_cat_id):
     if sub_cat:
         temp = check_current_user_category_id(current_user, sub_cat.category_id)
     return temp
-    
 
 
 #============================= Category =========================
@@ -77,6 +76,7 @@ def fetch_category(current_user):
     output = []
     for i in data:
         obj = {
+            "id": i.id,
             "name": i.name
         }
         output.append(obj)
