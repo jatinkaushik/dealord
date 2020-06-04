@@ -1,5 +1,6 @@
 from app import db
 from app.v1.product import *
+from app.v1.global_product import *
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,6 +11,8 @@ class User(db.Model):
     token_rel = db.relationship('Token', backref='user')
     category_rel = db.relationship('Category', backref='user')
     name=db.Column(db.String(50))
+    category_global_rel = db.relationship('Category_Global', backref='user')
+
 
     @property
     def rolenames(self):

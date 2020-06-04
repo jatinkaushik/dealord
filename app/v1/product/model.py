@@ -6,39 +6,41 @@ class Category(db.Model):
     name = db.Column(db.String(40))
     parent = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    sub_category_rel = db.relationship('Sub_Category', backref='category')
+    # sub_category_rel = db.relationship('Sub_Category', backref='category')
+    sub_category_features_rel = db.relationship('Category_Feature', backref='category')
+    products_rel = db.relationship('Products', backref='category')
 
-class Sub_Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40))
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-    sub_category_features_rel = db.relationship('Sub_Category_Feature', backref='sub__category')
-    products_rel = db.relationship('Products', backref='sub__category')
+# class Sub_Category(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(40))
+#     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+#     sub_category_features_rel = db.relationship('Sub_Category_Feature', backref='sub__category')
+#     products_rel = db.relationship('Products', backref='sub__category')
 
 class Features_Datatype(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
-    sub_category_features_rel = db.relationship('Sub_Category_Feature', backref='features__datatype')
+    category_features_rel = db.relationship('Category_Feature', backref='features__datatype')
     
 
-class Sub_Category_Feature(db.Model):
+class Category_Feature(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(40))
-    sub_category_id = db.Column(db.Integer, db.ForeignKey('sub__category.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     features_datatype_id = db.Column(db.Integer, db.ForeignKey('features__datatype.id'))
-    units = db.Column(db.Integer, nullable=True)
-    string_features_rel = db.relationship('String_Features', backref='sub__category__feature')
-    integer_features_rel = db.relationship('Integer_Features', backref='sub__category__feature')
-    double_features_rel = db.relationship('Double_Features', backref='sub__category__feature')
-    datetime_features_rel = db.relationship('Date_Features', backref='sub__category__feature')
-    boolean_features_rel = db.relationship('Boolean_Features', backref='sub__category__feature')
-    varient_rel = db.relationship('Varient', backref='sub__category__feature')
+    unit = db.Column(db.Integer, nullable=True)
+    string_features_rel = db.relationship('String_Features', backref='category__feature')
+    integer_features_rel = db.relationship('Integer_Features', backref='category__feature')
+    double_features_rel = db.relationship('Double_Features', backref='category__feature')
+    datetime_features_rel = db.relationship('Date_Features', backref='category__feature')
+    boolean_features_rel = db.relationship('Boolean_Features', backref='category__feature')
+    varient_rel = db.relationship('Varient', backref='category__feature')
 
 
 class Products(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name =db.Column(db.String(100))
-    sub_category_id = db.Column(db.Integer, db.ForeignKey('sub__category.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     string_features_rel = db.relationship('String_Features', backref='products')
     integer_features_rel = db.relationship('Integer_Features', backref='products')
     double_features_rel = db.relationship('Double_Features', backref='products')
@@ -50,32 +52,32 @@ class Products(db.Model):
 class String_Features(db.Model):
     id =db.Column(db.Integer,primary_key=True)
     feature_value = db.Column(db.String(1000))
-    feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     
 class Integer_Features(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     feature_value = db.Column(db.Integer)
-    feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 class Double_Features(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     feature_value = db.Column(db.Float)
-    feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 
 class Date_Features(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     feature_value = db.Column(db.DateTime)
-    feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 class Boolean_Features(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     feature_value = db.Column(db.Boolean)
-    feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 class Extra_Features(db.Model):
@@ -87,5 +89,5 @@ class Extra_Features(db.Model):
 
 class Varient(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    sub_category_feature_id = db.Column(db.Integer, db.ForeignKey('sub__category__feature.id'))
+    category_feature_id = db.Column(db.Integer, db.ForeignKey('category__feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
