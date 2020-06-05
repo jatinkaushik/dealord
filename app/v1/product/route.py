@@ -58,7 +58,7 @@ def create_category_route(current_user):
 def fetch_category_route(current_user):
     status = fetch_category(current_user)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -73,7 +73,7 @@ def delete_category_route(current_user):
     json_data = request.json
     status = delete_category(current_user,json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -89,7 +89,7 @@ def edit_category_route(current_user):
     json_data = request.json
     status = edit_category(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -183,7 +183,7 @@ def fetch_features(current_user):
     json_data = request.json
     status = fetch_category_features(current_user,json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -199,7 +199,7 @@ def delete_category_features_route(current_user, json_data):
     json_data = request.json
     status = delete_category_features(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -214,7 +214,7 @@ def edit_category_featuresroute(current_user):
     json_data = request.json
     status = edit_category_features(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -252,7 +252,7 @@ def fetch_product():
     json_data =request.json
     status = add_product_data(json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "product_not_found":
         return make_response('Product not found', 204)

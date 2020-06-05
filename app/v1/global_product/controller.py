@@ -8,7 +8,7 @@ from app.v1.user.model import *
 
 def check_current_user_category_id_global(current_user, cat_id):
     temp = False 
-    for i in  current_user.category_rel:
+    for i in  current_user.category_global_rel:
         if i.id == cat_id:
             temp = True
     return temp
@@ -208,7 +208,7 @@ def edit_category_features_global(current_user, json_data):
     except:
         return 'Something Went Wrong'
 
-#-------------------- SubCategory Data Features ---------------------
+#-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(current_user, json_data):
     try:
@@ -329,13 +329,13 @@ def add_product_data_global(json_data):
             if i['type'] == 2:
                 obj = Integer_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
 
-            if i['type'] == 3:
+            if i['type'] == 4:
                 obj = Date_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
 
             if i['type'] == 5:
                 obj = Boolean_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)   
 
-            if i['type'] == 6:
+            if i['type'] == 3:
                 obj = Double_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
                 
             db.session.add(obj)

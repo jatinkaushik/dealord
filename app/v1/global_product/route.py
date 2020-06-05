@@ -33,7 +33,7 @@ def token_required(f):
 
     return decorated
 
-blu_product = NestedBlueprint(blu_v1, '/product')
+blu_product = NestedBlueprint(blu_v1, '/globalproduct')
 
 
 
@@ -58,7 +58,7 @@ def create_category_route_global(current_user):
 def fetch_category_route_global(current_user):
     status = fetch_category_global(current_user)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -73,7 +73,7 @@ def delete_category_route_global(current_user):
     json_data = request.json
     status = delete_category_global(current_user,json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -89,7 +89,7 @@ def edit_category_route_global(current_user):
     json_data = request.json
     status = edit_category_global(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -183,7 +183,7 @@ def fetch_features_global(current_user):
     json_data = request.json
     status = fetch_category_features_global(current_user,json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -209,7 +209,7 @@ def delete_category_features_route_global(current_user, json_data):
     json_data = request.json
     status = delete_category_features_global(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -220,11 +220,11 @@ def delete_category_features_route_global(current_user, json_data):
 @blu_product.route('/globalcategoryfeatures', methods = ["PUT"])
 @cross_origin()
 @token_required
-def edit_category_featuresroute_global(current_user):
+def edit_category_featuresroute_global(current_user, json_data):
     json_data = request.json
     status = edit_category_features_global(current_user, json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -235,7 +235,7 @@ def edit_category_featuresroute_global(current_user):
 @blu_product.route('/globalfeaturedatatype', methods=["POST"])
 @cross_origin()
 @token_required
-def feature_datatyperoute_global():
+def feature_datatyperoute_global(json_data):
     json_data = request.json
     status = feature_datatypefunc_global(json_data)
 
@@ -262,7 +262,7 @@ def fetch_product_global():
     json_data =request.json
     status = add_product_data_global(json_data)
     if status == "user_check_fail":
-        return make_response('Could not verify', 403, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('User Check fail', 403)
 
     if status == "product_not_found":
         return make_response('Product not found', 204)
