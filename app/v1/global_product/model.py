@@ -7,7 +7,7 @@ class Category_Global(db.Model):
     parent = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # sub_category_rel = db.relationship('Sub_Category', backref='category')
-    sub_category_features_rel = db.relationship('Category_Feature_Global', backref='category__global')
+    category_features_rel = db.relationship('Category_Feature_Global', backref='category__global')
     products_rel = db.relationship('Products_Global', backref='category__global')
 
 # class Sub_Category(db.Model):

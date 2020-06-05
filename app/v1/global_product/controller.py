@@ -158,7 +158,7 @@ def fetch_category_global(current_user):
 
 def feature_func_global(json_data): 
     try:
-        feature_model = Category_Feature_Global(name=json_data['name'], features_datatype_id=json_data['feature_type'], category_id=json_data['category_id'], units=json_data['units'], features_groups_id=json_data['group_id']) 
+        feature_model = Category_Feature_Global(name=json_data['name'], features_datatype_id=json_data['features_datatype_id'], category_id=json_data['category_id'], unit=json_data['units'], features_groups_id=json_data['features_groups_id']) 
         db.session.add(feature_model)
         db.session.commit()
         return 'Done'
@@ -178,7 +178,7 @@ def features_groups_global(json_data):
 
 def delete_category_features_global(current_user, json_data):
     try:
-        if check_current_user_category_id_global(current_user, json_data['sub_category_id']):
+        if check_current_user_category_id_global(current_user, json_data['id']):
             category_feature_search = Category_Feature_Global.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
             if not category_feature_search:
                 return "category_feature_not_found"
@@ -190,7 +190,7 @@ def delete_category_features_global(current_user, json_data):
     except:
         return 'Something Went Wrong'
 
-#---------------- Edit Sub Category Feature -------------------
+#---------------- Edit Category Feature -------------------
 
 def edit_category_features_global(current_user, json_data):
     try:
@@ -211,9 +211,9 @@ def edit_category_features_global(current_user, json_data):
 #-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(current_user, json_data):
-    try:
-        if check_current_user_category_id_global(current_user, json_data['sub_category_id']):
-            check_type = Category_Feature_Global.query.filter_by(category_id=json_data['category_id']).first()
+    # try:
+        if check_current_user_category_id_global(current_user, json_data['category_id']):
+            check_type = Category_Feature_Global.query.filter_by(category_id=json_data['category_id'])
             cat_features = {
                 "features": []
             }
@@ -222,15 +222,15 @@ def fetch_category_features_global(current_user, json_data):
                     "id" : i.id,
                     "name": i.name,
                     "type": i.features_datatype_id,
-                    "units": i.units
+                    "units": i.unit
                 }
                 cat_features["features"].append(obj)
             return json.dumps(cat_features)
         else: 
             return "user_check_fail"
         
-    except:
-        "something went wrong"
+    # except:
+    #    return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 
@@ -241,7 +241,7 @@ def feature_datatypefunc_global(json_data):
         db.session.commit()
         return "Done"
     except:
-        "something went wrong"
+        return 'Something Went Wrong'
 
 #-------------------- Integer Datatype Features ---------------
 
@@ -252,7 +252,7 @@ def add_integer_feature_global(json_data):
         db.session.commit()
         return add_integer
     except: 
-        "something went wrong"
+        return 'Something Went Wrong'
 
 #-------------------- String Datatype Features ---------------
 
@@ -263,8 +263,7 @@ def add_string_feature_global(json_data):
         db.session.commit()
         return add_string
     except: 
-        "something went wrong"
-
+        return 'Something Went Wrong'
 #-------------------- Double Datatype Features ---------------
 
 def add_double_feature_global(json_data):
@@ -274,7 +273,7 @@ def add_double_feature_global(json_data):
         db.session.commit()
         return add_double
     except:
-        "something went wrong"
+        return 'Something Went Wrong'
 
 #-------------------- Boolean Datatype Features ---------------
 
@@ -285,7 +284,7 @@ def add_boolean_feature_global(json_data):
         db.session.commit()
         return add_boolean
     except:
-        "something went wrong"        
+        return 'Something Went Wrong'        
 
 #-------------------- Datetime Datatype Features ---------------
 
@@ -296,7 +295,7 @@ def add_date_features_global(json_data):
         db.session.commit()
         return add_date
     except:
-        "something went wrong"
+        return 'Something Went Wrong'
 
 #===================== Product =====================================
 
@@ -310,18 +309,29 @@ def add_product_global(json_data):
             db.session.commit()
             return addproduct.id
         except:
-            "something went wrong"
+            return 'Something Went Wrong'
         
-#-------------------Product Features ------------------------
+#------------------- Add Product ------------------------
 
 def add_product_data_global(json_data):
     try:
-        temp = json_data['product']
-        addproduct = Products_Global(name = temp['name'],category_id = temp['category_id'])
+        # temp = json_data['product']
+        addproduct = Products_Global(name = json_data['name'],category_id = json_data['category_id'])
         db.session.add(addproduct)
         db.session.commit()
         product_id = addproduct.id
+    
+        # return "Done"
+        return json.dumps(product_id)
+        # return json.dumps(temp)
+    except:
+        return 'Something Went Wrong'    
 
+
+#-----------------------Product Features-----------------------
+def product_features(json_data):
+    # try:
+        product_id = json_data["product_id"]
         for i in json_data['features']:
             if i['type'] == 1:
                 obj = String_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
@@ -341,9 +351,8 @@ def add_product_data_global(json_data):
             db.session.add(obj)
             db.session.commit()
         return json.dumps(product_id)
-        # return json.dumps(temp)
-    except:
-        "something went wrong"    
+    # except:
+    #     return 'Something Went Wrong'   
 
 #-----------------------Fetch Product -------------------------
 
@@ -359,7 +368,7 @@ def fetch_product_global(current_user,json_data):
         else:
             return "user_check_fail"
     except:
-        "something went wrong"
+        return 'Something Went Wrong'
 
 
 #--------------------Extra Features For Product -----------------
@@ -371,7 +380,7 @@ def extra_features_global(json_data):
         db.session.commit()
         return "done"
     except:
-        "something went wrong"    
+        return 'Something Went Wrong'
 
 #--------------------- To Add Varient ----------------------------
 
@@ -382,4 +391,4 @@ def add_varient_global(json_data):
         db.session.commit()
         return "done"
     except:
-        "something went wrong" 
+        return 'Something Went Wrong'

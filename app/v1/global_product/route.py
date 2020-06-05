@@ -44,7 +44,7 @@ blu_product = NestedBlueprint(blu_v1, '/globalproduct')
 @blu_product.route('/category', methods=["POST"])
 @cross_origin()
 @token_required
-def create_category_route_global(current_user):
+def create_category_route_global(current_usera):
     json_data = request.json
     create_status = create_category_global(current_user, json_data)
     
@@ -168,7 +168,7 @@ def edit_category_route_global(current_user):
 @blu_product.route('/categoryfeatures', methods=["POST"])  
 @cross_origin()
 @token_required
-def add_features_global():
+def add_features_global(current_user):
     json_data = request.json
     status = feature_func_global(json_data)
 
@@ -194,7 +194,7 @@ def fetch_features_global(current_user):
 @blu_product.route('/featuresgroups', methods=["POST"])
 @cross_origin()
 @token_required
-def feature_groups_route_global(json_data):
+def feature_groups_route_global(current_user):
     json_data = request.json
     status = features_groups_global(json_data)
 
@@ -205,7 +205,7 @@ def feature_groups_route_global(json_data):
 @blu_product.route('/categoryfeatures', methods=["DELETE"])
 @cross_origin()
 @token_required
-def delete_category_features_route_global(current_user, json_data):
+def delete_category_features_route_global(current_user):
     json_data = request.json
     status = delete_category_features_global(current_user, json_data)
     if status == "user_check_fail":
@@ -220,7 +220,7 @@ def delete_category_features_route_global(current_user, json_data):
 @blu_product.route('/categoryfeatures', methods = ["PUT"])
 @cross_origin()
 @token_required
-def edit_category_featuresroute_global(current_user, json_data):
+def edit_category_featuresroute_global(current_user):
     json_data = request.json
     status = edit_category_features_global(current_user, json_data)
     if status == "user_check_fail":
@@ -235,7 +235,7 @@ def edit_category_featuresroute_global(current_user, json_data):
 @blu_product.route('/featuredatatype', methods=["POST"])
 @cross_origin()
 @token_required
-def feature_datatyperoute_global(json_data):
+def feature_datatyperoute_global(current_user):
     json_data = request.json
     status = feature_datatypefunc_global(json_data)
 
@@ -245,20 +245,20 @@ def feature_datatyperoute_global(json_data):
 
 #-------------------- Add Product -----------------------------
 
-@blu_product.route('/productdata',methods=["POST"])
+@blu_product.route('/product',methods=["POST"])
 @cross_origin()
 @token_required
-def addproductdataroute_global():
+def add_product_data_global_route(current_user):
     json_data =request.json
     status = add_product_data_global(json_data)
 
     return status
 
 #------------------ Product fetch -----------------------------
-@blu_product.route('/productdata',methods=["GET"])
+@blu_product.route('/product',methods=["GET"])
 @cross_origin()
 @token_required
-def fetch_product_global():
+def fetch_product_globalcurrent(current_user):
     json_data =request.json
     status = add_product_data_global(json_data)
     if status == "user_check_fail":
@@ -269,12 +269,22 @@ def fetch_product_global():
 
     return status
 
+
+@blu_product.route('/productdata',methods=["POST"])
+@cross_origin()
+@token_required
+def product_features_route(current_user):
+    json_data =request.json
+    status = product_features(json_data)
+
+    return status
+
 #------------------- TO add extra Fearture --------------------
 
 @blu_product.route('/extrafeature', methods=["POST"])
 @cross_origin()
 @token_required
-def addextrafeature_route_global():
+def addextrafeature_route_global(current_user):
     json_data = request.json
     status = extra_features_global(json_data)
 
@@ -285,7 +295,7 @@ def addextrafeature_route_global():
 @blu_product.route('/varient', methods=["POST"])
 @cross_origin()
 @token_required
-def addvarientroute_global():
+def addvarientroute_global(current_user):
     json_data = request.json
     status = add_varient_global(json_data)
 
