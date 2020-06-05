@@ -41,7 +41,7 @@ blu_product = NestedBlueprint(blu_v1, '/globalproduct')
 
 # ------------------ create New category ------------------
 
-@blu_product.route('/globalcategory', methods=["POST"])
+@blu_product.route('/category', methods=["POST"])
 @cross_origin()
 @token_required
 def create_category_route_global(current_user):
@@ -52,7 +52,7 @@ def create_category_route_global(current_user):
 
 #------------------------Fetch category----------------------
 
-@blu_product.route('/globalcategory', methods=["GET"])
+@blu_product.route('/category', methods=["GET"])
 @cross_origin()
 @token_required
 def fetch_category_route_global(current_user):
@@ -66,7 +66,7 @@ def fetch_category_route_global(current_user):
     return json.dumps(status)
 
 #------------------------ Delete category----------------------
-@blu_product.route('/globalcategory', methods=["DELETE"])
+@blu_product.route('/category', methods=["DELETE"])
 @cross_origin()
 @token_required
 def delete_category_route_global(current_user):
@@ -82,7 +82,7 @@ def delete_category_route_global(current_user):
 
 #--------------------- Edit Category Name ---------------------
 
-@blu_product.route('/globalcategory', methods = ["PUT"])
+@blu_product.route('/category', methods = ["PUT"])
 @cross_origin()
 @token_required
 def edit_category_route_global(current_user):
@@ -165,7 +165,7 @@ def edit_category_route_global(current_user):
 
 #----------------- To Add features for Category------------
 
-@blu_product.route('/globalcategoryfeatures', methods=["POST"])  
+@blu_product.route('/categoryfeatures', methods=["POST"])  
 @cross_origin()
 @token_required
 def add_features_global():
@@ -176,7 +176,7 @@ def add_features_global():
 
 #-------------------To fetch Category features--------------
 
-@blu_product.route('/globalcategoryfeatures', methods=["GET"])
+@blu_product.route('/categoryfeatures', methods=["GET"])
 @cross_origin()
 @token_required
 def fetch_features_global(current_user):
@@ -191,7 +191,7 @@ def fetch_features_global(current_user):
     return status
 
 #----------------Features Groups Function -------------------
-@blu_product.route('/globalfeaturesgroups', methods=["POST"])
+@blu_product.route('/featuresgroups', methods=["POST"])
 @cross_origin()
 @token_required
 def feature_groups_route_global(json_data):
@@ -202,7 +202,7 @@ def feature_groups_route_global(json_data):
 
 #---------------------Delete category Features--------------   
 
-@blu_product.route('/globalcategoryfeatures', methods=["DELETE"])
+@blu_product.route('/categoryfeatures', methods=["DELETE"])
 @cross_origin()
 @token_required
 def delete_category_features_route_global(current_user, json_data):
@@ -217,7 +217,7 @@ def delete_category_features_route_global(current_user, json_data):
 
 #-------------------Edit category Features------------------
 
-@blu_product.route('/globalcategoryfeatures', methods = ["PUT"])
+@blu_product.route('/categoryfeatures', methods = ["PUT"])
 @cross_origin()
 @token_required
 def edit_category_featuresroute_global(current_user, json_data):
@@ -232,7 +232,7 @@ def edit_category_featuresroute_global(current_user, json_data):
 
 #-------------- To make Type of Datatype Features--------------
 
-@blu_product.route('/globalfeaturedatatype', methods=["POST"])
+@blu_product.route('/featuredatatype', methods=["POST"])
 @cross_origin()
 @token_required
 def feature_datatyperoute_global(json_data):
@@ -245,7 +245,7 @@ def feature_datatyperoute_global(json_data):
 
 #-------------------- Add Product -----------------------------
 
-@blu_product.route('/globalproductdata',methods=["POST"])
+@blu_product.route('/productdata',methods=["POST"])
 @cross_origin()
 @token_required
 def addproductdataroute_global():
@@ -255,7 +255,7 @@ def addproductdataroute_global():
     return status
 
 #------------------ Product fetch -----------------------------
-@blu_product.route('/globalproductdata',methods=["GET"])
+@blu_product.route('/productdata',methods=["GET"])
 @cross_origin()
 @token_required
 def fetch_product_global():
@@ -271,7 +271,7 @@ def fetch_product_global():
 
 #------------------- TO add extra Fearture --------------------
 
-@blu_product.route('/globalextrafeature', methods=["POST"])
+@blu_product.route('/extrafeature', methods=["POST"])
 @cross_origin()
 @token_required
 def addextrafeature_route_global():
@@ -282,7 +282,7 @@ def addextrafeature_route_global():
 
 #--------------------- To add Varient -------------------------
 
-@blu_product.route('/globalvarient', methods=["POST"])
+@blu_product.route('/varient', methods=["POST"])
 @cross_origin()
 @token_required
 def addvarientroute_global():

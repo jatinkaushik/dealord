@@ -72,7 +72,7 @@ def edit_category_global(current_user, json_data):
 #----------------------- Fetch Category ------------------
 
 def fetch_category_global(current_user):
-    data = current_user.category_rel
+    data = current_user.category_global_rel
     output = []
     for i in data:
         obj = {
