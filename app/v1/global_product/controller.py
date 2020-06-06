@@ -71,8 +71,9 @@ def edit_category_global(current_user, json_data):
 
 #----------------------- Fetch Category ------------------
 
-def fetch_category_global(current_user):
-    data = current_user.category_global_rel
+def fetch_category_global():
+    # data = current_user.category_global_rel
+    data = Category_Global.query.filter_by(parent=None)
     output = []
     for i in data:
         obj = {

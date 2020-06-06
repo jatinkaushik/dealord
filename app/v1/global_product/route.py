@@ -54,9 +54,9 @@ def create_category_route_global(current_usera):
 
 @blu_product.route('/category', methods=["GET"])
 @cross_origin()
-@token_required
-def fetch_category_route_global(current_user):
-    status = fetch_category_global(current_user)
+# @token_required
+def fetch_category_route_global():
+    status = fetch_category_global()
     if status == "user_check_fail":
         return make_response('User Check fail', 403)
 

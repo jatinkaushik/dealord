@@ -4,7 +4,7 @@ from app.v1.user.model import *
 class Category_Global(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
-    parent = db.Column(db.Integer)
+    parent = db.Column(db.Integer, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # sub_category_rel = db.relationship('Sub_Category', backref='category')
     category_features_rel = db.relationship('Category_Feature_Global', backref='category__global')
