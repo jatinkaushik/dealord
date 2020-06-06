@@ -87,6 +87,24 @@ def fetch_category_global(current_user):
     # if check_category:
     #     return "Done"
 
+#--------------Fetch Sub category With parent id---------------
+
+def fetch_sub_category(cat_id):
+    parent_check = Category_Global.query.filter_by(parent=cat_id)
+    
+    sub_category = []
+    for i in parent_check:
+        obj = {
+            "id" : i.id,
+            "name": i.name,
+            "user_id": i.user_id,
+            "parent_id": i.parent,
+            "child": fetch_sub_category(i.id)
+        }
+        sub_category.append(obj)
+        
+    return sub_category
+            
 #==================== Sub Category ==============================
 
 #----------------To make a New Sub_Category---------------
@@ -211,7 +229,7 @@ def edit_category_features_global(current_user, json_data):
 #-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(current_user, json_data):
-    # try:
+    try:
         if check_current_user_category_id_global(current_user, json_data['category_id']):
             check_type = Category_Feature_Global.query.filter_by(category_id=json_data['category_id'])
             cat_features = {
@@ -229,8 +247,8 @@ def fetch_category_features_global(current_user, json_data):
         else: 
             return "user_check_fail"
         
-    # except:
-    #    return "something went wrong"
+    except:
+       return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 

@@ -96,6 +96,18 @@ def edit_category_route_global(current_user):
 
     return json.dumps(status)
 
+#--------------Fetch Sub category With parent id---------------
+
+@blu_product.route('/subcategory/<cat_id>', methods = ["GET"])
+@cross_origin()
+# @token_required
+def fetch_sub_category_route(cat_id):
+    # json_data = request.json
+    status = fetch_sub_category(cat_id)
+
+    return json.dumps(status)
+
+
 
 #===============================Sub category=======================
 
@@ -215,7 +227,7 @@ def delete_category_features_route_global(current_user):
         return make_response('category Fearture not found', 204)
     return status
 
-#-------------------Edit category Features------------------
+#-------------------Edit category Features---------------------
 
 @blu_product.route('/categoryfeatures', methods = ["PUT"])
 @cross_origin()
@@ -269,6 +281,7 @@ def fetch_product_globalcurrent(current_user):
 
     return status
 
+#------------------ Product Features Data----------------------
 
 @blu_product.route('/productdata',methods=["POST"])
 @cross_origin()
@@ -278,6 +291,7 @@ def product_features_route(current_user):
     status = product_features(json_data)
 
     return status
+
 
 #------------------- TO add extra Fearture --------------------
 
