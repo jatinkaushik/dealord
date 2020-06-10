@@ -1,0 +1,1 @@
+from .basic_detail import *

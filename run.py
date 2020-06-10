@@ -12,10 +12,12 @@ manager = Manager(app)
 # manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
+
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
-    # manager.run()
+    # app.run(host='0.0.0.0', debug=True)
+    manager.run()
