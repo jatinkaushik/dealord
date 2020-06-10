@@ -78,7 +78,8 @@ def fetch_category_global():
     for i in data:
         obj = {
             "id": i.id,
-            "name": i.name
+            "name": i.name,
+            "child": fetch_sub_category(i.id)
         }
         output.append(obj)
     
