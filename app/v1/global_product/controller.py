@@ -188,7 +188,7 @@ def feature_func_global(json_data):
 #----------------Features Groups Function -------------------
 def features_groups_global(json_data):
     try:
-        features_group = Features_Groups_Global(name=json_data['name'])
+        features_group = Features_Groups_Global(name=json_data['name'], sub_category_id=json_data['sub_category_id'])
         db.session.add(features_group)
         db.session.commit()
         return "Done"

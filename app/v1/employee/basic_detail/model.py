@@ -2,7 +2,7 @@ from app import db
 
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    employee_id = db.Column(db.Integer)
+    employee_id = db.Column(db.Integer, unique= True)
     name = db.Column(db.String(30))
     email = db.Column(db.String(40))
     primary_phone_no = db.Column(db.String(15))

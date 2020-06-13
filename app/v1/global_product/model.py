@@ -9,6 +9,7 @@ class Category_Global(db.Model):
     # sub_category_rel = db.relationship('Sub_Category', backref='category')
     category_features_rel = db.relationship('Category_Feature_Global', backref='category__global')
     products_rel = db.relationship('Products_Global', backref='category__global')
+    features_groups_global_rel = db.relationship('Features_Groups_Global', backref='category__global')
 
 # class Sub_Category(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +27,7 @@ class Features_Datatype_Global(db.Model):
 class Features_Groups_Global(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    sub_category_id = db.Column(db.Integer, db.ForeignKey('category__global.id'))
     category_features_rel = db.relationship('Category_Feature_Global', backref='features__groups__global')    
 
 class Category_Feature_Global(db.Model):
