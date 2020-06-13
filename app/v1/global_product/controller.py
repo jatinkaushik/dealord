@@ -194,6 +194,20 @@ def features_groups_global(json_data):
         return "Done"
     except:
         "something went wrong"
+
+def features_groups_global(cat_id):
+    try:
+        cat_features = []
+        features_group = Features_Groups_Global.query.filter_by(sub_category_id=cat_id)
+        for i in features_group:
+            obj = {
+                "id" : i.id,
+                "name": i.name
+            }
+            cat_features.append(obj)
+        return cat_features
+    except:
+        return "something went wrong"
 #---------------- Delete Category Feature -------------------
 
 def delete_category_features_global(current_user, json_data):
@@ -235,16 +249,19 @@ def fetch_category_features_global(cat_id):
 
         check_type = Category_Feature_Global.query.filter_by(category_id=cat_id)
         cat_features = {
-            "features": []
+            "features": [],
+            "features_groups": []
         }
         for i in check_type:
             obj = {
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "units": i.unit
+                "units": i.unit,
+                "features_groups_id": i.features_groups_id
             }
             cat_features["features"].append(obj)
+        cat_features["features_groups"] = features_groups_global(cat_id)
         return json.dumps(cat_features)
         
         
