@@ -230,24 +230,23 @@ def edit_category_features_global(current_user, json_data):
 
 #-------------------- Category Data Features ---------------------
 
-def fetch_category_features_global(current_user, json_data):
+def fetch_category_features_global(cat_id):
     try:
-        if check_current_user_category_id_global(current_user, json_data['category_id']):
-            check_type = Category_Feature_Global.query.filter_by(category_id=json_data['category_id'])
-            cat_features = {
-                "features": []
+
+        check_type = Category_Feature_Global.query.filter_by(category_id=cat_id)
+        cat_features = {
+            "features": []
+        }
+        for i in check_type:
+            obj = {
+                "id" : i.id,
+                "name": i.name,
+                "type": i.features_datatype_id,
+                "units": i.unit
             }
-            for i in check_type:
-                obj = {
-                    "id" : i.id,
-                    "name": i.name,
-                    "type": i.features_datatype_id,
-                    "units": i.unit
-                }
-                cat_features["features"].append(obj)
-            return json.dumps(cat_features)
-        else: 
-            return "user_check_fail"
+            cat_features["features"].append(obj)
+        return json.dumps(cat_features)
+        
         
     except:
        return "something went wrong"

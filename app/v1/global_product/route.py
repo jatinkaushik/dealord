@@ -188,12 +188,12 @@ def add_features_global(current_user):
 
 #-------------------To fetch Category features--------------
 
-@blu_product.route('/categoryfeatures', methods=["GET"])
+@blu_product.route('/categoryfeatures/<cat_id>', methods=["GET"])
 @cross_origin()
 @token_required
-def fetch_features_global(current_user):
-    json_data = request.json
-    status = fetch_category_features_global(current_user,json_data)
+def fetch_features_global(current_user, cat_id):
+    # json_data = request.json
+    status = fetch_category_features_global(cat_id)
     if status == "user_check_fail":
         return make_response('User Check fail', 403)
 
