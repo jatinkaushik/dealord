@@ -1,6 +1,6 @@
 import json
 from app import app, db
-from app.v1.global_product import Category_Global, Category_Feature_Global, Features_Datatype_Global, Products_Global , Integer_Features_Global, Date_Features_Global, Boolean_Features_Global, String_Features_Global, Double_Features_Global,Extra_Features_Global,Varient_Global, Features_Groups_Global
+from app.v1.global_product import *
 # from app. import Category
 from app.v1.user.model import *
 
@@ -178,12 +178,37 @@ def fetch_sub_category(cat_id):
 
 def feature_func_global(json_data): 
     try:
-        feature_model = Category_Feature_Global(name=json_data['name'], features_datatype_id=json_data['features_datatype_id'], category_id=json_data['category_id'], unit=json_data['units'], features_groups_id=json_data['features_groups_id']) 
-        db.session.add(feature_model)
-        db.session.commit()
-        return 'Done'
+        for features in json_data:
+            feature_model = Category_Feature_Global(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit=features['units'], features_groups_id=features['features_groups_id'], recommendation =features['recommendation']) 
+            db.session.add(feature_model)
+            db.session.commit()
+            if features['recommendation'] == True:
+                status = recommendation_data(features,feature_model.id)
+            else:
+                status = "done"
+        return status 
+
     except:
         return 'Something Went Wrong'
+
+
+def recommendation_data(features,feature_id):
+    try:
+        for i in features['recommended_features']:
+            if features['features_datatype_id'] == 1:
+                obj = String_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+
+            if features['features_datatype_id'] == 2:
+                obj = Integer_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+
+            if features['features_datatype_id'] == 3:
+                obj = Double_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+            db.session.add(obj)
+            db.session.commit()
+            return "done"
+    except:
+        return 'Something Went Wrong'
+
 
 #----------------Features Groups Function -------------------
 def features_groups_global(json_data):
@@ -242,31 +267,60 @@ def edit_category_features_global(current_user, json_data):
     except:
         return 'Something Went Wrong'
 
+
+def fetch_recommended_features(feature_id, data_type ,recommendation):
+    # try:
+        
+        if recommendation:
+            if data_type == 1:
+                feature_value_check = String_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+
+            if data_type == 2:
+                feature_value_check = Integer_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+
+            if data_type == 3:
+                feature_value_check = Double_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+            
+            obj = []
+            for i in feature_value_check:
+                obj1 ={
+                    "id" : i.id,
+                    "feature_value": i.feature_value
+                }
+                obj.append(obj1)
+            return obj  
+        else:
+            return []
+    # except:
+        # return  'Something Went Wrong'       
+
 #-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(cat_id):
-    try:
+    # try:
 
-        check_type = Category_Feature_Global.query.filter_by(category_id=cat_id)
+        fetch_features = Category_Feature_Global.query.filter_by(category_id=cat_id)
         cat_features = {
             "features": [],
             "features_groups": []
         }
-        for i in check_type:
+        for i in fetch_features:
             obj = {
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
                 "units": i.unit,
-                "features_groups_id": i.features_groups_id
+                "features_groups_id": i.features_groups_id,
+                "is_recommendation": i.recommendation,
+                "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation)
             }
             cat_features["features"].append(obj)
         cat_features["features_groups"] = features_groups_global(cat_id)
-        return json.dumps(cat_features)
+        return cat_features
         
         
-    except:
-       return "something went wrong"
+    # except:
+    #    return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 
@@ -388,7 +442,9 @@ def product_features(json_data):
             db.session.commit()
         return json.dumps(product_id)
     # except:
-    #     return 'Something Went Wrong'   
+    #     return 'Something Went Wrong'  
+
+
 
 #-----------------------Fetch Product -------------------------
 
@@ -428,3 +484,8 @@ def add_varient_global(json_data):
         return "done"
     except:
         return 'Something Went Wrong'
+
+
+# def add_data_of_recommendation(json_data):
+#     try:
+#         recommendation_data = Recommended_Features_Global()

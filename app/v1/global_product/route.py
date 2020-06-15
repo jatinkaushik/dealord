@@ -200,7 +200,7 @@ def fetch_features_global(current_user, cat_id):
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
 
-    return status
+    return json.dumps(status)
 
 #----------------Features Groups Function -------------------
 @blu_product.route('/featuresgroups', methods=["POST"])
