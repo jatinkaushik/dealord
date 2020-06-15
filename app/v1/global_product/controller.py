@@ -28,7 +28,7 @@ def check_current_user_category_id_global(current_user, cat_id):
 
 def create_category_global(current_user, json_data): 
     try:
-        category_model = Category_Global(name=json_data['name'], parent=json_data['parent'], user_id=current_user.id) 
+        category_model = GlobalCategory(name=json_data['name'], parent=json_data['parent'], user_id=current_user.id) 
         db.session.add(category_model)
         db.session.commit()
         return 'Done'
@@ -40,7 +40,7 @@ def create_category_global(current_user, json_data):
 def delete_category_global(current_user, json_data):
     try:
         if check_current_user_category_id_global(current_user, json_data['id']):
-            category_search = Category_Global.query.filter_by(id=json_data['id']).first()
+            category_search = GlobalCategory.query.filter_by(id=json_data['id']).first()
             if not category_search:
                 return "category_not_found"
             db.session.delete(category_search)
@@ -56,7 +56,7 @@ def delete_category_global(current_user, json_data):
 def edit_category_global(current_user, json_data):
     try:
         if check_current_user_category_id_global(current_user, json_data['id']):
-            category_search = Category_Global.query.filter_by(id=json_data['id']).first()
+            category_search = GlobalCategory.query.filter_by(id=json_data['id']).first()
             if not category_search:
                 return "category_not_found"
             category_search.name = json_data['name']
@@ -73,7 +73,7 @@ def edit_category_global(current_user, json_data):
 
 def fetch_category_global():
     # data = current_user.category_global_rel
-    data = Category_Global.query.filter_by(parent=None)
+    data = GlobalCategory.query.filter_by(parent=None)
     output = []
     for i in data:
         obj = {
@@ -92,7 +92,7 @@ def fetch_category_global():
 #--------------Fetch Sub category With parent id---------------
 
 def fetch_sub_category(cat_id):
-    parent_check = Category_Global.query.filter_by(parent=cat_id)
+    parent_check = GlobalCategory.query.filter_by(parent=cat_id)
     
     sub_category = []
     for i in parent_check:
@@ -179,7 +179,7 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     try:
         for features in json_data:
-            feature_model = Category_Feature_Global(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit=features['units'], features_groups_id=features['features_groups_id'], recommendation =features['recommendation']) 
+            feature_model = GlobalCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit=features['units'], features_groups_id=features['features_groups_id'], recommendation =features['recommendation']) 
             db.session.add(feature_model)
             db.session.commit()
             if features['recommendation'] == True:
@@ -196,13 +196,13 @@ def recommendation_data(features,feature_id):
     try:
         for i in features['recommended_features']:
             if features['features_datatype_id'] == 1:
-                obj = String_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalFeaturesStringRecommended(feature_value = i['feature_value'], feature_id = feature_id)
 
             if features['features_datatype_id'] == 2:
-                obj = Integer_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalFeaturesDoubleRecommended(feature_value = i['feature_value'], feature_id = feature_id)
 
             if features['features_datatype_id'] == 3:
-                obj = Double_Features_Recommended_Global(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalFeaturesDoubleRecommended(feature_value = i['feature_value'], feature_id = feature_id)
             db.session.add(obj)
             db.session.commit()
             return "done"
@@ -213,7 +213,7 @@ def recommendation_data(features,feature_id):
 #----------------Features Groups Function -------------------
 def features_groups_global(json_data):
     try:
-        features_group = Features_Groups_Global(name=json_data['name'], sub_category_id=json_data['sub_category_id'])
+        features_group = GlobalFeaturesGroups(name=json_data['name'], sub_category_id=json_data['sub_category_id'])
         db.session.add(features_group)
         db.session.commit()
         return "Done"
@@ -223,7 +223,7 @@ def features_groups_global(json_data):
 def features_groups_global(cat_id):
     try:
         cat_features = []
-        features_group = Features_Groups_Global.query.filter_by(sub_category_id=cat_id)
+        features_group = GlobalFeaturesGroups.query.filter_by(sub_category_id=cat_id)
         for i in features_group:
             obj = {
                 "id" : i.id,
@@ -238,7 +238,7 @@ def features_groups_global(cat_id):
 def delete_category_features_global(current_user, json_data):
     try:
         if check_current_user_category_id_global(current_user, json_data['id']):
-            category_feature_search = Category_Feature_Global.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
+            category_feature_search = GlobalCategoryFeature.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
             if not category_feature_search:
                 return "category_feature_not_found"
             db.session.delete(category_feature_search)
@@ -254,7 +254,7 @@ def delete_category_features_global(current_user, json_data):
 def edit_category_features_global(current_user, json_data):
     try:
         if check_current_user_category_id_global(current_user, json_data['id']):
-            category_feature_search = Category_Feature_Global.query.filter_by(id=json_data['id']).first()
+            category_feature_search = GlobalCategoryFeature.query.filter_by(id=json_data['id']).first()
             if not category_feature_search:
                 return "category_feature_not_found"
             category_feature_search.name = json_data['name']
@@ -273,13 +273,13 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
         
         if recommendation:
             if data_type == 1:
-                feature_value_check = String_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+                feature_value_check = GlobalFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
 
             if data_type == 2:
-                feature_value_check = Integer_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+                feature_value_check = GlobalFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
 
             if data_type == 3:
-                feature_value_check = Double_Features_Recommended_Global.query.filter_by(feature_id = feature_id)
+                feature_value_check = GlobalFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
             
             obj = []
             for i in feature_value_check:
@@ -299,7 +299,7 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
 def fetch_category_features_global(cat_id):
     # try:
 
-        fetch_features = Category_Feature_Global.query.filter_by(category_id=cat_id)
+        fetch_features = GlobalCategoryFeature.query.filter_by(category_id=cat_id)
         cat_features = {
             "features": [],
             "features_groups": []
@@ -326,7 +326,7 @@ def fetch_category_features_global(cat_id):
 
 def feature_datatypefunc_global(json_data):
     try:
-        feature_type = Features_Datatype_Global(name=json_data['name'])
+        feature_type = GlobalFeaturesDatatype(name=json_data['name'])
         db.session.add(feature_type)
         db.session.commit()
         return "Done"
@@ -337,7 +337,7 @@ def feature_datatypefunc_global(json_data):
 
 def add_integer_feature_global(json_data):
     try:
-        add_integer = Integer_Features_Global(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        add_integer = GlobalFeaturesInteger(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
         db.session.add(add_integer)
         db.session.commit()
         return add_integer
@@ -348,7 +348,7 @@ def add_integer_feature_global(json_data):
 
 def add_string_feature_global(json_data):
     try:
-        add_string = String_Features_Global(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        add_string = GlobalFeaturesString(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
         db.session.add(add_string)
         db.session.commit()
         return add_string
@@ -358,7 +358,7 @@ def add_string_feature_global(json_data):
 
 def add_double_feature_global(json_data):
     try:
-        add_double = Double_Features_Global(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        add_double = GlobalFeaturesDouble(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
         db.session.add(add_double)
         db.session.commit()
         return add_double
@@ -369,7 +369,7 @@ def add_double_feature_global(json_data):
 
 def add_boolean_feature_global(json_data):
     try:
-        add_boolean = Boolean_Features_Global(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        add_boolean = GlobalFeaturesBoolean(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
         db.session.add(add_boolean)
         db.session.commit()
         return add_boolean
@@ -380,7 +380,7 @@ def add_boolean_feature_global(json_data):
 
 def add_date_features_global(json_data):
     try:
-        add_date = Date_Features_Global(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
+        add_date = GlobalFeaturesDate(feature_value = json_data['feature_value'], feature_id = json_data['feature_id'], product_id=json_data['product_id'])
         db.session.add(add_date)
         db.session.commit()
         return add_date
@@ -394,7 +394,7 @@ def add_date_features_global(json_data):
 def add_product_global(json_data):
     for i in json_data['product']:
         try:
-            addproduct = Products_Global(name = i['name'],category_id = i['categoy_id'])
+            addproduct = GlobalProducts(name = i['name'],category_id = i['categoy_id'])
             db.session.add(addproduct)
             db.session.commit()
             return addproduct.id
@@ -406,7 +406,7 @@ def add_product_global(json_data):
 def add_product_data_global(json_data):
     try:
         # temp = json_data['product']
-        addproduct = Products_Global(name = json_data['name'],category_id = json_data['category_id'])
+        addproduct = GlobalProducts(name = json_data['name'],category_id = json_data['category_id'])
         db.session.add(addproduct)
         db.session.commit()
         product_id = addproduct.id
@@ -424,19 +424,19 @@ def product_features(json_data):
         product_id = json_data["product_id"]
         for i in json_data['features']:
             if i['type'] == 1:
-                obj = String_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                obj = GlobalFeaturesString(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
 
             if i['type'] == 2:
-                obj = Integer_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                obj = GlobalFeaturesInteger(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
 
             if i['type'] == 4:
-                obj = Date_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                obj = GlobalFeaturesDate(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
 
             if i['type'] == 5:
-                obj = Boolean_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)   
+                obj = GlobalFeaturesBoolean(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)   
 
             if i['type'] == 3:
-                obj = Double_Features_Global(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                obj = GlobalFeaturesDouble(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
                 
             db.session.add(obj)
             db.session.commit()
@@ -451,7 +451,7 @@ def product_features(json_data):
 def fetch_product_global(current_user,json_data):
     try:
         if check_current_user_category_id_global(current_user, json_data['category_id']):   
-            fetch_product_obj = Products_Global.query.filter_by(id=json_data['product_id']).first()
+            fetch_product_obj = GlobalProducts.query.filter_by(id=json_data['product_id']).first()
 
             if not fetch_product_obj:
                 return "product_not_found"
@@ -467,7 +467,7 @@ def fetch_product_global(current_user,json_data):
 
 def extra_features_global(json_data):
     try:
-        add_features = Extra_Features_Global(name=json_data['name'], feature_type_id=json_data['feature_type_id'],product_id = json_data['product_id'],units=json_data['units'])
+        add_features = GlobalFeaturesExtra(name=json_data['name'], feature_type_id=json_data['feature_type_id'],product_id = json_data['product_id'],units=json_data['units'])
         db.session.add(add_features) 
         db.session.commit()
         return "done"
@@ -478,7 +478,7 @@ def extra_features_global(json_data):
 
 def add_varient_global(json_data):
     try:
-        add_varient_data = Varient_Global(sub_category_feature_id=json_data['sub_category_feature_id'], product_id = json_data['product_id'])
+        add_varient_data = GlobalVarient(sub_category_feature_id=json_data['sub_category_feature_id'], product_id = json_data['product_id'])
         db.session.add(add_varient_data) 
         db.session.commit()
         return "done"
@@ -488,4 +488,4 @@ def add_varient_global(json_data):
 
 # def add_data_of_recommendation(json_data):
 #     try:
-#         recommendation_data = Recommended_Features_Global()
+#         recommendation_data = GlobalFeaturesRecommended()
