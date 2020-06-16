@@ -6,7 +6,7 @@ import datetime
 from flask_cors import CORS, cross_origin
 from app.NestedBlueprint import NestedBlueprint
 from app.v1 import blu_v1
-from .model import User
+from .model import UserUser
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 import jwt
@@ -48,7 +48,7 @@ def user_data(current_user):
 @cross_origin()
 def verify_email():
     json_data = request.data
-    check_email = User.query.filter_by(email=json_data['email']).first()
+    check_email = UserUser.query.filter_by(email=json_data['email']).first()
 
     if check_email:
         return json.dumps('email_exist')
@@ -59,7 +59,7 @@ def verify_email():
 @cross_origin()
 def verify_phone():
     json_data = request.data
-    check_phone = User.query.filter_by(phone=json_data['phone']).first()
+    check_phone = UserUser.query.filter_by(phone=json_data['phone']).first()
 
     if check_phone:
         return json.dumps('phone_exist')
@@ -70,7 +70,7 @@ def verify_phone():
 @cross_origin()
 def verify_username():
     json_data = request.data
-    check_username = User.query.filter_by(username=json_data['username']).first()
+    check_username = UserUser.query.filter_by(username=json_data['username']).first()
     
     if check_username:
         return json.dumps('username_exist')

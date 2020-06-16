@@ -1,7 +1,7 @@
 import json
 import datetime
 from app import app
-from app.v1.user import User, Token
+from app.v1.user import UserUser, UserToken
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -17,9 +17,9 @@ def check_token(user, password):
         return "password_is_incorrect"
 
 def login(auth):
-    check_username = User.query.filter_by(username=auth.username).first()
-    check_email = User.query.filter_by(email=auth.username).first()
-    check_phone = User.query.filter_by(phone=auth.username).first()
+    check_username = UserUser.query.filter_by(username=auth.username).first()
+    check_email = UserUser.query.filter_by(email=auth.username).first()
+    check_phone = UserUser.query.filter_by(phone=auth.username).first()
     password = auth.password
 
     if check_username:
@@ -40,15 +40,15 @@ def login(auth):
 
 def register(json_data):
     try:
-        check_username = User.query.filter_by(username=json_data['username']).first()
-        check_email = User.query.filter_by(email=json_data['email']).first()
-        check_phone = User.query.filter_by(phone=json_data['phone']).first()
+        check_username = UserUser.query.filter_by(username=json_data['username']).first()
+        check_email = UserUser.query.filter_by(email=json_data['email']).first()
+        check_phone = UserUser.query.filter_by(phone=json_data['phone']).first()
 
         if not check_username:
             if not check_email:
                 if not check_phone:
                     hashed_password = generate_password_hash(json_data['password'], method='sha256')
-                    users_model = User(username=json_data['username'],name=json_data['name'], email=json_data['email'],
+                    users_model = UserUser(username=json_data['username'],name=json_data['name'], email=json_data['email'],
                             password=hashed_password, phone=json_data['phone'])
                     db.session.add(users_model)
                     db.session.commit()

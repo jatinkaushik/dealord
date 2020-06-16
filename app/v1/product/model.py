@@ -5,7 +5,7 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
     parent = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
     # sub_category_rel = db.relationship('Sub_Category', backref='category')
     sub_category_features_rel = db.relationship('Category_Feature', backref='category')
     products_rel = db.relationship('Products', backref='category')

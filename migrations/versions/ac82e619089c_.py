@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 2a35b79d1817
+Revision ID: ac82e619089c
 Revises: 
-Create Date: 2020-06-15 22:32:06.037608
+Create Date: 2020-06-16 13:10:26.577591
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2a35b79d1817'
+revision = 'ac82e619089c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,7 +32,7 @@ def upgrade():
     sa.Column('name', sa.String(length=20), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_datatype',
+    op.create_table('global_product_features_datatype',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=20), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -44,7 +44,7 @@ def upgrade():
     sa.Column('shift_time_end', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('user',
+    op.create_table('user_user',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=30), nullable=True),
     sa.Column('email', sa.String(length=100), nullable=True),
@@ -73,7 +73,7 @@ def upgrade():
     sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('parent', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('department',
@@ -101,20 +101,20 @@ def upgrade():
     sa.ForeignKeyConstraint(['employee_id1'], ['employee.employee_id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_category',
+    op.create_table('global_product_category',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('parent', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('token',
+    op.create_table('user_token',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('tokens', sa.String(length=1000), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user_user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('category__feature',
@@ -127,18 +127,18 @@ def upgrade():
     sa.ForeignKeyConstraint(['features_datatype_id'], ['features__datatype.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_groups',
+    op.create_table('global_product_features_groups',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
     sa.Column('sub_category_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['sub_category_id'], ['global_category.id'], ),
+    sa.ForeignKeyConstraint(['sub_category_id'], ['global_product_category.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_products',
+    op.create_table('global_product_products',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
     sa.Column('category_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['category_id'], ['global_category.id'], ),
+    sa.ForeignKeyConstraint(['category_id'], ['global_product_category.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('products',
@@ -184,7 +184,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_category_feature',
+    op.create_table('global_product_category_feature',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('category_id', sa.Integer(), nullable=True),
@@ -192,18 +192,18 @@ def upgrade():
     sa.Column('unit', sa.Integer(), nullable=True),
     sa.Column('recommendation', sa.Boolean(), nullable=True),
     sa.Column('features_groups_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['category_id'], ['global_category.id'], ),
-    sa.ForeignKeyConstraint(['features_datatype_id'], ['global_features_datatype.id'], ),
-    sa.ForeignKeyConstraint(['features_groups_id'], ['global_features_groups.id'], ),
+    sa.ForeignKeyConstraint(['category_id'], ['global_product_category.id'], ),
+    sa.ForeignKeyConstraint(['features_datatype_id'], ['global_product_features_datatype.id'], ),
+    sa.ForeignKeyConstraint(['features_groups_id'], ['global_product_features_groups.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_extra',
+    op.create_table('global_product_features_extra',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=40), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
     sa.Column('feature_type_id', sa.Integer(), nullable=True),
     sa.Column('units', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('integer__features',
@@ -232,78 +232,78 @@ def upgrade():
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_boolean',
+    op.create_table('global_product_features_boolean',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.Boolean(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_date',
+    op.create_table('global_product_features_date',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.DateTime(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_double',
+    op.create_table('global_product_features_double',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.Float(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_double_recommended',
+    op.create_table('global_product_features_double_recommended',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.Float(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_integer',
+    op.create_table('global_product_features_integer',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.Integer(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_integer_recommended',
+    op.create_table('global_product_features_integer_recommended',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.Integer(), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_string',
+    op.create_table('global_product_features_string',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.String(length=1000), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_features_string_recommended',
+    op.create_table('global_product_features_string_recommended',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('feature_value', sa.String(length=1000), nullable=True),
     sa.Column('feature_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['feature_id'], ['global_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['feature_id'], ['global_product_category_feature.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('global_varient',
+    op.create_table('global_product_varient',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('category_feature_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['category_feature_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
+    sa.ForeignKeyConstraint(['category_feature_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('global_features_recommended',
@@ -313,11 +313,11 @@ def upgrade():
     sa.Column('string_seleted_id', sa.Integer(), nullable=True),
     sa.Column('integer_seleted_id', sa.Integer(), nullable=True),
     sa.Column('double_seleted_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['category_feature_global_id'], ['global_category_feature.id'], ),
-    sa.ForeignKeyConstraint(['double_seleted_id'], ['global_features_double_recommended.id'], ),
-    sa.ForeignKeyConstraint(['integer_seleted_id'], ['global_features_integer_recommended.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['global_products.id'], ),
-    sa.ForeignKeyConstraint(['string_seleted_id'], ['global_features_string_recommended.id'], ),
+    sa.ForeignKeyConstraint(['category_feature_global_id'], ['global_product_category_feature.id'], ),
+    sa.ForeignKeyConstraint(['double_seleted_id'], ['global_product_features_double_recommended.id'], ),
+    sa.ForeignKeyConstraint(['integer_seleted_id'], ['global_product_features_integer_recommended.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['global_product_products.id'], ),
+    sa.ForeignKeyConstraint(['string_seleted_id'], ['global_product_features_string_recommended.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -326,38 +326,38 @@ def upgrade():
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('global_features_recommended')
-    op.drop_table('global_varient')
-    op.drop_table('global_features_string_recommended')
-    op.drop_table('global_features_string')
-    op.drop_table('global_features_integer_recommended')
-    op.drop_table('global_features_integer')
-    op.drop_table('global_features_double_recommended')
-    op.drop_table('global_features_double')
-    op.drop_table('global_features_date')
-    op.drop_table('global_features_boolean')
+    op.drop_table('global_product_varient')
+    op.drop_table('global_product_features_string_recommended')
+    op.drop_table('global_product_features_string')
+    op.drop_table('global_product_features_integer_recommended')
+    op.drop_table('global_product_features_integer')
+    op.drop_table('global_product_features_double_recommended')
+    op.drop_table('global_product_features_double')
+    op.drop_table('global_product_features_date')
+    op.drop_table('global_product_features_boolean')
     op.drop_table('varient')
     op.drop_table('string__features')
     op.drop_table('integer__features')
-    op.drop_table('global_features_extra')
-    op.drop_table('global_category_feature')
+    op.drop_table('global_product_features_extra')
+    op.drop_table('global_product_category_feature')
     op.drop_table('extra__features')
     op.drop_table('double__features')
     op.drop_table('date__features')
     op.drop_table('boolean__features')
     op.drop_table('products')
-    op.drop_table('global_products')
-    op.drop_table('global_features_groups')
+    op.drop_table('global_product_products')
+    op.drop_table('global_product_features_groups')
     op.drop_table('category__feature')
-    op.drop_table('token')
-    op.drop_table('global_category')
+    op.drop_table('user_token')
+    op.drop_table('global_product_category')
     op.drop_table('employee_personal_detail')
     op.drop_table('designation')
     op.drop_table('department')
     op.drop_table('category')
     op.drop_table('address')
-    op.drop_table('user')
+    op.drop_table('user_user')
     op.drop_table('shift_time')
-    op.drop_table('global_features_datatype')
+    op.drop_table('global_product_features_datatype')
     op.drop_table('features__datatype')
     op.drop_table('employee')
     # ### end Alembic commands ###
