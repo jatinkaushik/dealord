@@ -44,7 +44,7 @@ blu_product = NestedBlueprint(blu_v1, '/globalproduct')
 @blu_product.route('/category', methods=["POST"])
 @cross_origin()
 @token_required
-def create_category_route_global(current_usera):
+def create_category_route_global(current_user):
     json_data = request.json
     create_status = create_category_global(current_user, json_data)
     
@@ -54,8 +54,8 @@ def create_category_route_global(current_usera):
 
 @blu_product.route('/category', methods=["GET"])
 @cross_origin()
-# @token_required
-def fetch_category_route_global():
+@token_required
+def fetch_category_route_global(current_user):
     status = fetch_category_global()
     if status == "user_check_fail":
         return make_response('User Check fail', 403)

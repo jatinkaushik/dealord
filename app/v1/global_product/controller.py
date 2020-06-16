@@ -177,7 +177,7 @@ def fetch_sub_category(cat_id):
 #---------------------- To add features ----------------------
 
 def feature_func_global(json_data): 
-    try:
+    # try:
         for features in json_data:
             feature_model = GlobalCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit=features['units'], features_groups_id=features['features_groups_id'], recommendation =features['recommendation']) 
             db.session.add(feature_model)
@@ -188,12 +188,12 @@ def feature_func_global(json_data):
                 status = "done"
         return status 
 
-    except:
-        return 'Something Went Wrong'
+    # except:
+        # return 'Something Went Wrong'
 
 
 def recommendation_data(features,feature_id):
-    try:
+    # try:
         for i in features['recommended_features']:
             if features['features_datatype_id'] == 1:
                 obj = GlobalFeaturesStringRecommended(feature_value = i['feature_value'], feature_id = feature_id)
@@ -206,8 +206,8 @@ def recommendation_data(features,feature_id):
             db.session.add(obj)
             db.session.commit()
             return "done"
-    except:
-        return 'Something Went Wrong'
+    # except:
+    #     return 'Something Went Wrong'
 
 
 #----------------Features Groups Function -------------------
@@ -269,14 +269,14 @@ def edit_category_features_global(current_user, json_data):
 
 
 def fetch_recommended_features(feature_id, data_type ,recommendation):
-    # try:
+    try:
         
         if recommendation:
             if data_type == 1:
                 feature_value_check = GlobalFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
 
             if data_type == 2:
-                feature_value_check = GlobalFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
+                feature_value_check = GlobalFeaturesIntegerRecommended.query.filter_by(feature_id = feature_id)
 
             if data_type == 3:
                 feature_value_check = GlobalFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
@@ -291,13 +291,13 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
             return obj  
         else:
             return []
-    # except:
-        # return  'Something Went Wrong'       
+    except:
+        return  'Something Went Wrong'       
 
 #-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(cat_id):
-    # try:
+    try:
 
         fetch_features = GlobalCategoryFeature.query.filter_by(category_id=cat_id)
         cat_features = {
@@ -319,8 +319,8 @@ def fetch_category_features_global(cat_id):
         return cat_features
         
         
-    # except:
-    #    return "something went wrong"
+    except:
+       return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 

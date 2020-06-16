@@ -7,7 +7,7 @@ from flask_migrate import Migrate, MigrateCommand
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flask:bhuvnesh@curesee.in/flask'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://flask:bhuvnesh@curesee.in/new_flask'
 app.config['SECRET_KEY'] = 'Dealord'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # app.config.from_pyfile('config.cfg')

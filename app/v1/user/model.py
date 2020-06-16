@@ -11,7 +11,7 @@ class User(db.Model):
     token_rel = db.relationship('Token', backref='user')
     category_rel = db.relationship('Category', backref='user')
     name=db.Column(db.String(50))
-    category_global_rel = db.relationship('Category_Global', backref='user')
+    category_global_rel = db.relationship('GlobalCategory', backref='user')
 
 
     @property
