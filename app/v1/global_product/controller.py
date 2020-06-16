@@ -297,7 +297,7 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
 #-------------------- Category Data Features ---------------------
 
 def fetch_category_features_global(cat_id):
-    try:
+    # try:
 
         fetch_features = GlobalProductCategoryFeature.query.filter_by(category_id=cat_id)
         cat_features = {
@@ -309,18 +309,19 @@ def fetch_category_features_global(cat_id):
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "units": i.unit,
+                "units": i.unit_id,
                 "features_groups_id": i.features_groups_id,
                 "is_recommendation": i.recommendation,
-                "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation)
+                "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
+                # "features_units": fetch_feature_units_global(i.unit_id)
             }
             cat_features["features"].append(obj)
         cat_features["features_groups"] = features_groups_global(cat_id)
         return cat_features
         
         
-    except:
-       return "something went wrong"
+    # except:
+    #    return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 
@@ -485,7 +486,39 @@ def add_varient_global(json_data):
     except:
         return 'Something Went Wrong'
 
+def feature_units_types_global(json_data):
+    try:
+        add_features_units_types = GlobalProductFeaturesUnitsTypes(name = json_data['name_types'])
+        db.session.add(add_features_units_types)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
 
+# def feature_units_global(json_data):
+#     try:
+#         add_features_units = GlobalProductFeaturesUnits(name = json_data['name'],units_id = json_data['units_id'])
+#         db.session.add(add_features_units)
+#         db.session.commit()
+#         return "done"
+#     except:
+        # return 'Something Went Wrong'
+
+def fetch_feature_units_global():
+    # try:
+        fetch_units = GlobalProductFeaturesUnitsTypes.query.all()
+        units ={
+            "feature_units": []
+        }
+        for unit in fetch_units:
+            obj = {
+                "id": unit.id,
+                "name": unit.name
+            }
+            units["feature_units"].append(obj)
+        return units
+    # except:
+        # return "Something went Wrong"
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()
