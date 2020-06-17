@@ -12,6 +12,7 @@ from app import db
 import jwt
 from app.v1.product.route import token_required
 
+
 blu_user = NestedBlueprint(blu_v1, '/user')
 
 
