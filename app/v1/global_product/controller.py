@@ -284,8 +284,8 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
             obj = []
             for i in feature_value_check:
                 obj1 ={
-                    "id" : i.id,
-                    "feature_value": i.feature_value
+                    "value" : i.id,
+                    "label": i.feature_value
                 }
                 obj.append(obj1)
             return obj  
@@ -309,9 +309,9 @@ def fetch_category_features_global(cat_id):
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "units": i.unit_id,
+                "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
-                "is_recommendation": i.recommendation,
+                "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
                 # "features_units": fetch_feature_units_global(i.unit_id)
             }
