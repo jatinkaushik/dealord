@@ -4,14 +4,14 @@ from app.v1.employee.basic_detail import *
 
 
 def employee_basic(json_data):
-    try:
+    # try:
         employee_basic_detail = Employee(name=json_data['name'], email=json_data['email'],
                                   employee_id=json_data['employee_id'], primary_phone_no=json_data['primary_phone_no'])
         db.session.add(employee_basic_detail)
         db.session.commit()
         return 'Done'
-    except:
-        return 'Something Went Wrong'
+    # except:
+        # return 'Something Went Wrong'
 
 def fetch_employee_basic(json_data):
     try:
@@ -31,26 +31,26 @@ def fetch_employee_basic(json_data):
         return 'Something Went Wrong'
 
 def edit_employee_basic(json_data):
-    try:
+    # try:
         edit_employee_basic_detail = Employee.query.filter_by(employee_id=json_data['employee_id']).first()
-        if json_data['name']:
+        if 'name' in json_data:
             edit_employee_basic_detail.name = json_data['name']
 
-        if json_data['employee_id']:
-            edit_employee_basic_detail.employee_id = json_data['employee_id']
+        if 'employee_id1' in json_data:
+            edit_employee_basic_detail.employee_id = json_data['employee_id1']
 
-        if json_data['primary_phone_no']:
+        if 'primary_phone_no' in json_data:
             edit_employee_basic_detail.primary_phone_no = json_data['primary_phone_no']
         
-        if json_data['email']:
+        if 'email' in json_data:
             edit_employee_basic_detail.email = json_data['email']
         
         db.session.add(edit_employee_basic_detail)
         db.session.commit()
         
         return "done"    
-    except:
-        return 'Something Went Wrong'
+    # except:
+    #     return 'Something Went Wrong'
 
 def delete_employee_basic(json_data):
     try:

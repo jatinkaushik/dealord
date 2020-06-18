@@ -14,7 +14,7 @@ def employee_basic_route():
     json_data = request.json
     create_status = employee_basic(json_data)
     
-    return json.dumps(create_status)
+    return (create_status)
 
 
 @blu_product.route('/employeebasic', methods=["GET"])

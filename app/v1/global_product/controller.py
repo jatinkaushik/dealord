@@ -309,7 +309,7 @@ def fetch_category_features_global(cat_id):
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "units": i.unit_id,
+                "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "is_recommendation": i.recommendation,
                 "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
