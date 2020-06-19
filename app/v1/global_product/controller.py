@@ -423,8 +423,8 @@ def add_product_data_global(json_data):
 
 #-----------------------Product Features-----------------------
 def product_features(json_data):
+    try:
         product = json_data['product']
-    # try:
         addproduct = GlobalProductProducts(name = product['name'],category_id = product['category_id'])
         db.session.add(addproduct)
         db.session.commit()
@@ -460,8 +460,8 @@ def product_features(json_data):
                 db.session.add(obj)
                 db.session.commit()
         return json.dumps(product_id)
-    # except:
-    #     return 'Something Went Wrong'
+    except:
+        return 'Something Went Wrong'
 
 
 
