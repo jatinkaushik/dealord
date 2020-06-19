@@ -127,7 +127,7 @@ class GlobalProductFeaturesDoubleRecommended(db.Model):
 
 class GlobalProductFeaturesRecommended(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    category_feature_global_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
     string_seleted_id = db.Column(db.Integer, db.ForeignKey('global_product_features_string_recommended.id'))
     integer_seleted_id = db.Column(db.Integer, db.ForeignKey('global_product_features_integer_recommended.id'))

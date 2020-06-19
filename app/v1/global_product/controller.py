@@ -312,7 +312,9 @@ def fetch_category_features_global(cat_id):
                 "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
-                "recommendation_values": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
+                "recommendation_value": None,
+                "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
+                "value": None
                 # "features_units": fetch_feature_units_global(i.unit_id)
             }
             cat_features["features"].append(obj)
@@ -421,29 +423,47 @@ def add_product_data_global(json_data):
 
 #-----------------------Product Features-----------------------
 def product_features(json_data):
+        product = json_data['product']
     # try:
-        product_id = json_data["product_id"]
+        addproduct = GlobalProductProducts(name = product['name'],category_id = product['category_id'])
+        db.session.add(addproduct)
+        db.session.commit()
+        product_id = addproduct.id
         for i in json_data['features']:
-            if i['type'] == 1:
-                obj = GlobalProductFeaturesString(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+            if i['is_recommendation'] == True:
+                if i['type'] == 1:
+                    obj = GlobalProductFeaturesRecommended(feature_id = i['id'], string_seleted_id = i['value'], product_id = product_id)
 
-            if i['type'] == 2:
-                obj = GlobalProductFeaturesInteger(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                if i['type'] == 2:
+                    obj = GlobalProductFeaturesRecommended(feature_id = i['id'], integer_seleted_id= i['value'], product_id = product_id)
 
-            if i['type'] == 4:
-                obj = GlobalProductFeaturesDate(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
+                if i['type'] == 3:
+                    obj = GlobalProductFeaturesRecommended(feature_id = i['id'], double_seleted_id= i['value'], product_id = product_id)
+                db.session.add(obj)
+                db.session.commit()
+            else:
+                if i['type'] == 1:
+                    obj = GlobalProductFeaturesString(feature_value = i['value'], feature_id = i['id'], product_id = product_id)
 
-            if i['type'] == 5:
-                obj = GlobalProductFeaturesBoolean(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)   
+                if i['type'] == 2:
+                    obj = GlobalProductFeaturesInteger(feature_value = i['value'], feature_id = i['id'], product_id = product_id)
 
-            if i['type'] == 3:
-                obj = GlobalProductFeaturesDouble(feature_value = i['feature_value'], feature_id = i['feature_id'], product_id = product_id)
-                
-            db.session.add(obj)
-            db.session.commit()
+                if i['type'] == 4:
+                    obj = GlobalProductFeaturesDate(feature_value = i['value'], feature_id = i['id'], product_id = product_id)
+
+                if i['type'] == 5:
+                    obj = GlobalProductFeaturesBoolean(feature_value = i['value'], feature_id = i['id'], product_id = product_id)   
+
+                if i['type'] == 3:
+                    obj = GlobalProductFeaturesDouble(feature_value = i['value'], feature_id = i['id'], product_id = product_id)
+                    
+                db.session.add(obj)
+                db.session.commit()
         return json.dumps(product_id)
     # except:
-    #     return 'Something Went Wrong'  
+    #     return 'Something Went Wrong'
+
+
 
 
 
