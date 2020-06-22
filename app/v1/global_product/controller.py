@@ -304,6 +304,7 @@ def fetch_category_features_global(cat_id):
             "features": [],
             "features_groups": []
         }
+        
         for i in fetch_features:
             obj = {
                 "id" : i.id,
@@ -320,7 +321,6 @@ def fetch_category_features_global(cat_id):
             cat_features["features"].append(obj)
         cat_features["features_groups"] = features_groups_global(cat_id)
         return cat_features
-        
         
     # except:
     #    return "something went wrong"
