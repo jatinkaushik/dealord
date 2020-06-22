@@ -216,7 +216,7 @@ def features_groups_global(json_data):
         features_group = GlobalProductFeaturesGroups(name=json_data['name'], sub_category_id=json_data['sub_category_id'])
         db.session.add(features_group)
         db.session.commit()
-        return "Done"
+        return fetch_features_groups_global(json_data['sub_category_id'])
     except:
         "something went wrong"
 
@@ -346,6 +346,31 @@ def fetch_category_features_global(cat_id):
     # try:
 
         fetch_features = GlobalProductCategoryFeature.query.filter_by(category_id=cat_id)
+        features = []
+        
+        for i in fetch_features:
+            obj = {
+                "id" : i.id,
+                "name": i.name,
+                "type": i.features_datatype_id,
+                "unit": i.unit_id if i.unit_id != None else False,
+                "features_groups_id": i.features_groups_id,
+                "is_recommendation": i.recommendation if i.recommendation != None else False,
+                "recommendation_value": None,
+                "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
+                "value": None
+                # "features_units": fetch_feature_units_global(i.unit_id)
+            }
+            features.append(obj)
+        return features
+        
+    # except:
+    #    return "something went wrong"
+
+def fetch_category_with_groups_features_global(cat_id):
+    # try:
+
+        fetch_features = GlobalProductCategoryFeature.query.filter_by(category_id=cat_id)
         cat_features = {
             "features": [],
             "features_groups": []
@@ -367,9 +392,6 @@ def fetch_category_features_global(cat_id):
             cat_features["features"].append(obj)
         cat_features["features_groups"] = fetch_features_groups_global(cat_id)
         return cat_features
-        
-    # except:
-    #    return "something went wrong"
 
 #----------------- Add Datatype ---------------------------- 
 

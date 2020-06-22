@@ -202,6 +202,20 @@ def fetch_features_global(current_user, cat_id):
 
     return json.dumps(status)
 
+@blu_product.route('/categoryfeatureswithgroups/<cat_id>', methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_features_with_groups_global(current_user, cat_id):
+    # json_data = request.json
+    status = fetch_category_with_groups_features_global(cat_id)
+    if status == "user_check_fail":
+        return make_response('User Check fail', 403)
+
+    if status == "category_feature_not_found":
+        return make_response('category Fearture not found', 204)
+
+    return json.dumps(status)
+
 #----------------Features Groups Function -------------------
 @blu_product.route('/featuresgroups', methods=["POST"])
 @cross_origin()
@@ -209,6 +223,14 @@ def fetch_features_global(current_user, cat_id):
 def feature_groups_route_global(current_user):
     json_data = request.json
     status = features_groups_global(json_data)
+
+    return json.dumps(status)
+
+@blu_product.route('/featuresgroups/<cat_id>', methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_feature_groups_route_global(current_user, cat_id):
+    status = fetch_features_groups_global(cat_id)
 
     return json.dumps(status)
 
