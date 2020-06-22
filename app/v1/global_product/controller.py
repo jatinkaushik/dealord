@@ -255,8 +255,8 @@ def delete_category_features_global(current_user, json_data):
 def edit_category_features_global(json_data):
     # try:
         category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
-        if not category_feature_search:
-            return "category_feature_not_found"
+        # if not category_feature_search:
+        #     return "category_feature_not_found"
         if 'name' in json_data:
             category_feature_search.name = json_data['name']
 
@@ -275,8 +275,8 @@ def edit_category_features_global(json_data):
         if 'is_recommendation' in json_data:
             category_feature_search.recommendation = json_data['is_recommendation']
             if category_feature_search.recommendation == False:
-                status = delete_recommended_features(category_feature_search.id)
-                status = delete_recommended_features_values(category_feature_search.id,category_feature_search.features_datatype_id)
+                # delete_recommended_features1 = delete_recommended_features(category_feature_search.id)
+                delete_recommended_features_values1 = delete_recommended_features_values(category_feature_search.id,category_feature_search.features_datatype_id)
 
         db.session.add(category_feature_search)
         db.session.commit()
@@ -286,7 +286,7 @@ def edit_category_features_global(json_data):
     #     return 'Something Went Wrong'
 
 def delete_recommended_features(feature_id):
-    recommended_features = GlobalProductFeaturesRecommended.query.filter_by(feature_id = feature_id)
+    recommended_features = GlobalProductFeaturesRecommended.query.filter_by(feature_id = feature_id).first()
     db.session.delete(recommended_features)
     db.session.commit()
     return "Done"
@@ -295,16 +295,22 @@ def delete_recommended_features_values(feature_id,type_id):
     
     if type_id == 1:
         recommended_features_values = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
-        db.session.delete(recommended_features_values)
-        db.session.commit()
+        for value in recommended_features_values:
+            db.session.delete(value)
+            db.session.commit()
+
     if type_id == 2:
-        recommended_features_values = GlobalProductFeaturesIntegerRecommended.query.filter_by(feature_id = feature_id)
-        db.session.delete(recommended_features_values)
-        db.session.commit()
+        recommended_features_values = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
+        for value in recommended_features_values:
+            db.session.delete(value)
+            db.session.commit()
+
     if type_id == 3:
-        recommended_features_values = GlobalProductFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
-        db.session.delete(recommended_features_values)
-        db.session.commit()
+        recommended_features_values = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
+        for value in recommended_features_values:
+            db.session.delete(value)
+            db.session.commit()
+
     return "Done"
 
 
