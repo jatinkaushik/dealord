@@ -220,8 +220,6 @@ def feature_groups_route_global(current_user):
 def delete_category_features_route_global(current_user):
     json_data = request.json
     status = delete_category_features_global(current_user, json_data)
-    if status == "user_check_fail":
-        return make_response('User Check fail', 403)
 
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
@@ -234,7 +232,7 @@ def delete_category_features_route_global(current_user):
 @token_required
 def edit_category_featuresroute_global(current_user):
     json_data = request.json
-    status = edit_category_features_global(current_user, json_data)
+    status = edit_category_features_global(json_data)
     if status == "user_check_fail":
         return make_response('User Check fail', 403)
 

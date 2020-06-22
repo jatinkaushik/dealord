@@ -358,7 +358,7 @@ def fetch_category_features_global(cat_id):
                 # "features_units": fetch_feature_units_global(i.unit_id)
             }
             cat_features["features"].append(obj)
-        cat_features["features_groups"] = features_groups_global(cat_id)
+        cat_features["features_groups"] = fetch_features_groups_global(cat_id)
         return cat_features
         
         
