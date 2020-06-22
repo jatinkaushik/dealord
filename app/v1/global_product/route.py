@@ -113,14 +113,14 @@ def fetch_sub_category_route(cat_id):
 
 #----------------------create New Sub category-----------------
 
-# @blu_product.route('/subcategory', methods=["POST"])
-# @cross_origin()
-# @token_required
-# def create_sub_category_route(current_user):
-#     json_data = request.json
-#     create_status = create_sub_category(json_data)
+@blu_product.route('/subcategory', methods=["POST"])
+@cross_origin()
+@token_required
+def create_sub_category_route(current_user):
+    json_data = request.json
+    create_status = create_sub_category(json_data,current_user)
     
-#     return json.dumps(create_status)
+    return json.dumps(create_status)
 
 
 # #---------------------Fetch Sub category-----------------------
@@ -343,3 +343,12 @@ def addvarientroute_global(current_user):
 
     return json.dumps(status)
 
+#-----------------------To Add Units---------------------------
+@blu_product.route('/units', methods=["POST"])
+@cross_origin()
+@token_required
+def add_units_route(current_user):
+    json_data = request.json
+    status = add_units(json_data)
+
+    return status

@@ -111,9 +111,9 @@ def fetch_sub_category(cat_id):
 
 #----------------To make a New Sub_Category---------------
 
-# def create_sub_category(json_data):
+# def create_sub_category(json_data,current_user):
 #     try:
-#         sub_category_model = Sub_Category(name=json_data['name'], category_id=json_data['category_id']) 
+#         sub_category_model = GlobalProductCategory(name=json_data['name'], parent_id=json_data['category_id'], user_id=current_user.id) 
 #         db.session.add(sub_category_model)
 #         db.session.commit()
 #         return 'Done'
@@ -179,10 +179,10 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     # try:
         for features in json_data:
-            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit=features['units'], features_groups_id=features['features_groups_id'], recommendation =features['recommendation']) 
+            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation']) 
             db.session.add(feature_model)
             db.session.commit()
-            if features['recommendation'] == True:
+            if features['is_recommendation'] == True:
                 status = recommendation_data(features,feature_model.id)
             else:
                 status = "done"
@@ -194,18 +194,18 @@ def feature_func_global(json_data):
 
 def recommendation_data(features,feature_id):
     # try:
-        for i in features['recommended_features']:
+        for i in features['recommended_options']:
             if features['features_datatype_id'] == 1:
-                obj = GlobalProductFeaturesStringRecommended(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalProductFeaturesStringRecommended(feature_value = i['value'], feature_id = feature_id)
 
             if features['features_datatype_id'] == 2:
-                obj = GlobalProductFeaturesIntegerRecommended(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalProductFeaturesIntegerRecommended(feature_value = i['value'], feature_id = feature_id)
 
             if features['features_datatype_id'] == 3:
-                obj = GlobalProductFeaturesDoubleRecommended(feature_value = i['feature_value'], feature_id = feature_id)
+                obj = GlobalProductFeaturesDoubleRecommended(feature_value = i['value'], feature_id = feature_id)
             db.session.add(obj)
             db.session.commit()
-            return "done"
+        return "done"
     # except:
     #     return 'Something Went Wrong'
 
@@ -220,7 +220,7 @@ def features_groups_global(json_data):
     except:
         "something went wrong"
 
-def features_groups_global(cat_id):
+def fetch_features_groups_global(cat_id):
     try:
         cat_features = []
         features_group = GlobalProductFeaturesGroups.query.filter_by(sub_category_id=cat_id)
@@ -233,6 +233,7 @@ def features_groups_global(cat_id):
         return cat_features
     except:
         return "something went wrong"
+
 #---------------- Delete Category Feature -------------------
 
 def delete_category_features_global(current_user, json_data):
@@ -251,21 +252,60 @@ def delete_category_features_global(current_user, json_data):
 
 #---------------- Edit Category Feature -------------------
 
-def edit_category_features_global(current_user, json_data):
-    try:
-        if check_current_user_category_id_global(current_user, json_data['id']):
-            category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
-            if not category_feature_search:
-                return "category_feature_not_found"
+def edit_category_features_global(json_data):
+    # try:
+        category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
+        if not category_feature_search:
+            return "category_feature_not_found"
+        if 'name' in json_data:
             category_feature_search.name = json_data['name']
-            db.session.add(category_feature_search)
-            db.session.commit()
-            return 'Category Feature Edited'
-        else:
-            return "user_check_fail"
 
-    except:
-        return 'Something Went Wrong'
+        if 'features_datatype_id' in json_data:
+            category_feature_search.features_datatype_id = json_data['features_datatype_id']
+
+        if 'category_id' in json_data:
+            category_feature_search.category_id = json_data['category_id']
+        
+        if 'unit' in json_data:
+            category_feature_search.unit_id = json_data['unit']
+
+        if 'features_groups_id' in json_data:
+            category_feature_search.features_groups_id = json_data['features_groups_id']
+        
+        if 'is_recommendation' in json_data:
+            category_feature_search.recommendation = json_data['is_recommendation']
+            if category_feature_search.recommendation == False:
+                status = delete_recommended_features(category_feature_search.id)
+                status = delete_recommended_features_values(category_feature_search.id,category_feature_search.features_datatype_id)
+
+        db.session.add(category_feature_search)
+        db.session.commit()
+        return 'Category Features Edited'
+
+    # except:
+    #     return 'Something Went Wrong'
+
+def delete_recommended_features(feature_id):
+    recommended_features = GlobalProductFeaturesRecommended.query.filter_by(feature_id = feature_id)
+    db.session.delete(recommended_features)
+    db.session.commit()
+    return "Done"
+
+def delete_recommended_features_values(feature_id,type_id):
+    
+    if type_id == 1:
+        recommended_features_values = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
+        db.session.delete(recommended_features_values)
+        db.session.commit()
+    if type_id == 2:
+        recommended_features_values = GlobalProductFeaturesIntegerRecommended.query.filter_by(feature_id = feature_id)
+        db.session.delete(recommended_features_values)
+        db.session.commit()
+    if type_id == 3:
+        recommended_features_values = GlobalProductFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
+        db.session.delete(recommended_features_values)
+        db.session.commit()
+    return "Done"
 
 
 def fetch_recommended_features(feature_id, data_type ,recommendation):
@@ -539,6 +579,17 @@ def fetch_feature_units_global():
         return units
     # except:
         # return "Something went Wrong"
+
+
+def add_units(json_data):
+    try:
+        for unit in json_data:       
+            units_arrey = GlobalProductFeaturesUnits(name = unit['name'], units_type_id = unit['units_type_id'], order = unit['order'])
+            db.session.add(units_arrey)
+            db.session.commit()
+        return "done"
+    except:
+        return "Something went Wrong"
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()

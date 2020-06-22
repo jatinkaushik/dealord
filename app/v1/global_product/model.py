@@ -143,4 +143,5 @@ class GlobalProductFeaturesUnitsTypes(db.Model):
 class GlobalProductFeaturesUnits(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20))
-    units_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
+    units_type_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
+    order = db.Column(db.Integer)
