@@ -37,6 +37,7 @@ class GlobalProductCategoryFeature(db.Model):
     features_datatype_id = db.Column(db.Integer, db.ForeignKey('global_product_features_datatype.id'))
     unit_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
     recommendation = db.Column(db.Boolean)
+    required_features = db.Column(db.Boolean, default=False)
     features_groups_id = db.Column(db.Integer, db.ForeignKey('global_product_features_groups.id'))
     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_category_feature')
     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_category_feature')

@@ -234,6 +234,15 @@ def fetch_feature_groups_route_global(current_user, cat_id):
 
     return json.dumps(status)
 
+@blu_product.route('/featuresgroups', methods=["DELETE"])
+@cross_origin()
+@token_required
+def delete_feature_groups_route_global(current_user):
+    json_data = request.json
+    status = delete_features_groups_global(json_data)
+
+    return json.dumps(status)
+
 #---------------------Delete category Features--------------   
 
 @blu_product.route('/categoryfeatures', methods=["DELETE"])
