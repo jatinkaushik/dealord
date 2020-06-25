@@ -88,8 +88,8 @@ def delete_category_route_global(current_user):
 def edit_category_route_global(current_user):
     json_data = request.json
     status = edit_category_global(current_user, json_data)
-    if status == "user_check_fail":
-        return make_response('User Check fail', 403)
+    # if status == "user_check_fail":
+    #     return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)

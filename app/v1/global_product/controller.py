@@ -55,7 +55,7 @@ def delete_category_global(current_user, json_data):
 
 def edit_category_global(current_user, json_data):
     try:
-        if check_current_user_category_id_global(current_user, json_data['id']):
+        # if check_current_user_category_id_global(current_user, json_data['id']):
             category_search = GlobalProductCategory.query.filter_by(id=json_data['id']).first()
             if not category_search:
                 return "category_not_found"
@@ -63,8 +63,8 @@ def edit_category_global(current_user, json_data):
             db.session.add(category_search)
             db.session.commit()
             return 'Category Edited'
-        else:
-            return "user_check_fail"
+        # else:
+        #     return "user_check_fail"
 
     except:
         return 'Something Went Wrong'
