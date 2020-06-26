@@ -46,7 +46,7 @@ def delete_category_global(current_user, json_data):
                 return "category_not_found"
             db.session.delete(category_search)
             db.session.commit()
-            return 'Category Deleted'
+            return fetch_category_global()
         else:
             return "user_check_fail"    
     except:
@@ -63,7 +63,7 @@ def edit_category_global(current_user, json_data):
             category_search.name = json_data['name']
             db.session.add(category_search)
             db.session.commit()
-            return 'Category Edited'
+            return fetch_category_global()
         # else:
         #     return "user_check_fail"
 
