@@ -31,7 +31,8 @@ def create_category_global(current_user, json_data):
         category_model = GlobalProductCategory(name=json_data['name'], parent=json_data['parent'], user_id=current_user.id) 
         db.session.add(category_model)
         db.session.commit()
-        return 'Done'
+        return fetch_category_global()
+
     except:
         return 'Something Went Wrong'
 
@@ -45,7 +46,7 @@ def delete_category_global(current_user, json_data):
                 return "category_not_found"
             db.session.delete(category_search)
             db.session.commit()
-            return 'Category Deleted'
+            return fetch_category_global()
         else:
             return "user_check_fail"    
     except:
@@ -62,7 +63,7 @@ def edit_category_global(current_user, json_data):
             category_search.name = json_data['name']
             db.session.add(category_search)
             db.session.commit()
-            return 'Category Edited'
+            return fetch_category_global()
         # else:
         #     return "user_check_fail"
 
@@ -183,9 +184,9 @@ def feature_func_global(json_data):
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
-                status = recommendation_data(features,feature_model.id)
-            else:
-                status = "done"
+                recommendation_data(features,feature_model.id)
+        # cat_id = 
+        status = fetch_category_features_global(json_data[0]['category_id'])
         return status 
 
     # except:
@@ -205,7 +206,7 @@ def recommendation_data(features,feature_id):
                 obj = GlobalProductFeaturesDoubleRecommended(feature_value = i['value'], feature_id = feature_id)
             db.session.add(obj)
             db.session.commit()
-        return "done"
+        # return "done"
     # except:
     #     return 'Something Went Wrong'
 
