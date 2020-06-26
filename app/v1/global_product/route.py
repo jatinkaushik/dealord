@@ -312,14 +312,14 @@ def feature_datatyperoute_global(current_user):
 
 #-------------------- Add Product -----------------------------
 
-# @blu_product.route('/product',methods=["POST"])
-# @cross_origin()
-# @token_required
-# def add_product_data_global_route(current_user):
-#     json_data =request.json
-#     status = add_product_data_global(json_data)
+@blu_product.route('/product',methods=["POST"])
+@cross_origin()
+@token_required
+def add_product_data_global_route(current_user):
+    json_data =request.json
+    status = add_product_global(json_data)
 
-#     return status
+    return status
 
 #------------------ Product fetch -----------------------------
 @blu_product.route('/product',methods=["GET"])
@@ -338,7 +338,7 @@ def fetch_product_globalcurrent(current_user):
 
 #------------------ Product Features Data----------------------
 
-@blu_product.route('/product',methods=["POST"])
+@blu_product.route('/productvarient',methods=["POST"])
 @cross_origin()
 @token_required
 def product_features_route(current_user):
