@@ -56,7 +56,7 @@ def delete_category_global(current_user, json_data):
 
 def edit_category_global(current_user, json_data):
     try:
-        if check_current_user_category_id_global(current_user, json_data['id']):
+        # if check_current_user_category_id_global(current_user, json_data['id']):
             category_search = GlobalProductCategory.query.filter_by(id=json_data['id']).first()
             if not category_search:
                 return "category_not_found"
@@ -64,8 +64,8 @@ def edit_category_global(current_user, json_data):
             db.session.add(category_search)
             db.session.commit()
             return 'Category Edited'
-        else:
-            return "user_check_fail"
+        # else:
+        #     return "user_check_fail"
 
     except:
         return 'Something Went Wrong'
@@ -235,29 +235,38 @@ def fetch_features_groups_global(cat_id):
     except:
         return "something went wrong"
 
+def delete_features_groups_global(json_data):
+    try:
+        features_groups = GlobalProductFeaturesGroups.query.filter_by(id=json_data['id']).first()
+        db.session.delete(features_groups)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
+
 #---------------- Delete Category Feature -------------------
 
 def delete_category_features_global(current_user, json_data):
-    try:
-        if check_current_user_category_id_global(current_user, json_data['id']):
-            category_feature_search = GlobalProductCategoryFeature.query.filter_by(sub_category_id=json_data['sub_category_id']).first()
+    # try:
+        # if check_current_user_category_id_global(current_user, json_data['id']):
+            category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
             if not category_feature_search:
                 return "category_feature_not_found"
             db.session.delete(category_feature_search)
             db.session.commit()
             return 'Feature Delete'
-        else:
-            return "user_check_fail"
-    except:
-        return 'Something Went Wrong'
+        # else:
+        #     return "user_check_fail"
+    # except:
+    #     return 'Something Went Wrong'
 
 #---------------- Edit Category Feature -------------------
 
 def edit_category_features_global(json_data):
     # try:
         category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
-        # if not category_feature_search:
-        #     return "category_feature_not_found"
+        if not category_feature_search:
+            return "category_feature_not_found"
         if 'name' in json_data:
             category_feature_search.name = json_data['name']
 

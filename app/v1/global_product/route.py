@@ -88,8 +88,8 @@ def delete_category_route_global(current_user):
 def edit_category_route_global(current_user):
     json_data = request.json
     status = edit_category_global(current_user, json_data)
-    if status == "user_check_fail":
-        return make_response('User Check fail', 403)
+    # if status == "user_check_fail":
+    #     return make_response('User Check fail', 403)
 
     if status == "category_not_found":
         return make_response('Category not found', 204)
@@ -231,6 +231,15 @@ def feature_groups_route_global(current_user):
 @token_required
 def fetch_feature_groups_route_global(current_user, cat_id):
     status = fetch_features_groups_global(cat_id)
+
+    return json.dumps(status)
+
+@blu_product.route('/featuresgroups', methods=["DELETE"])
+@cross_origin()
+@token_required
+def delete_feature_groups_route_global(current_user):
+    json_data = request.json
+    status = delete_features_groups_global(json_data)
 
     return json.dumps(status)
 
