@@ -319,7 +319,7 @@ def add_product_data_global_route(current_user):
     json_data =request.json
     status = add_product_global(json_data)
 
-    return status
+    return json.dumps(status)
 
 #------------------ Product fetch -----------------------------
 @blu_product.route('/product',methods=["GET"])
@@ -361,7 +361,7 @@ def addextrafeature_route_global(current_user):
 
 #--------------------- To add Varient -------------------------
 
-@blu_product.route('/varient', methods=["POST"])
+@blu_product.route('/enblevarient', methods=["POST"])
 @cross_origin()
 @token_required
 def addvarientroute_global(current_user):

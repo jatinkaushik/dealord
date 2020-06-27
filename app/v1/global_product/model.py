@@ -37,7 +37,7 @@ class GlobalProductCategoryFeature(db.Model):
     features_datatype_id = db.Column(db.Integer, db.ForeignKey('global_product_features_datatype.id'))
     unit_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
     recommendation = db.Column(db.Boolean)
-    required_features = db.Column(db.Boolean, default=False)
+    feature_required = db.Column(db.Boolean, default=False)
     features_groups_id = db.Column(db.Integer, db.ForeignKey('global_product_features_groups.id'))
     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_category_feature')
     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_category_feature')
@@ -54,12 +54,13 @@ class GlobalProductProducts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     varient = db.Column(db.Boolean)
     products_varient_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_products')
+    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products')
 
 
 class GlobalProductProductsVarient(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
-    name =db.Column(db.String(100))
+    name = db.Column(db.String(100))
     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_products_varient')
     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_products_varient')
@@ -68,12 +69,11 @@ class GlobalProductProductsVarient(db.Model):
     boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_products_varient')
     Extra_features_rel = db.relationship('GlobalProductFeaturesExtra', backref='global_product_products_varient')
     recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_products_varient')
-    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products_varient')
 
 class GlobalProductVarientFeatures(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     feature_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
-    product_varient_id = db.Column(db.Integer, db.ForeignKey('global_product_products_varient.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
 
 
 

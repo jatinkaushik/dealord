@@ -180,7 +180,7 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     # try:
         for features in json_data:
-            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation']) 
+            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required']) 
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
@@ -282,6 +282,9 @@ def edit_category_features_global(json_data):
         if 'features_groups_id' in json_data:
             category_feature_search.features_groups_id = json_data['features_groups_id']
         
+        if 'feature_required' in json_data:
+            category_feature_search.feature_required = json_data['feature_required']
+
         if 'is_recommendation' in json_data:
             category_feature_search.recommendation = json_data['is_recommendation']
             if category_feature_search.recommendation == False:
@@ -365,6 +368,7 @@ def fetch_category_features_global(cat_id):
                 "type": i.features_datatype_id,
                 "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
+                "feature_required": i.feature_required,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
@@ -393,6 +397,7 @@ def fetch_category_with_groups_features_global(cat_id):
                 "type": i.features_datatype_id,
                 "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
+                "feature_required": i.feature_required,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
@@ -473,21 +478,22 @@ def add_date_features_global(json_data):
 #------------------ Add Product ----------------------------
 
 def add_product_global(json_data):
-    for i in json_data:
-        addproduct = GlobalProductProducts(varient = i['varient'])
+    # for i in json_data["product"]:
+        addproduct = GlobalProductProducts(varient = json_data['varient'])
         db.session.add(addproduct)
         db.session.commit()
-        return addproduct.id
+        product_id = addproduct.id
+        return product_id
 
-def add_product_global(json_data):
-    try:
-        for i in json_data['product']:
-        addproduct = GlobalProductProductsVarient(name = i['name'],category_id = i['categoy_id'])
-        db.session.add(addproduct)
-        db.session.commit()
-        return addproduct.id
-    except:
-        return 'Something Went Wrong'
+# def add_product_global(json_data):
+#     try:
+#         for i in json_data['product']:
+#             addproduct = GlobalProductProductsVarient(name = i['name'],category_id = i['categoy_id'])
+#             db.session.add(addproduct)
+#             db.session.commit()
+#             return addproduct.id
+#     except:
+#         return 'Something Went Wrong'
         
 #------------------- Add Product ------------------------
 
@@ -508,9 +514,10 @@ def add_product_data_global(json_data):
 
 #-----------------------Product Features-----------------------
 def product_features(json_data):
-    try:
+    # try:
         product = json_data['product']
-        addproduct = GlobalProductProductsVarient(name = product['name'],category_id = product['category_id'],product_varient_id = product_varient_id)
+        product_id = add_product_global(product)
+        addproduct = GlobalProductProductsVarient(name = product['name'],category_id = product['category_id'],product_id = product_id)
         db.session.add(addproduct)
         db.session.commit()
         product_varient_id = addproduct.id
@@ -544,11 +551,38 @@ def product_features(json_data):
                     
                 db.session.add(obj)
                 db.session.commit()
-        return json.dumps(product_varient_id)
+
+        for varient in json_data['varient_features']:
+            # varient_features_id = add_varient_global(product_id,varient)
+            add_varient_data = GlobalProductVarientFeatures(feature_id=varient['feature_id'], product_id = product_id)
+            db.session.add(add_varient_data) 
+            db.session.commit()
+        
+        id_s = {
+            "product_varient_id":product_varient_id,
+            "product_id" : product_id
+        }
+        return id_s
+    # except:
+    #     return 'Something Went Wrong'
+
+
+#--------------------- To Add Varient ----------------------------
+
+def add_varient_global(json_data):
+    try:
+        fetch_product = GlobalProductProducts.query.filter_by(id = json_data['product_id']).first()
+        fetch_product.varient = True
+        db.session.add(fetch_product)
+        db.session.commit()
+        for feature_id in json_data['feature_ids']:
+            add_varient_data = GlobalProductVarientFeatures(feature_id=feature_id, product_id = json_data['product_id'])
+            db.session.add(add_varient_data)
+            db.session.commit()
+            # varient_features_id = add_varient_data.id
+        return "done"
     except:
         return 'Something Went Wrong'
-
-
 
 
 
@@ -580,16 +614,6 @@ def extra_features_global(json_data):
     except:
         return 'Something Went Wrong'
 
-#--------------------- To Add Varient ----------------------------
-
-def add_varient_global(json_data):
-    try:
-        add_varient_data = GlobalProductVarientFeatures(sub_category_feature_id=json_data['sub_category_feature_id'], product_varient_id = json_data['product_varient_id'])
-        db.session.add(add_varient_data) 
-        db.session.commit()
-        return "done"
-    except:
-        return 'Something Went Wrong'
 
 def feature_units_types_global(json_data):
     try:
