@@ -419,6 +419,20 @@ def feature_datatypefunc_global(json_data):
     except:
         return 'Something Went Wrong'
 
+def fetch_datatypefunc_global(json_data):
+    try:
+        features_datatype = []
+        fetch_features_datatype = GlobalProductFeaturesDatatype.query.all()
+        for i in fetch_features_datatype:
+            obj = {
+                "id" : i.id,
+                "name": i.name
+            }
+            features_datatype.append(obj)
+        return features_datatype
+    except:
+        return "Something Went Wrong"
+
 #-------------------- Integer Datatype Features ---------------
 
 def add_integer_feature_global(json_data):

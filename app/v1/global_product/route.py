@@ -308,6 +308,15 @@ def feature_datatyperoute_global(current_user):
 
     return json.dumps(status)
 
+@blu_product.route('/featuredatatype', methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_datatypefunc_route_global(current_user):
+    json_data = request.json
+    status = fetch_datatypefunc_global(json_data)
+
+    return json.dumps(status)
+
 #======================= Product =================================
 
 #-------------------- Add Product -----------------------------
