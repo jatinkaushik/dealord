@@ -425,8 +425,8 @@ def fetch_datatypefunc_global(json_data):
         fetch_features_datatype = GlobalProductFeaturesDatatype.query.all()
         for i in fetch_features_datatype:
             obj = {
-                "id" : i.id,
-                "name": i.name
+                "value" : i.id,
+                "label": i.name
             }
             features_datatype.append(obj)
         return features_datatype
@@ -650,15 +650,13 @@ def feature_units_types_global(json_data):
 def fetch_feature_units_global():
     # try:
         fetch_units = GlobalProductFeaturesUnitsTypes.query.all()
-        units ={
-            "feature_units": []
-        }
+        units =[]
         for unit in fetch_units:
             obj = {
-                "id": unit.id,
-                "name": unit.name
+                "value": unit.id,
+                "label": unit.name
             }
-            units["feature_units"].append(obj)
+            units.append(obj)
         return units
     # except:
         # return "Something went Wrong"
