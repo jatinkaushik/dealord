@@ -214,7 +214,7 @@ def recommendation_data(features,feature_id):
 #----------------Features Groups Function -------------------
 def features_groups_global(json_data):
     try:
-        features_group = GlobalProductFeaturesGroups(name=json_data['name'], sub_category_id=json_data['sub_category_id'])
+        features_group = GlobalProductFeaturesGroups(name=json_data['name'], sub_category_id=json_data['sub_category_id'],order=json_data['order'])
         db.session.add(features_group)
         db.session.commit()
         return fetch_features_groups_global(json_data['sub_category_id'])
@@ -228,7 +228,8 @@ def fetch_features_groups_global(cat_id):
         for i in features_group:
             obj = {
                 "id" : i.id,
-                "name": i.name
+                "name": i.name,
+                "order": i.order
             }
             cat_features.append(obj)
         return cat_features
@@ -673,7 +674,7 @@ def add_units(json_data):
         return "Something went Wrong"
 
 def fetch_add_units(units_type_id):
-    # try:
+    try:
         fetch_units_obj = GlobalProductFeaturesUnits.query.filter_by(units_type_id = units_type_id)
         units = []
         for unit in fetch_units_obj:
@@ -685,8 +686,8 @@ def fetch_add_units(units_type_id):
             }
             units.append(obj)
         return units
-    # except:
-    #     return "Something went Wrong"    
+    except:
+        return "Something went Wrong"    
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()

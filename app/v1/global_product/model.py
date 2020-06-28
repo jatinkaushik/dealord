@@ -28,6 +28,7 @@ class GlobalProductFeaturesGroups(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
     sub_category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
+    order = db.Column(db.Integer)
     category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_features_groups')    
 
 class GlobalProductCategoryFeature(db.Model):
