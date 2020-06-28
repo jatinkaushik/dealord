@@ -388,3 +388,12 @@ def add_units_route(current_user):
     status = add_units(json_data)
 
     return status
+
+@blu_product.route('/units/<units_type_id>', methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_units_route(current_user,units_type_id):
+    # json_data = request.json
+    status = fetch_add_units(units_type_id)
+
+    return json.dumps(status)

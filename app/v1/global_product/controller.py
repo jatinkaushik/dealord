@@ -673,6 +673,22 @@ def add_units(json_data):
         return "done"
     except:
         return "Something went Wrong"
+
+def fetch_add_units(units_type_id):
+    # try:
+        fetch_units_obj = GlobalProductFeaturesUnits.query.filter_by(units_type_id = units_type_id)
+        units = []
+        for unit in fetch_units_obj:
+            obj = {
+                "id": unit.id,
+                "name": unit.name,
+                "order": unit.order,
+                "units_type_id": unit.units_type_id
+            }
+            units.append(obj)
+        return units
+    # except:
+    #     return "Something went Wrong"    
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()
