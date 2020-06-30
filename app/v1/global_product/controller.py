@@ -655,7 +655,8 @@ def fetch_feature_units_global():
         for unit in fetch_units:
             obj = {
                 "value": unit.id,
-                "label": unit.name
+                "label": unit.name,
+                "units": fetch_add_units(unit.id)
             }
             units.append(obj)
         return units
@@ -679,10 +680,13 @@ def fetch_add_units(units_type_id):
         units = []
         for unit in fetch_units_obj:
             obj = {
-                "id": unit.id,
-                "name": unit.name,
+                "value": unit.id,
+                "label": unit.name,
                 "order": unit.order,
-                "units_type_id": unit.units_type_id
+                "exp": unit.exp,
+                "exp_value": unit.value,
+                "units_type_id": unit.units_type_id,
+                "selected_unit": unit.selected_unit
             }
             units.append(obj)
         return units
