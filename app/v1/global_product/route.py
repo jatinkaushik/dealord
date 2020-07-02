@@ -317,6 +317,25 @@ def fetch_datatypefunc_route_global(current_user):
 
     return json.dumps(status)
 
+@blu_product.route('/recommendation_value', methods=["DELETE"])
+@cross_origin()
+@token_required
+def delete_recommended_particular_value_route(current_user):
+    json_data = request.json
+    status = delete_recommended_particular_value(json_data)
+
+    return json.dumps(status)
+
+
+@blu_product.route('/recommendation_value', methods=["PUT"])
+@cross_origin()
+@token_required
+def edit_recommended_particular_value_route(current_user):
+    json_data = request.json
+    status = edit_recommended_particular_value(json_data)
+
+    return json.dumps(status)
+
 #======================= Product =================================
 
 #-------------------- Add Product -----------------------------
