@@ -395,5 +395,4 @@ def add_units_route(current_user):
 def fetch_units_route(current_user,units_type_id):
     # json_data = request.json
     status = fetch_add_units(units_type_id)
-
     return json.dumps(status)
