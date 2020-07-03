@@ -180,7 +180,7 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     # try:
         for features in json_data:
-            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required']) 
+            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required'],filterable=features['filterable']) 
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
@@ -283,6 +283,9 @@ def edit_category_features_global(json_data):
 
         if 'features_groups_id' in json_data:
             category_feature_search.features_groups_id = json_data['features_groups_id']
+        
+        if 'filterable' in json_data:
+            category_feature_search.filterable = json_data['filterable']
         
         if 'feature_required' in json_data:
             category_feature_search.feature_required = json_data['feature_required']
@@ -418,6 +421,7 @@ def fetch_category_features_global(cat_id):
                 "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "feature_required": i.feature_required,
+                "filterable": i.filterable,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
@@ -447,6 +451,7 @@ def fetch_category_with_groups_features_global(cat_id):
                 "unit": i.unit_id if i.unit_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "feature_required": i.feature_required,
+                "filterable": i.filterable,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
