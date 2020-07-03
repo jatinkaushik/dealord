@@ -146,9 +146,10 @@ class GlobalProductFeaturesRecommended(db.Model):
 class GlobalProductFeaturesUnitsTypes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    selected_unit = db.Column(db.Integer, db.ForeignKey('global_product_features_units.id'))
     # features_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
-    category_features_rel = db.relationship('GlobalProductCategoryFeature', backref= 'global_product_features_units_types')
-    units_rel = db.relationship('GlobalProductFeaturesUnits', backref='global_product_features_units_types')
+    # category_features_rel = db.relationship('GlobalProductCategoryFeature', backref= 'global_product_features_units_types')
+    # units_rel = db.relationship('GlobalProductFeaturesUnits', backref='global_product_features_units_types')
 
 class GlobalProductFeaturesUnits(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -157,4 +158,3 @@ class GlobalProductFeaturesUnits(db.Model):
     exp = db.Column(db.String(5))
     value = db.Column(db.Float)
     order = db.Column(db.Integer)
-    selected_unit = db.Column(db.Boolean, default= False)
