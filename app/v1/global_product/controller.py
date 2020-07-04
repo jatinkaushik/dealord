@@ -184,7 +184,7 @@ def feature_func_global(json_data):
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
-                recommendation_data(features,feature_model.id)
+                recommendation_data(features['recommended_options'],feature_model.id,features['features_datatype_id'])
         # cat_id = 
         status = fetch_category_features_global(json_data[0]['category_id'])
         return status 
@@ -193,16 +193,16 @@ def feature_func_global(json_data):
         # return 'Something Went Wrong'
 
 
-def recommendation_data(features,feature_id):
+def recommendation_data(add,feature_id,type_id):
     # try:
-        for i in features['recommended_options']:
-            if features['features_datatype_id'] == 1:
+        for i in add:
+            if type_id == 1:
                 obj = GlobalProductFeaturesStringRecommended(feature_value = i['value'], feature_id = feature_id)
 
-            if features['features_datatype_id'] == 2:
+            if type_id == 2:
                 obj = GlobalProductFeaturesIntegerRecommended(feature_value = i['value'], feature_id = feature_id)
 
-            if features['features_datatype_id'] == 3:
+            if type_id == 3:
                 obj = GlobalProductFeaturesDoubleRecommended(feature_value = i['value'], feature_id = feature_id)
             db.session.add(obj)
             db.session.commit()
@@ -305,51 +305,146 @@ def edit_category_features_global(json_data):
     # except:
     #     return 'Something Went Wrong'
 
+def edit_category_features_with_check_global(json_data):
+    # try:
+        category_feature_search = GlobalProductCategoryFeature.query.filter_by(id=json_data['id']).first()
+        if not category_feature_search:
+            return "category_feature_not_found"
+        
+        if 'name' in json_data:
+            if json_data['name'] != category_feature_search.name:
+                category_feature_search.name = json_data['name']
+
+        if 'type_id' in json_data:
+            if json_data['type_id'] != category_feature_search.features_datatype_id:
+                category_feature_search.features_datatype_id = json_data['type_id']
+
+
+        # if 'category_id' in json_data:
+        #     if json_data['category_id'] != category_feature_search.category_id:
+        #         category_feature_search.category_id = json_data['category_id']
+        
+        if 'unit' in json_data:
+            if json_data['unit'] != category_feature_search.unit_id:
+                category_feature_search.unit_id = json_data['unit']
+
+        if 'features_groups_id' in json_data:
+            if json_data['features_groups_id'] != category_feature_search.features_groups_id:
+                category_feature_search.features_groups_id = json_data['features_groups_id']
+        
+        if 'filterable' in json_data:
+            if json_data['filterable'] != category_feature_search.filterable:
+                category_feature_search.filterable = json_data['filterable']
+        
+        if 'feature_required' in json_data:
+            if json_data['feature_required'] != category_feature_search.feature_required:
+                category_feature_search.feature_required = json_data['feature_required']
+
+        if 'is_recommendation' in json_data:
+            recommendation_options = json_data['recommendation_options']
+            if json_data['is_recommendation'] != category_feature_search.recommendation:
+                category_feature_search.recommendation = json_data['is_recommendation']
+                if category_feature_search.recommendation == True:
+                    # for add in recommendation_options['add']:
+                    add_recommendation = recommendation_data(recommendation_options['add'],category_feature_search.id,category_feature_search.features_datatype_id)   
+
+                if category_feature_search.recommendation == False:
+                    # delete_recommended_features1 = delete_recommended_features(category_feature_search.id)
+                    delete_recommended_features_values1 = delete_recommended_features_values(category_feature_search.id,category_feature_search.features_datatype_id)
+            else:
+                if category_feature_search.recommendation == True:
+                    if recommendation_options['edit']:
+                        for edit in recommendation_options['edit']:
+                            edit_recommendation = edit_recommended_particular_value(edit,category_feature_search.features_datatype_id)
+
+                    if recommendation_options['delete']:
+                        for delete in recommendation_options['delete']:
+                            delete_recommendation = delete_recommended_particular_value(delete,category_feature_search.features_datatype_id)
+
+                    if recommendation_options['add']:
+                        # for add in recommendation_options['add']:
+                        add_recommendation = recommendation_data(recommendation_options['add'],category_feature_search.id,category_feature_search.features_datatype_id)
+
+        db.session.add(category_feature_search)
+        db.session.commit()
+        features = fetch_features_global(category_feature_search.id)
+        return features
+
+    # except:
+    #     return 'Something Went Wrong'
+
+def fetch_features_global(feature_id):
+    # try:
+
+        fetch_features = GlobalProductCategoryFeature.query.filter_by(id=feature_id).first()
+        # features = []
+        
+        
+        features = {
+            "id" : fetch_features.id,
+            "name": fetch_features.name,
+            "type": fetch_features.features_datatype_id,
+            "unit": fetch_features.unit_id if fetch_features.unit_id != None else False,
+            "features_groups_id": fetch_features.features_groups_id,
+            "feature_required": fetch_features.feature_required,
+            "filterable": fetch_features.filterable,
+            "is_recommendation": fetch_features.recommendation if fetch_features.recommendation != None else False,
+            "recommendation_value": None,
+            "recommendation_options": fetch_recommended_features(fetch_features.id, fetch_features.features_datatype_id, fetch_features.recommendation),
+            "value": None
+            # "features_units": fetch_feature_units_global(fetch_features.unit_id)
+        }
+            # features.append(obj)
+        return features
+        
+    # except:
+    #    return "something went wrong"
+
 def delete_recommended_features(feature_id):
     recommended_features = GlobalProductFeaturesRecommended.query.filter_by(feature_id = feature_id).first()
     db.session.delete(recommended_features)
     db.session.commit()
     return "Done"
 
-def edit_recommended_particular_value(json_data):
-    if json_data['type_id'] == 1:
+def edit_recommended_particular_value(json_data,type_id):
+    if type_id == 1:
         recommendation_search = GlobalProductFeaturesStringRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
 
-        if 'feature_value' in json_data:
-            recommendation_search.feature_value = json_data['feature_value']
-    if json_data['type_id'] == 2:
+        if 'value' in json_data:
+            recommendation_search.feature_value = json_data['value']
+    if type_id == 2:
         recommendation_search = GlobalProductFeaturesIntegerRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
 
-        if 'feature_value' in json_data:
-            recommendation_search.feature_value = json_data['feature_value']
-    if json_data['type_id'] == 3:
+        if 'value' in json_data:
+            recommendation_search.feature_value = json_data['value']
+    if type_id == 3:
         recommendation_search = GlobalProductFeaturesDoubleRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
 
-        if 'feature_value' in json_data:
-            recommendation_search.feature_value = json_data['feature_value']
+        if 'value' in json_data:
+            recommendation_search.feature_value = json_data['value']
 
     db.session.add(recommendation_search)
     db.session.commit()
     return 'done'
 
-def delete_recommended_particular_value(json_data):
-    if json_data['type_id'] == 1:
+def delete_recommended_particular_value(json_data,type_id):
+    if type_id == 1:
         recommended_features_value = GlobalProductFeaturesStringRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
 
-    if json_data['type_id'] == 2:
+    if type_id == 2:
         recommended_features_value = GlobalProductFeaturesIntegerRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
 
-    if json_data['type_id'] == 3:
+    if type_id == 3:
         recommended_features_value = GlobalProductFeaturesDoubleRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
