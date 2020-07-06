@@ -269,6 +269,16 @@ def edit_category_featuresroute_global(current_user):
     #     return make_response('category Fearture not found', 204)
     return json.dumps(status)
 
+@blu_product.route('/categoryfeaturestest', methods = ["PUT"])
+@cross_origin()
+@token_required
+def edit_category_features_with_check_global_route(current_user):
+    json_data = request.json
+    status = edit_category_features_with_check_global(json_data)
+
+    # if status == "category_feature_not_found":
+    #     return make_response('category Fearture not found', 204)
+    return json.dumps(status)
 
 @blu_product.route('/featurestypesunits', methods=["POST"])
 @cross_origin()
@@ -322,7 +332,8 @@ def fetch_datatypefunc_route_global(current_user):
 @token_required
 def delete_recommended_particular_value_route(current_user):
     json_data = request.json
-    status = delete_recommended_particular_value(json_data)
+    type_id = json_data['type_id']
+    status = delete_recommended_particular_value(json_data,type_id)
 
     return json.dumps(status)
 
@@ -332,7 +343,8 @@ def delete_recommended_particular_value_route(current_user):
 @token_required
 def edit_recommended_particular_value_route(current_user):
     json_data = request.json
-    status = edit_recommended_particular_value(json_data)
+    type_id = json_data['type_id']
+    status = edit_recommended_particular_value(json_data,type_id)
 
     return json.dumps(status)
 
