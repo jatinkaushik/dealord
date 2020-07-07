@@ -36,7 +36,7 @@ class GlobalProductCategoryFeature(db.Model):
     name = db.Column(db.String(40))
     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
     features_datatype_id = db.Column(db.Integer, db.ForeignKey('global_product_features_datatype.id'))
-    unit_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
+    unit_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'), nullable = True)
     recommendation = db.Column(db.Boolean)
     feature_required = db.Column(db.Boolean, default=False)
     filterable = db.Column(db.Boolean, default=False)
