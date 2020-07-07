@@ -317,7 +317,9 @@ def edit_category_features_with_check_global(json_data):
 
         if 'type_id' in json_data:
             if json_data['type_id'] != category_feature_search.features_datatype_id:
+                delete_recommended_features_values1 = delete_recommended_features_values(category_feature_search.id,category_feature_search.features_datatype_id)
                 category_feature_search.features_datatype_id = json_data['type_id']
+
 
 
         # if 'category_id' in json_data:
@@ -326,7 +328,10 @@ def edit_category_features_with_check_global(json_data):
         
         if 'unit' in json_data:
             if json_data['unit'] != category_feature_search.unit_id:
-                category_feature_search.unit_id = json_data['unit']
+                if category_feature_search.unit_id == False:
+                    category_feature_search.unit_id = None
+                else:
+                    category_feature_search.unit_id = json_data['unit']
 
         if 'features_groups_id' in json_data:
             if json_data['features_groups_id'] != category_feature_search.features_groups_id:
