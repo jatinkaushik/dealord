@@ -435,7 +435,7 @@ def fetch_units_route(current_user,units_type_id):
 @cross_origin()
 @token_required
 def upload_image_route(current_user):
-    image = request.files
-    status = upload_image(image)
+    images = request.files
+    status = upload_image(images)
     return json.dumps(status)
 
