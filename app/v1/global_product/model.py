@@ -71,6 +71,8 @@ class GlobalProductProductsVarient(db.Model):
     boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_products_varient')
     Extra_features_rel = db.relationship('GlobalProductFeaturesExtra', backref='global_product_products_varient')
     recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_products_varient')
+    products_image_rel = db.relationship('GlobalProductProductsImage', backref='global_product_products_varient')
+
 
 class GlobalProductVarientFeatures(db.Model):
     id = db.Column(db.Integer,primary_key=True)
@@ -157,4 +159,10 @@ class GlobalProductFeaturesUnits(db.Model):
     units_type_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
     exp = db.Column(db.String(5))
     value = db.Column(db.Float)
+    order = db.Column(db.Integer)
+
+class GlobalProductProductsImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path = db.Column(db.String(200))
+    product_varient_id = db.Column(db.Integer, db.ForeignKey('global_product_products_varient.id'))
     order = db.Column(db.Integer)
