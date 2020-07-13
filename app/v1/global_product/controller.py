@@ -329,7 +329,7 @@ def edit_category_features_with_check_global(json_data):
         if 'unit' in json_data:
             if json_data['unit'] != category_feature_search.unit_id:
                 if category_feature_search.unit_id == False:
-                    category_feature_search.unit_id = None
+                    category_feature_search.unit_id = json_data['unit']
                 else:
                     category_feature_search.unit_id = json_data['unit']
 
