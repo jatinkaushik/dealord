@@ -3,7 +3,10 @@ from app import app, db
 from app.v1.global_product import *
 # from app. import Category
 from app.v1.user.model import *
+import os
+from werkzeug.utils import secure_filename
 
+app.config["IMAGE_UPLOADS"] = "./static/img/"
 #-------------------- User Category Check ----------------------
 
 def check_current_user_category_id_global(current_user, cat_id):
@@ -848,3 +851,22 @@ def fetch_add_units(units_type_id):
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()
+
+def upload_image(image,json_data):
+    # try:
+        product = json_data['json']
+        for key in image:
+            file = request.files.get(key)
+            order = request.form.get(key)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
+            path = app.config["IMAGE_UPLOADS"]+filename
+            image_data = GlobalProductProductsImage(product_varient_id = product['product_id'],image_path = path, order = order)
+            db.session.add(image_data)
+            db.session.commit()
+        return "done"
+    # except:
+    #     return "Something went Wrong" 
+
+# def 
+

@@ -1,12 +1,15 @@
 from flask import render_template, flash, request, url_for, redirect, session, jsonify , make_response
 from app.v1.global_product.controller import *
 import json
+
 from app import app
 from flask_cors import CORS, cross_origin
 from app.NestedBlueprint import NestedBlueprint
 from app.v1 import blu_v1
 from functools import wraps
 import jwt
+
+
 # from app.v1.user import User
 
 #========================= Token Verification ==========================
@@ -427,3 +430,13 @@ def fetch_units_route(current_user,units_type_id):
     # json_data = request.json
     status = fetch_add_units(units_type_id)
     return json.dumps(status)
+
+@blu_product.route('/uploadimage', methods=["POST"])
+@cross_origin()
+@token_required
+def upload_image_route(current_user):
+    images = request.files
+    json_data = request.form
+    status = upload_image(images,json_data)
+    return json.dumps(status)
+
