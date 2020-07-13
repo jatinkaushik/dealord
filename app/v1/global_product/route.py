@@ -436,6 +436,7 @@ def fetch_units_route(current_user,units_type_id):
 @token_required
 def upload_image_route(current_user):
     images = request.files
-    status = upload_image(images)
+    json_data = request.form
+    status = upload_image(images,json_data)
     return json.dumps(status)
 
