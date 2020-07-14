@@ -1,4 +1,4 @@
-from flask import render_template, flash, request, url_for, redirect, session, jsonify , make_response
+from flask import render_template, flash, request, url_for, redirect, session, jsonify , make_response ,send_file
 from app.v1.global_product.controller import *
 import json
 
@@ -441,6 +441,7 @@ def upload_image_route(current_user):
     status = upload_image(images,json_data)
     return json.dumps(status)
 
+<<<<<<< HEAD
 
 @blu_product.route('/justchill', methods=["GET"])
 @cross_origin()
@@ -449,3 +450,23 @@ def testing_route():
     # path = os.getcwd()
     url = "http://127.0.0.1:5000"+app.config['IMAGE_UPLOADS']
     return json.dumps(url)
+=======
+@blu_product.route('/static/img/<file>', methods=["GET"])
+@cross_origin()
+# @token_required
+def fetch_test_image_route(file):
+    path = '../static/img/'+ file
+    image = send_file(path , attachment_filename = file)
+    return image
+    
+# http://127.0.0.1:5000/v1/globalproduct/static/img/Pizza_Momos_Finger_Dip.jpeg
+
+@blu_product.route('/image', methods=["GET"])
+@cross_origin()
+# @token_required
+def fetch_image_route():
+    json_data = request.json
+    # image = send_file(path , attachment_filename = file)
+    images = fetch_image(json_data)
+    return json.dumps(images)
+>>>>>>> 3f3aaeb8169220a2d1229e4497197e103ff8a320
