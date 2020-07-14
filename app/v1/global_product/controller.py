@@ -737,6 +737,23 @@ def product_features(json_data):
     # except:
     #     return 'Something Went Wrong'
 
+def product_features_new(json_data):
+    # try:
+        product = json_data['product']
+        product_id = add_product_global(product)
+        addproduct = GlobalProductProductsVarient(name = product['name'],category_id = product['category_id'],product_id = product_id,country_of_origin = product['country_of_origin'],description_of_products = product['description_of_products'],is_product_features_added = product['is_product_features_added'])
+        db.session.add(addproduct)
+        db.session.commit()
+        product_varient_id = addproduct.id
+        
+        
+        id_s = {
+            "product_varient_id":product_varient_id,
+            "product_id" : product_id
+        }
+        return id_s
+    # except:
+    #     return 'Something Went Wrong'
 
 #--------------------- To Add Varient ----------------------------
 
