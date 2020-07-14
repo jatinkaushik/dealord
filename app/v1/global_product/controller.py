@@ -867,9 +867,6 @@ def upload_image(image,json_data):
             db.session.commit()
         return "done"
     # except:
-<<<<<<< HEAD
-    #     return "Something went Wrong" 
-=======
     #     return "Something went Wrong" 
 
 def fetch_image(json_data):
@@ -887,4 +884,3 @@ def fetch_image(json_data):
         return images
     except:
         return "Something went Wrong" 
->>>>>>> 3f3aaeb8169220a2d1229e4497197e103ff8a320
