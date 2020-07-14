@@ -854,19 +854,17 @@ def fetch_add_units(units_type_id):
 
 def upload_image(image,json_data):
     # try:
-        product = json_data['json']
+        product = json.loads(json_data['json'])
         for key in image:
-            file = request.files.get(key)
-            order = request.form.get(key)
+            file = image.get(key)
+            order = int(json_data.get(key))
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
             path = app.config["IMAGE_UPLOADS"]+filename
+            # print("path: ", path)
             image_data = GlobalProductProductsImage(product_varient_id = product['product_id'],image_path = path, order = order)
             db.session.add(image_data)
             db.session.commit()
         return "done"
     # except:
     #     return "Something went Wrong" 
-
-# def 
-
