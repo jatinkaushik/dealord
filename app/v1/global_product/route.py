@@ -365,6 +365,16 @@ def add_product_data_global_route(current_user):
 
     return json.dumps(status)
 
+@blu_product.route('/product_img',methods=["POST"])
+@cross_origin()
+@token_required
+def add_product_with_image_route(current_user):
+    images = request.files
+    json_data = request.form
+    status = add_product_with_image(images,json_data)
+
+    return json.dumps(status)
+
 #------------------ Product fetch -----------------------------
 @blu_product.route('/product',methods=["GET"])
 @cross_origin()
@@ -386,8 +396,9 @@ def fetch_product_globalcurrent(current_user):
 @cross_origin()
 @token_required
 def product_features_route(current_user):
-    json_data =request.json
-    status = product_features(json_data)
+    json_data = request.json
+    product_varient_id = json_data['product_varient_id']
+    status = product_features(json_data,product_varient_id)
 
     return status
 
