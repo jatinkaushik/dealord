@@ -365,7 +365,7 @@ def add_product_data_global_route(current_user):
 
     return json.dumps(status)
 
-@blu_product.route('/product_img',methods=["POST"])
+@blu_product.route('/initializing_product',methods=["POST"])
 @cross_origin()
 @token_required
 def add_product_with_image_route(current_user):
