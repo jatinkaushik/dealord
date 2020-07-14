@@ -688,7 +688,7 @@ def product_features(json_data):
     # try:
         product = json_data['product']
         product_id = add_product_global(product)
-        addproduct = GlobalProductProductsVarient(name = product['name'],category_id = product['category_id'],product_id = product_id)
+        addproduct = GlobalProductProductsVarient(name = product['name'],category_id = product['category_id'],product_id = product_id,country_of_origin = product['country_of_origin'],description_of_products = product['description_of_products'],is_product_features_added = product['is_product_features_added'])
         db.session.add(addproduct)
         db.session.commit()
         product_varient_id = addproduct.id
@@ -868,5 +868,18 @@ def upload_image(image,json_data):
     # except:
     #     return "Something went Wrong" 
 
-# def 
-
+def fetch_image(json_data):
+    try:
+        fetch_image_obj = GlobalProductProductsImage.query.filter_by(product_varient_id = json_data['product_varient_id'])
+        images =[]
+        for image in fetch_image_obj:
+            obj = {
+                "id": image.id,
+                "product_varient_id": image.product_varient_id,
+                "image_path": "http://127.0.0.1:5000/v1/globalproduct"+image.image_path,
+                "order": image.order
+            }
+            images.append(obj)
+        return images
+    except:
+        return "Something went Wrong" 
