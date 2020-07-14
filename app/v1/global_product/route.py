@@ -8,6 +8,7 @@ from app.NestedBlueprint import NestedBlueprint
 from app.v1 import blu_v1
 from functools import wraps
 import jwt
+import os
 
 
 # from app.v1.user import User
@@ -439,6 +440,16 @@ def upload_image_route(current_user):
     json_data = request.form
     status = upload_image(images,json_data)
     return json.dumps(status)
+
+
+@blu_product.route('/justchill', methods=["GET"])
+@cross_origin()
+def testing_route():
+    # os.chdir("./static/img")
+    # path = os.getcwd()
+    url = "http://127.0.0.1:5000"+app.config['IMAGE_UPLOADS']
+    return json.dumps(url)
+
 
 @blu_product.route('/static/img/<file>', methods=["GET"])
 @cross_origin()
