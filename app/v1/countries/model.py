@@ -16,6 +16,7 @@ class Countries(db.Model):
     flag = db.Column(db.Boolean)
     wikiDataId = db.Column(db.String(200))
     states_rel = db.relationship('States', backref='countries')
+    cities_rel = db.relationship('Cities', backref='countries')
 
 class States(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +29,7 @@ class States(db.Model):
     updated_at = db.Column(db.TIMESTAMP, nullable=False, server_default=db.text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     flag = db.Column(db.Boolean)
     wikiDataId = db.Column(db.String(200))  
-    states_rel = db.relationship('States', backref='countries') 
+    states_rel = db.relationship('Cities', backref='states') 
 
 class Cities(db.Model):
     id = db.Column(db.Integer, primary_key=True)
