@@ -1,5 +1,6 @@
 from app import db
 from app.v1.user.model import *
+from app.v1.countries.model import *
 
 class GlobalProductCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,7 +65,7 @@ class GlobalProductProductsVarient(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
     name = db.Column(db.String(100))
     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    country_of_origin = db.Column(db.String(100))
+    country_of_origin = db.Column(db.Integer,db.ForeignKey('countries.id'))
     description_of_products = db.Column(db.String(2000)) 
     is_product_features_added = db.Column(db.Boolean, default=False)
     product_live = db.Column(db.Boolean, default=False)

@@ -1,4 +1,5 @@
 from app import db
+from app.v1.global_product import *
 
 class Countries(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,6 +18,7 @@ class Countries(db.Model):
     wikiDataId = db.Column(db.String(200))
     states_rel = db.relationship('States', backref='countries')
     cities_rel = db.relationship('Cities', backref='countries')
+    global_product_rel = db.relationship('GlobalProductProductsVarient', backref='countries')
 
 class States(db.Model):
     id = db.Column(db.Integer, primary_key=True)
