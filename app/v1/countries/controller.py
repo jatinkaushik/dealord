@@ -1,8 +1,9 @@
 import json
 from app import app, db
 from app.v1.countries import *
+from app.v1.countries.countries_data import countries
 
-def fetch_country(json_data):
+def fetch_country():
     data = Countries.query.all()
     output = []
     for i in data:
@@ -13,3 +14,8 @@ def fetch_country(json_data):
         output.append(obj)
     
     return output
+
+def add_country():
+    db.session.execute(countries)
+    db.session.commit()
+    return

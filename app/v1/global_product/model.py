@@ -65,7 +65,7 @@ class GlobalProductProductsVarient(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
     name = db.Column(db.String(100))
     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    country_of_origin = db.Column(db.Integer,db.ForeignKey('countries.id'))
+    country_of_origin = db.Column(db.Integer, db.ForeignKey('countries.id'))
     description_of_products = db.Column(db.String(2000)) 
     is_product_features_added = db.Column(db.Boolean, default=False)
     product_live = db.Column(db.Boolean, default=False)

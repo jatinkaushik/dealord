@@ -11,7 +11,13 @@ blu_product = NestedBlueprint(blu_v1, '/countries')
 @blu_product.route('/country', methods=["GET"])
 @cross_origin()
 def fetch_country_route():
-    json_data = request.json
-    status = fetch_country(json_data)
+    status = fetch_country()
     
+    return json.dumps(status)
+    
+
+@blu_product.route('/addcountry', methods=["GET"])
+@cross_origin()
+def add_country_route():
+    status = add_country()
     return json.dumps(status)
