@@ -7,8 +7,8 @@ def fetch_country(json_data):
     output = []
     for i in data:
         obj = {
-            "id": i.id,
-            "name": i.name
+            "value": i.id,
+            "label": i.name
         }
         output.append(obj)
     
