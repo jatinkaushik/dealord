@@ -842,6 +842,167 @@ def product_features(json_data,product_varient_id):
         #     add_varient_data = GlobalProductVarientFeatures(feature_id=varient['feature_id'], product_id = product_id)
         #     db.session.add(add_varient_data) 
         #     db.session.commit()
+def edit_product_varient(image,json_data):
+    try:
+        product = json.loads(json_data['json'])
+        product_varient_search = GlobalProductProductsVarient.query.filter_by(id=product['id']).first()
+        
+        if 'name' in product:
+            if product['name'] != product_varient_search.name:
+                product_varient_search.name = product['name']
+
+        if 'product_id' in product:
+            if product['product_id'] != product_varient_search.product_id:
+                product_varient_search.product_id = product['product_id'] 
+
+        if 'category_id' in product:
+            if product['category_id'] != product_varient_search.category_id:
+                product_varient_search.category_id = product['category_id']
+        
+        if 'country_of_origin' in product:
+            if product['country_of_origin'] != product_varient_search.country_of_origin:
+                product_varient_search.country_of_origin = product['country_of_origin']
+
+        if 'description_of_products' in product:
+            if product['description_of_products'] != product_varient_search.description_of_products:
+                product_varient_search.description_of_products = product['description_of_products']
+
+        if 'is_product_features_added' in product:
+            if product['is_product_features_added'] != product_varient_search.is_product_features_added:
+                product_varient_search.is_product_features_added = product['is_product_features_added']
+
+        if 'product_live' in product:
+            if product['product_live'] != product_varient_search.product_live:
+                product_varient_search.product_live = product['product_live']
+
+        if 'product_approve' in product:
+            if product['product_approve'] != product_varient_search.product_approve:
+                product_varient_search.product_approve = product['product_approve']
+        
+        if 'master_product' in product:
+            if product['master_product'] != product_varient_search.master_product:
+                product_varient_search.master_product = product['master_product']
+
+        
+    except:
+        return 'Something Went Wrong'
+
+def fetch_all_product():
+    # try:
+        fetch_all_product_filter = GlobalProductProductsVarient.query.all()
+        product_varient = []
+        for product in fetch_all_product_filter:
+            obj = {
+                "id" : product.id,
+                "name": product.name,
+                "category_id": product.category_id,
+                "product_id": product.product_id,
+                "country_of_origin": product.country_of_origin,
+                "description_of_products": product.description_of_products,
+                "is_product_features_added": product.is_product_features_added,
+                "product_live": product.product_live,
+                "product_approve": product.product_approve,
+                "master_product": product.master_product
+            }
+            product_varient.append(obj)
+        return product_varient
+    # except:
+    #     return 'Something Went Wrong'
+
+
+def fetch_product_varient(json_data):
+    try:
+        fetch_product_varient = GlobalProductProductsVarient.query.filter_by(id = json_data['product_varient_id']).first()
+        fetch_product_varient_image = fetch_image(json_data)
+
+        product_varient = {
+            "id" : fetch_product_varient.id,
+            "name": fetch_product_varient.name,
+            "category_id": fetch_product_varient.category_id,
+            "product_id": fetch_product_varient.product_id,
+            "country_of_origin": fetch_product_varient.country_of_origin,
+            "description_of_products": fetch_product_varient.description_of_products,
+            "is_product_features_added": fetch_product_varient.is_product_features_added,
+            "product_live": fetch_product_varient.product_live,
+            "product_approve": fetch_product_varient.product_approve,
+            "master_product": fetch_product_varient.master_product
+            
+        }
+
+        if not product_varient['master_product']:
+            features = []
+            fetch_product_varient_features_string_values = GlobalProductFeaturesString.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_string = []
+            for feature in fetch_product_varient_features_string_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_string.append(obj)
+            features.append(features_string)
+            fetch_product_varient_features_integer_values = GlobalProductFeaturesInteger.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_integer = []
+            for feature in fetch_product_varient_features_integer_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_integer.append(obj)
+            features.append(features_integer)
+
+            fetch_product_varient_features_double_values = GlobalProductFeaturesDouble.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_double = []
+            for feature in fetch_product_varient_features_double_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_double.append(obj)
+            features.append(features_double)
+
+            fetch_product_varient_features_datetime_values = GlobalProductFeaturesDate.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_datetime = []
+            for feature in fetch_product_varient_features_datetime_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_datetime.append(obj)
+            features.append(features_datetime)
+
+            fetch_product_varient_features_boolean_values = GlobalProductFeaturesBoolean.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_boolean = []
+            for feature in fetch_product_varient_features_boolean_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_boolean.append(obj)
+            features.append(features_boolean)
+
+        product_varient_with_features = {
+            'product_varient': product_varient,
+            'features': features,
+            'product_varient_image':fetch_product_varient_image
+        }
+        return product_varient_with_features
+    except:
+        return 'Something Went Wrong'
 
 #--------------------- To Add Varient ----------------------------
 

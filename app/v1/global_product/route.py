@@ -402,6 +402,24 @@ def product_features_route(current_user):
 
     return status
 
+@blu_product.route('/productvarient',methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_product_varient_route(current_user):
+    json_data = request.json
+    status = fetch_product_varient(json_data)
+
+    return json.dumps(status)
+
+@blu_product.route('/allproductvarient',methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_all_product_varient_route(current_user):
+    # json_data = request.json
+    status = fetch_all_product()
+
+    return json.dumps(status)
+
 
 #------------------- TO add extra Fearture --------------------
 

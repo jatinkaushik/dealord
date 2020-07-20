@@ -70,6 +70,7 @@ class GlobalProductProductsVarient(db.Model):
     is_product_features_added = db.Column(db.Boolean, default=False)
     product_live = db.Column(db.Boolean, default=False)
     product_approve = db.Column(db.Boolean, default=False)
+    master_product = db.Column(db.Integer)
     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_products_varient')
     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_products_varient')
     double_features_rel = db.relationship('GlobalProductFeaturesDouble', backref='global_product_products_varient')
