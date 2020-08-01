@@ -183,7 +183,7 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     # try:
         for features in json_data:
-            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required'],filterable=features['filterable']) 
+            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_types_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required'],filterable=features['filterable']) 
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
@@ -282,7 +282,7 @@ def edit_category_features_global(json_data):
             category_feature_search.category_id = json_data['category_id']
         
         if 'unit' in json_data:
-            category_feature_search.unit_id = json_data['unit']
+            category_feature_search.unit_types_id = json_data['unit']
 
         if 'features_groups_id' in json_data:
             category_feature_search.features_groups_id = json_data['features_groups_id']
@@ -330,11 +330,11 @@ def edit_category_features_with_check_global(json_data):
         #         category_feature_search.category_id = json_data['category_id']
         
         if 'unit' in json_data:
-            if json_data['unit'] != category_feature_search.unit_id:
-                if category_feature_search.unit_id == False:
-                    category_feature_search.unit_id = json_data['unit']
+            if json_data['unit'] != category_feature_search.unit_types_id:
+                if category_feature_search.unit_types_id == False:
+                    category_feature_search.unit_types_id = json_data['unit']
                 else:
-                    category_feature_search.unit_id = json_data['unit']
+                    category_feature_search.unit_types_id = json_data['unit']
 
         if 'features_groups_id' in json_data:
             if json_data['features_groups_id'] != category_feature_search.features_groups_id:
@@ -392,7 +392,7 @@ def fetch_features_global(feature_id):
             "id" : fetch_features.id,
             "name": fetch_features.name,
             "type": fetch_features.features_datatype_id,
-            "unit": fetch_features.unit_id if fetch_features.unit_id != None else False,
+            "unit": fetch_features.unit_types_id if fetch_features.unit_types_id != None else False,
             "features_groups_id": fetch_features.features_groups_id,
             "feature_required": fetch_features.feature_required,
             "filterable": fetch_features.filterable,
@@ -400,7 +400,7 @@ def fetch_features_global(feature_id):
             "recommendation_value": None,
             "recommendation_options": fetch_recommended_features(fetch_features.id, fetch_features.features_datatype_id, fetch_features.recommendation),
             "value": None
-            # "features_units": fetch_feature_units_global(fetch_features.unit_id)
+            # "features_units": fetch_feature_units_global(fetch_features.unit_types_id)
         }
             # features.append(obj)
         return features
@@ -521,7 +521,7 @@ def fetch_category_features_global(cat_id):
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "unit": i.unit_id if i.unit_id != None else False,
+                "unit": i.unit_types_id if i.unit_types_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "feature_required": i.feature_required,
                 "filterable": i.filterable,
@@ -529,7 +529,7 @@ def fetch_category_features_global(cat_id):
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
                 "value": None
-                # "features_units": fetch_feature_units_global(i.unit_id)
+                # "features_units": fetch_feature_units_global(i.unit_types_id)
             }
             features.append(obj)
         return features
@@ -551,7 +551,7 @@ def fetch_category_with_groups_features_global(cat_id):
                 "id" : i.id,
                 "name": i.name,
                 "type": i.features_datatype_id,
-                "unit": i.unit_id if i.unit_id != None else False,
+                "unit": i.unit_types_id if i.unit_types_id != None else False,
                 "features_groups_id": i.features_groups_id,
                 "feature_required": i.feature_required,
                 "filterable": i.filterable,
@@ -559,7 +559,7 @@ def fetch_category_with_groups_features_global(cat_id):
                 "recommendation_value": None,
                 "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
                 "value": None
-                # "features_units": fetch_feature_units_global(i.unit_id)
+                # "features_units": fetch_feature_units_global(i.unit_types_id)
             }
             cat_features["features"].append(obj)
         cat_features["features_groups"] = fetch_features_groups_global(cat_id)
@@ -567,28 +567,28 @@ def fetch_category_with_groups_features_global(cat_id):
 
 #----------------- Add Datatype ---------------------------- 
 
-def feature_datatypefunc_global(json_data):
-    try:
-        feature_type = GlobalProductFeaturesDatatype(name=json_data['name'])
-        db.session.add(feature_type)
-        db.session.commit()
-        return "Done"
-    except:
-        return 'Something Went Wrong'
+# def feature_datatypefunc_global(json_data):
+#     try:
+#         feature_type = GlobalProductFeaturesDatatype(name=json_data['name'])
+#         db.session.add(feature_type)
+#         db.session.commit()
+#         return "Done"
+#     except:
+#         return 'Something Went Wrong'
 
-def fetch_datatypefunc_global(json_data):
-    try:
-        features_datatype = []
-        fetch_features_datatype = GlobalProductFeaturesDatatype.query.all()
-        for i in fetch_features_datatype:
-            obj = {
-                "value" : i.id,
-                "label": i.name
-            }
-            features_datatype.append(obj)
-        return features_datatype
-    except:
-        return "Something Went Wrong"
+# def fetch_datatypefunc_global(json_data):
+#     try:
+#         features_datatype = []
+#         fetch_features_datatype = GlobalProductFeaturesDatatype.query.all()
+#         for i in fetch_features_datatype:
+#             obj = {
+#                 "value" : i.id,
+#                 "label": i.name
+#             }
+#             features_datatype.append(obj)
+#         return features_datatype
+#     except:
+#         return "Something Went Wrong"
 
 #-------------------- Integer Datatype Features ---------------
 
@@ -994,6 +994,95 @@ def fetch_product_varient(json_data):
                 }
                 features_boolean.append(obj)
             features.append(features_boolean)
+        else:
+            fetch_varient_features = GlobalProductVarientFeatures.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features = []
+            fetch_product_varient_features_string_values = GlobalProductFeaturesString.query.filter_by(product_varient_id = product_varient['master_product'])
+            features_string = []
+            for feature in fetch_product_varient_features_string_values:
+                count = 0
+                for varient_feature in fetch_varient_features:
+                    if feature.feature_id == varient_feature.feature_id:
+                        count += 1
+                if count != 0:
+                    fetch_product_varient_features_values = GlobalProductFeaturesString.query.filter_by(product_varient_id = json_data['product_varient_id'],feature_id = feature.feature_id).first()
+                    fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                    obj = {
+                        "id" : fetch_product_varient_features_values.id,
+                        "name": fetch_product_varient_features.name,
+                        "feature_id": fetch_product_varient_features_values.feature_id,
+                        "feature_value": fetch_product_varient_features_values.feature_value
+                    }
+                    features_string.append(obj)
+                else:
+                    fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                    obj = {
+                        "id" : feature.id,
+                        "name": fetch_product_varient_features.name,
+                        "feature_id": feature.feature_id,
+                        "feature_value": feature.feature_value
+                    }
+                    features_string.append(obj)
+            features.append(features_string)
+
+            fetch_product_varient_features_integer_values = GlobalProductFeaturesInteger.query.filter_by(product_varient_id = product_varient['master_product'])
+            features_integer = []
+            for feature in fetch_product_varient_features_integer_values:
+                count = 0
+                for varient_feature in fetch_varient_features:
+                    if feature.feature_id == varient_feature.feature_id:
+                        count += 1
+                if count != 0:
+                    fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                    obj = {
+                        "id" : feature.id,
+                        "name": fetch_product_varient_features.name,
+                        "feature_id": feature.feature_id,
+                        "feature_value": feature.feature_value
+                    }
+                features_integer.append(obj)
+            features.append(features_integer)
+
+            fetch_product_varient_features_double_values = GlobalProductFeaturesDouble.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_double = []
+            for feature in fetch_product_varient_features_double_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_double.append(obj)
+            features.append(features_double)
+
+            fetch_product_varient_features_datetime_values = GlobalProductFeaturesDate.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_datetime = []
+            for feature in fetch_product_varient_features_datetime_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_datetime.append(obj)
+            features.append(features_datetime)
+
+            fetch_product_varient_features_boolean_values = GlobalProductFeaturesBoolean.query.filter_by(product_varient_id = json_data['product_varient_id'])
+            features_boolean = []
+            for feature in fetch_product_varient_features_boolean_values:
+                fetch_product_varient_features = GlobalProductCategoryFeature.query.filter_by(id = feature.feature_id).first()
+                obj = {
+                    "id" : feature.id,
+                    "name": fetch_product_varient_features.name,
+                    "feature_id": feature.feature_id,
+                    "feature_value": feature.feature_value
+                }
+                features_boolean.append(obj)
+            features.append(features_boolean)
+
+
 
         product_varient_with_features = {
             'product_varient': product_varient,
@@ -1052,14 +1141,14 @@ def extra_features_global(json_data):
         return 'Something Went Wrong'
 
 
-def feature_units_types_global(json_data):
-    try:
-        add_features_units_types = GlobalProductFeaturesUnitsTypes(name = json_data['name_types'])
-        db.session.add(add_features_units_types)
-        db.session.commit()
-        return "done"
-    except:
-        return 'Something Went Wrong'
+# def feature_units_types_global(json_data):
+#     try:
+#         add_features_units_types = GlobalProductFeaturesUnitsTypes(name = json_data['name_types'])
+#         db.session.add(add_features_units_types)
+#         db.session.commit()
+#         return "done"
+#     except:
+#         return 'Something Went Wrong'
 
 # def feature_units_global(json_data):
 #     try:
@@ -1070,50 +1159,50 @@ def feature_units_types_global(json_data):
 #     except:
         # return 'Something Went Wrong'
 
-def fetch_feature_units_global():
-    # try:
-        fetch_units = GlobalProductFeaturesUnitsTypes.query.all()
-        units =[]
-        for unit in fetch_units:
-            obj = {
-                "value": unit.id,
-                "label": unit.name,
-                "selected_unit": unit.selected_unit,
-                "units": fetch_add_units(unit.id)
-            }
-            units.append(obj)
-        return units
-    # except:
-        # return "Something went Wrong"
+# def fetch_feature_units_global():
+#     # try:
+#         fetch_units = GlobalProductFeaturesUnitsTypes.query.all()
+#         units =[]
+#         for unit in fetch_units:
+#             obj = {
+#                 "value": unit.id,
+#                 "label": unit.name,
+#                 "selected_unit": unit.selected_unit,
+#                 "units": fetch_add_units(unit.id)
+#             }
+#             units.append(obj)
+#         return units
+#     # except:
+#         # return "Something went Wrong"
 
 
-def add_units(json_data):
-    try:
-        for unit in json_data:       
-            units_arrey = GlobalProductFeaturesUnits(name = unit['name'], units_type_id = unit['units_type_id'], order = unit['order'])
-            db.session.add(units_arrey)
-            db.session.commit()
-        return "done"
-    except:
-        return "Something went Wrong"
+# def add_units(json_data):
+#     try:
+#         for unit in json_data:       
+#             units_arrey = GlobalProductFeaturesUnits(name = unit['name'], units_type_id = unit['units_type_id'], order = unit['order'])
+#             db.session.add(units_arrey)
+#             db.session.commit()
+#         return "done"
+#     except:
+#         return "Something went Wrong"
 
-def fetch_add_units(units_type_id):
-    try:
-        fetch_units_obj = GlobalProductFeaturesUnits.query.filter_by(units_type_id = units_type_id)
-        units = []
-        for unit in fetch_units_obj:
-            obj = {
-                "value": unit.id,
-                "label": unit.name,
-                "order": unit.order,
-                "exp": unit.exp,
-                "exp_value": unit.value,
-                "units_type_id": unit.units_type_id,
-            }
-            units.append(obj)
-        return units
-    except:
-        return "Something went Wrong"    
+# def fetch_add_units(units_type_id):
+#     try:
+#         fetch_units_obj = GlobalProductFeaturesUnits.query.filter_by(units_type_id = units_type_id)
+#         units = []
+#         for unit in fetch_units_obj:
+#             obj = {
+#                 "value": unit.id,
+#                 "label": unit.name,
+#                 "order": unit.order,
+#                 "exp": unit.exp,
+#                 "exp_value": unit.value,
+#                 "units_type_id": unit.units_type_id,
+#             }
+#             units.append(obj)
+#         return units
+#     except:
+#         return "Something went Wrong"    
 # def add_data_of_recommendation(json_data):
 #     try:
 #         recommendation_data = GlobalProductFeaturesRecommended()

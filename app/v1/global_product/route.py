@@ -284,14 +284,14 @@ def edit_category_features_with_check_global_route(current_user):
     #     return make_response('category Fearture not found', 204)
     return json.dumps(status)
 
-@blu_product.route('/featurestypesunits', methods=["POST"])
-@cross_origin()
-@token_required
-def feature_units_types_route_global(current_user):
-    json_data = request.json
-    status = feature_units_types_global(json_data)
+# @blu_product.route('/featurestypesunits', methods=["POST"])
+# @cross_origin()
+# @token_required
+# def feature_units_types_route_global(current_user):
+#     json_data = request.json
+#     status = feature_units_types_global(json_data)
 
-    return json.dumps(status)
+#     return json.dumps(status)
 
 # @blu_product.route('/featuresunits', methods=["POST"])
 # @cross_origin()
@@ -302,34 +302,34 @@ def feature_units_types_route_global(current_user):
 
     # return json.dumps(status)
 
-@blu_product.route('/featuresunits', methods=["GET"])
-@cross_origin()
-@token_required
-def fetch_feature_units_route_global(current_user):
-    # json_data = request.json
-    status = fetch_feature_units_global()
+# @blu_product.route('/featuresunits', methods=["GET"])
+# @cross_origin()
+# @token_required
+# def fetch_feature_units_route_global(current_user):
+#     # json_data = request.json
+#     status = fetch_feature_units_global()
 
-    return json.dumps(status)
+#     return json.dumps(status)
 
 #-------------- To make Type of Datatype Features--------------
 
-@blu_product.route('/featuredatatype', methods=["POST"])
-@cross_origin()
-@token_required
-def feature_datatyperoute_global(current_user):
-    json_data = request.json
-    status = feature_datatypefunc_global(json_data)
+# @blu_product.route('/featuredatatype', methods=["POST"])
+# @cross_origin()
+# @token_required
+# def feature_datatyperoute_global(current_user):
+#     json_data = request.json
+#     status = feature_datatypefunc_global(json_data)
 
-    return json.dumps(status)
+#     return json.dumps(status)
 
-@blu_product.route('/featuredatatype', methods=["GET"])
-@cross_origin()
-@token_required
-def fetch_datatypefunc_route_global(current_user):
-    json_data = request.json
-    status = fetch_datatypefunc_global(json_data)
+# @blu_product.route('/featuredatatype', methods=["GET"])
+# @cross_origin()
+# @token_required
+# def fetch_datatypefunc_route_global(current_user):
+#     json_data = request.json
+#     status = fetch_datatypefunc_global(json_data)
 
-    return json.dumps(status)
+#     return json.dumps(status)
 
 @blu_product.route('/recommendation_value', methods=["DELETE"])
 @cross_origin()
@@ -444,22 +444,22 @@ def addvarientroute_global(current_user):
     return json.dumps(status)
 
 #-----------------------To Add Units---------------------------
-@blu_product.route('/units', methods=["POST"])
-@cross_origin()
-@token_required
-def add_units_route(current_user):
-    json_data = request.json
-    status = add_units(json_data)
+# @blu_product.route('/units', methods=["POST"])
+# @cross_origin()
+# @token_required
+# def add_units_route(current_user):
+#     json_data = request.json
+#     status = add_units(json_data)
 
-    return status
+#     return status
 
-@blu_product.route('/units/<units_type_id>', methods=["GET"])
-@cross_origin()
-@token_required
-def fetch_units_route(current_user,units_type_id):
-    # json_data = request.json
-    status = fetch_add_units(units_type_id)
-    return json.dumps(status)
+# @blu_product.route('/units/<units_type_id>', methods=["GET"])
+# @cross_origin()
+# @token_required
+# def fetch_units_route(current_user,units_type_id):
+#     # json_data = request.json
+#     status = fetch_add_units(units_type_id)
+#     return json.dumps(status)
 
 @blu_product.route('/uploadimage', methods=["POST"])
 @cross_origin()

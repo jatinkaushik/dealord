@@ -1,6 +1,7 @@
 from app import db
 from app.v1.user.model import *
-from app.v1.countries.model import *
+from app.v1.general_data.countries.model import *
+from app.v1.general_data.datatypes.model import *
 
 class GlobalProductCategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,10 +20,10 @@ class GlobalProductCategory(db.Model):
 #     sub_category_features_rel = db.relationship('Sub_Category_Feature', backref='sub__category')
 #     products_rel = db.relationship('Products', backref='sub__category')
 
-class GlobalProductFeaturesDatatype(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-    category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_features_datatype')
+# class GlobalProductFeaturesDatatype(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(20))
+#     category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='general_data_datatype')
 
 
 class GlobalProductFeaturesGroups(db.Model):
@@ -36,8 +37,8 @@ class GlobalProductCategoryFeature(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(40))
     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    features_datatype_id = db.Column(db.Integer, db.ForeignKey('global_product_features_datatype.id'))
-    unit_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'), nullable = True)
+    features_datatype_id = db.Column(db.String(10), db.ForeignKey('general_data_datatype.abbreviation'))
+    unit_types_id = db.Column(db.Integer, db.ForeignKey('general_data_units_types.id'), nullable = True)
     recommendation = db.Column(db.Boolean)
     feature_required = db.Column(db.Boolean, default=False)
     filterable = db.Column(db.Boolean, default=False)
@@ -79,12 +80,13 @@ class GlobalProductProductsVarient(db.Model):
     Extra_features_rel = db.relationship('GlobalProductFeaturesExtra', backref='global_product_products_varient')
     recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_products_varient')
     products_image_rel = db.relationship('GlobalProductProductsImage', backref='global_product_products_varient')
-
+    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products_varient')
 
 class GlobalProductVarientFeatures(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     feature_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
+    product_varient_id = db.Column(db.Integer, db.ForeignKey('global_product_products_varient.id'))
 
 
 
@@ -152,21 +154,21 @@ class GlobalProductFeaturesRecommended(db.Model):
     integer_seleted_id = db.Column(db.Integer, db.ForeignKey('global_product_features_integer_recommended.id'))
     double_seleted_id = db.Column(db.Integer, db.ForeignKey('global_product_features_double_recommended.id'))
 
-class GlobalProductFeaturesUnitsTypes(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    selected_unit = db.Column(db.Integer, db.ForeignKey('global_product_features_units.id'))
-    # features_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
-    # category_features_rel = db.relationship('GlobalProductCategoryFeature', backref= 'global_product_features_units_types')
-    # units_rel = db.relationship('GlobalProductFeaturesUnits', backref='global_product_features_units_types')
+# class GlobalProductFeaturesUnitsTypes(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100))
+#     # selected_unit = db.Column(db.Integer, db.ForeignKey('global_product_features_units.id'))
+#     # features_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
+#     # category_features_rel = db.relationship('GlobalProductCategoryFeature', backref= 'global_product_features_units_types')
+#     # units_rel = db.relationship('GlobalProductFeaturesUnits', backref='global_product_features_units_types')
 
-class GlobalProductFeaturesUnits(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
-    units_type_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
-    exp = db.Column(db.String(5))
-    value = db.Column(db.Float)
-    order = db.Column(db.Integer)
+# class GlobalProductFeaturesUnits(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(20))
+#     # units_type_id = db.Column(db.Integer, db.ForeignKey('global_product_features_units_types.id'))
+#     exp = db.Column(db.String(5))
+#     value = db.Column(db.Float)
+#     order = db.Column(db.Integer)
 
 class GlobalProductProductsImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)

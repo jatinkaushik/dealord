@@ -7,4 +7,5 @@ from .user import *
 from .product import *
 from .global_product import *
 from .employee import *
-from .countries import *
+# from .countries import *
+from .general_data import *
