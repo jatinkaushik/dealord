@@ -17,9 +17,9 @@ def fetch_datatypefunc_global(json_data):
         fetch_features_datatype = GeneralDataDatatype.query.all()
         for i in fetch_features_datatype:
             obj = {
-                "value" : i.id,
+                "id" : i.id,
                 "label": i.name,
-                "abbreviation":i.abbreviation
+                "value":i.abbreviation
             }
             features_datatype.append(obj)
         return features_datatype

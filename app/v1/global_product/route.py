@@ -1,7 +1,7 @@
 from flask import render_template, flash, request, url_for, redirect, session, jsonify , make_response ,send_file
 from app.v1.global_product.controller import *
 import json
-
+# from app.v1.global_product.model import *
 from app import app
 from flask_cors import CORS, cross_origin
 from app.NestedBlueprint import NestedBlueprint

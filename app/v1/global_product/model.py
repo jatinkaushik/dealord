@@ -1,5 +1,6 @@
 from app import db
 from app.v1.user.model import *
+# from app.v1.general_data import *
 from app.v1.general_data.countries.model import *
 from app.v1.general_data.datatypes.model import *
 
