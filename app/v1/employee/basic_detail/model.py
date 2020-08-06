@@ -13,7 +13,7 @@ class Employee(db.Model):
 
 class EmployeePersonalDetail(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    employee_id1 = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
     alternate_phone_no = db.Column(db.String(15))
     father_name = db.Column(db.String(30))
     date_of_birth = db.Column(db.DateTime)
@@ -22,7 +22,7 @@ class EmployeePersonalDetail(db.Model):
 
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    employee_id1 = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
     address_line1 = db.Column(db.String(50))
     address_line2 = db.Column(db.String(50))
     city = db.Column(db.String(30))
@@ -38,11 +38,11 @@ class ShiftTime(db.Model):
 
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    employee_id1 = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
     department_name = db.Column(db.String(30))
 
 class Designation(db.Model):
     id = db.Column(db.Integer, primary_key = True) 
-    employee_id1 = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
     designation_name = db.Column(db.String(30))
 
