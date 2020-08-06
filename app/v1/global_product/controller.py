@@ -183,11 +183,11 @@ def fetch_sub_category(cat_id):
 def feature_func_global(json_data): 
     # try:
         for features in json_data:
-            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['features_datatype_id'], category_id=features['category_id'], unit_types_id=features['unit'], features_groups_id=features['features_groups_id'], recommendation =features['is_recommendation'], feature_required=features['feature_required'],filterable=features['filterable']) 
+            feature_model = GlobalProductCategoryFeature(name=features['name'], features_datatype_id=features['type'], category_id=features['category_id'], unit_types_id=features['unit'], features_groups_id=features['groups_id'], recommendation =features['is_recommendation'], feature_required=features['is_required'],filterable=features['filterable']) 
             db.session.add(feature_model)
             db.session.commit()
             if features['is_recommendation'] == True:
-                recommendation_data(features['recommended_options'],feature_model.id,features['features_datatype_id'])
+                recommendation_data(features['recommended_options'],feature_model.id,features['type'])
         # cat_id = 
         status = fetch_category_features_global(json_data[0]['category_id'])
         return status 
@@ -274,8 +274,8 @@ def edit_category_features_global(json_data):
         if 'name' in json_data:
             category_feature_search.name = json_data['name']
 
-        if 'features_datatype_id' in json_data:
-            category_feature_search.features_datatype_id = json_data['features_datatype_id']
+        if 'type' in json_data:
+            category_feature_search.features_datatype_id = json_data['type']
 
 
         if 'category_id' in json_data:
@@ -284,14 +284,14 @@ def edit_category_features_global(json_data):
         if 'unit' in json_data:
             category_feature_search.unit_types_id = json_data['unit']
 
-        if 'features_groups_id' in json_data:
-            category_feature_search.features_groups_id = json_data['features_groups_id']
+        if 'groups_id' in json_data:
+            category_feature_search.features_groups_id = json_data['groups_id']
         
         if 'filterable' in json_data:
             category_feature_search.filterable = json_data['filterable']
         
-        if 'feature_required' in json_data:
-            category_feature_search.feature_required = json_data['feature_required']
+        if 'is_required' in json_data:
+            category_feature_search.feature_required = json_data['is_required']
 
         if 'is_recommendation' in json_data:
             category_feature_search.recommendation = json_data['is_recommendation']
@@ -336,17 +336,17 @@ def edit_category_features_with_check_global(json_data):
                 else:
                     category_feature_search.unit_types_id = json_data['unit']
 
-        if 'features_groups_id' in json_data:
-            if json_data['features_groups_id'] != category_feature_search.features_groups_id:
-                category_feature_search.features_groups_id = json_data['features_groups_id']
+        if 'groups_id' in json_data:
+            if json_data['groups_id'] != category_feature_search.features_groups_id:
+                category_feature_search.features_groups_id = json_data['groups_id']
         
         if 'filterable' in json_data:
             if json_data['filterable'] != category_feature_search.filterable:
                 category_feature_search.filterable = json_data['filterable']
         
-        if 'feature_required' in json_data:
-            if json_data['feature_required'] != category_feature_search.feature_required:
-                category_feature_search.feature_required = json_data['feature_required']
+        if 'is_required' in json_data:
+            if json_data['is_required'] != category_feature_search.feature_required:
+                category_feature_search.feature_required = json_data['is_required']
 
         if 'is_recommendation' in json_data:
             recommendation_options = json_data['recommendation_options']
@@ -393,8 +393,8 @@ def fetch_features_global(feature_id):
             "name": fetch_features.name,
             "type": fetch_features.features_datatype_id,
             "unit": fetch_features.unit_types_id if fetch_features.unit_types_id != None else False,
-            "features_groups_id": fetch_features.features_groups_id,
-            "feature_required": fetch_features.feature_required,
+            "groups_id": fetch_features.features_groups_id,
+            "is_required": fetch_features.feature_required,
             "filterable": fetch_features.filterable,
             "is_recommendation": fetch_features.recommendation if fetch_features.recommendation != None else False,
             "recommendation_value": None,
@@ -522,8 +522,8 @@ def fetch_category_features_global(cat_id):
                 "name": i.name,
                 "type": i.features_datatype_id,
                 "unit": i.unit_types_id if i.unit_types_id != None else False,
-                "features_groups_id": i.features_groups_id,
-                "feature_required": i.feature_required,
+                "groups_id": i.features_groups_id,
+                "is_required": i.feature_required,
                 "filterable": i.filterable,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
@@ -552,8 +552,8 @@ def fetch_category_with_groups_features_global(cat_id):
                 "name": i.name,
                 "type": i.features_datatype_id,
                 "unit": i.unit_types_id if i.unit_types_id != None else False,
-                "features_groups_id": i.features_groups_id,
-                "feature_required": i.feature_required,
+                "groups_id": i.features_groups_id,
+                "is_required": i.feature_required,
                 "filterable": i.filterable,
                 "is_recommendation": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
