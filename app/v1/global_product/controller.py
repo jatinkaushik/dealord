@@ -199,13 +199,13 @@ def feature_func_global(json_data):
 def recommendation_data(add,feature_id,type_id):
     # try:
         for i in add:
-            if type_id == 1:
+            if type_id == 'str':
                 obj = GlobalProductFeaturesStringRecommended(feature_value = i['value'], feature_id = feature_id)
 
-            if type_id == 2:
+            if type_id == 'int':
                 obj = GlobalProductFeaturesIntegerRecommended(feature_value = i['value'], feature_id = feature_id)
 
-            if type_id == 3:
+            if type_id == 'float':
                 obj = GlobalProductFeaturesDoubleRecommended(feature_value = i['value'], feature_id = feature_id)
             db.session.add(obj)
             db.session.commit()
@@ -415,21 +415,21 @@ def delete_recommended_features(feature_id):
     return "Done"
 
 def edit_recommended_particular_value(json_data,type_id):
-    if type_id == 1:
+    if type_id == 'str':
         recommendation_search = GlobalProductFeaturesStringRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
 
         if 'value' in json_data:
             recommendation_search.feature_value = json_data['value']
-    if type_id == 2:
+    if type_id == 'int':
         recommendation_search = GlobalProductFeaturesIntegerRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
 
         if 'value' in json_data:
             recommendation_search.feature_value = json_data['value']
-    if type_id == 3:
+    if type_id == 'float':
         recommendation_search = GlobalProductFeaturesDoubleRecommended.query.filter_by(id=json_data['id']).first()
         if 'feature_id' in json_data:
             recommendation_search.feature_id = json_data['feature_id']
@@ -442,17 +442,17 @@ def edit_recommended_particular_value(json_data,type_id):
     return 'done'
 
 def delete_recommended_particular_value(json_data,type_id):
-    if type_id == 1:
+    if type_id == 'str':
         recommended_features_value = GlobalProductFeaturesStringRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
 
-    if type_id == 2:
+    if type_id == 'int':
         recommended_features_value = GlobalProductFeaturesIntegerRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
 
-    if type_id == 3:
+    if type_id == 'float':
         recommended_features_value = GlobalProductFeaturesDoubleRecommended.query.filter_by(id = json_data['id']).first()
         db.session.delete(recommended_features_value)
         db.session.commit()
@@ -461,19 +461,19 @@ def delete_recommended_particular_value(json_data,type_id):
 
 def delete_recommended_features_values(feature_id,type_id):
     
-    if type_id == 1:
+    if type_id == 'str':
         recommended_features_values = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
         for value in recommended_features_values:
             db.session.delete(value)
             db.session.commit()
 
-    if type_id == 2:
+    if type_id == 'int':
         recommended_features_values = GlobalProductFeaturesIntegerRecommended.query.filter_by(feature_id = feature_id)
         for value in recommended_features_values:
             db.session.delete(value)
             db.session.commit()
 
-    if type_id == 3:
+    if type_id == 'float':
         recommended_features_values = GlobalProductFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
         for value in recommended_features_values:
             db.session.delete(value)
@@ -486,13 +486,13 @@ def fetch_recommended_features(feature_id, data_type ,recommendation):
     try:
         
         if recommendation:
-            if data_type == 1:
+            if data_type == 'str':
                 feature_value_check = GlobalProductFeaturesStringRecommended.query.filter_by(feature_id = feature_id)
 
-            if data_type == 2:
+            if data_type == 'int':
                 feature_value_check = GlobalProductFeaturesIntegerRecommended.query.filter_by(feature_id = feature_id)
 
-            if data_type == 3:
+            if data_type == 'float':
                 feature_value_check = GlobalProductFeaturesDoubleRecommended.query.filter_by(feature_id = feature_id)
             
             obj = []
@@ -769,30 +769,30 @@ def add_product_with_image(image,json_data):
 def product_features(json_data,product_varient_id):
     for i in json_data['features']:
         if i['is_recommendation'] == True:
-            if i['type'] == 1:
+            if i['type'] == 'str':
                 obj = GlobalProductFeaturesRecommended(feature_id = i['id'], string_seleted_id = i['value'], product_varient_id = product_varient_id)
 
-            if i['type'] == 2:
+            if i['type'] == 'int':
                 obj = GlobalProductFeaturesRecommended(feature_id = i['id'], integer_seleted_id= i['value'], product_varient_id = product_varient_id)
 
-            if i['type'] == 3:
+            if i['type'] == 'float':
                 obj = GlobalProductFeaturesRecommended(feature_id = i['id'], double_seleted_id= i['value'], product_varient_id = product_varient_id)
             db.session.add(obj)
             db.session.commit()
         else:
-            if i['type'] == 1:
+            if i['type'] == 'str':
                 obj = GlobalProductFeaturesString(feature_value = i['value'], feature_id = i['id'], product_varient_id = product_varient_id)
 
-            if i['type'] == 2:
+            if i['type'] == 'int':
                 obj = GlobalProductFeaturesInteger(feature_value = i['value'], feature_id = i['id'], product_varient_id = product_varient_id)
 
-            if i['type'] == 4:
+            if i['type'] == 'datetime':
                 obj = GlobalProductFeaturesDate(feature_value = i['value'], feature_id = i['id'], product_varient_id = product_varient_id)
 
-            if i['type'] == 5:
+            if i['type'] == 'boolean':
                 obj = GlobalProductFeaturesBoolean(feature_value = i['value'], feature_id = i['id'], product_varient_id = product_varient_id)   
 
-            if i['type'] == 3:
+            if i['type'] == 'float':
                 obj = GlobalProductFeaturesDouble(feature_value = i['value'], feature_id = i['id'], product_varient_id = product_varient_id)
                 
             db.session.add(obj)
@@ -801,36 +801,36 @@ def product_features(json_data,product_varient_id):
     fetch_required_features = GlobalProductCategoryFeature.query.filter_by(category_id=json_data['category_id'],feature_required=True)
     for feature in fetch_required_features:
         if feature.recommendation == True:
-            if feature.features_datatype_id == 1:
+            if feature.features_datatype_id == 'str':
                 value_available = GlobalProductFeaturesRecommended.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 2:
+            if feature.features_datatype_id == 'int':
                 value_available = GlobalProductFeaturesRecommended.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 3:
+            if feature.features_datatype_id == 'float':
                 value_available = GlobalProductFeaturesRecommended.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
         else:
-            if feature.features_datatype_id == 1:
+            if feature.features_datatype_id == 'str':
                 value_available = GlobalProductFeaturesString.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 2:
+            if feature.features_datatype_id == 'int':
                 value_available = GlobalProductFeaturesInteger.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 3:
+            if feature.features_datatype_id == 'float':
                 value_available = GlobalProductFeaturesDouble.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 4:
+            if feature.features_datatype_id == 'datetime':
                 value_available = GlobalProductFeaturesDate.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
-            if feature.features_datatype_id == 5:
+            if feature.features_datatype_id == 'boolean':
                 value_available = GlobalProductFeaturesBoolean.query.filter_by(feature_id=feature.id,product_varient_id=product_varient_id).first()
                 if not value_available:
                     break
