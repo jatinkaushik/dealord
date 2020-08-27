@@ -14,7 +14,7 @@ class GlobalProductCategory(db.Model):
     products_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_category')
     features_groups_global_rel = db.relationship('GlobalProductFeaturesGroups', backref='global_product_category')
 
-# class Sub_Category(db.Model):
+# class Sub_Category(db.Model): 
 #     id = db.Column(db.Integer, primary_key=True)
 #     name = db.Column(db.String(40))
 #     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
