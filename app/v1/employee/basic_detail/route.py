@@ -72,4 +72,3 @@ def delete_employee_personal_detail_route():
     create_status = delete_employee_personal_detail(json_data)
     
     return json.dumps(create_status)
-

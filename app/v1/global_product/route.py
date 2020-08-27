@@ -260,6 +260,13 @@ def delete_category_features_route_global(current_user):
         return make_response('category Fearture not found', 204)
     return status
 
+@blu_product.route('/categoryfeatures/<feature_id>', methods=["DELETE"])
+@cross_origin()
+@token_required
+def delete_features_route(current_user,feature_id):
+    status = delete_features(feature_id)
+
+    return status
 #-------------------Edit category Features---------------------
 
 @blu_product.route('/categoryfeatures', methods = ["PUT"])
