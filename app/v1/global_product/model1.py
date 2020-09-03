@@ -1,18 +1,18 @@
 from app import db
 from app.v1.user.model import *
-# from app.v1.general_data import *
+from app.v1.global_product.model.features.features import *
 from app.v1.general_data.countries.model import *
 from app.v1.general_data.datatypes.model import *
 
-class GlobalProductCategory(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40))
-    parent = db.Column(db.Integer, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
-    # sub_category_rel = db.relationship('Sub_Category', backref='category')
-    category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_category')
-    products_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_category')
-    features_groups_global_rel = db.relationship('GlobalProductFeaturesGroups', backref='global_product_category')
+# class GlobalProductCategory(db.Model): 
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(40))
+#     parent = db.Column(db.Integer, nullable=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
+#     # sub_category_rel = db.relationship('Sub_Category', backref='category')
+#     category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_category')
+#     products_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_category')
+#     features_groups_global_rel = db.relationship('GlobalProductFeaturesGroups', backref='global_product_category')
 
 # class Sub_Category(db.Model): 
 #     id = db.Column(db.Integer, primary_key=True)
@@ -27,67 +27,67 @@ class GlobalProductCategory(db.Model):
 #     category_feature_rel = db.relationship('GlobalProductCategoryFeature', backref='general_data_datatype')
 
 
-class GlobalProductFeaturesGroups(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    sub_category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    order = db.Column(db.Integer)
-    category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_features_groups')    
+# class GlobalProductFeaturesGroups(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100))
+#     sub_category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
+#     order = db.Column(db.Integer)
+#     category_features_rel = db.relationship('GlobalProductCategoryFeature', backref='global_product_features_groups')    
 
-class GlobalProductCategoryFeature(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    name = db.Column(db.String(40))
-    category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    features_datatype_id = db.Column(db.String(10), db.ForeignKey('general_data_datatype.abbreviation'))
-    unit_types_id = db.Column(db.Integer, db.ForeignKey('general_data_units_types.id'), nullable = True)
-    recommendation = db.Column(db.Boolean)
-    feature_required = db.Column(db.Boolean, default=False)
-    filterable = db.Column(db.Boolean, default=False)
-    features_groups_id = db.Column(db.Integer, db.ForeignKey('global_product_features_groups.id'))
-    string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_category_feature')
-    integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_category_feature')
-    double_features_rel = db.relationship('GlobalProductFeaturesDouble', backref='global_product_category_feature')
-    datetime_features_rel = db.relationship('GlobalProductFeaturesDate', backref='global_product_category_feature')
-    boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_category_feature')
-    string_features_recommended_rel = db.relationship('GlobalProductFeaturesStringRecommended', backref='global_product_category_feature')
-    interger_features_recommended_rel = db.relationship('GlobalProductFeaturesIntegerRecommended', backref='global_product_category_feature')
-    double_features_recommended_rel = db.relationship('GlobalProductFeaturesDoubleRecommended', backref='global_product_category_feature')
-    recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_category_feature')
-    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_category_feature')
+# class GlobalProductCategoryFeature(db.Model):
+#     id = db.Column(db.Integer,primary_key=True)
+#     name = db.Column(db.String(40))
+#     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
+#     features_datatype_id = db.Column(db.String(10), db.ForeignKey('general_data_datatype.abbreviation'))
+#     unit_types_id = db.Column(db.Integer, db.ForeignKey('general_data_units_types.id'), nullable = True)
+#     recommendation = db.Column(db.Boolean)
+#     feature_required = db.Column(db.Boolean, default=False)
+#     filterable = db.Column(db.Boolean, default=False)
+#     features_groups_id = db.Column(db.Integer, db.ForeignKey('global_product_features_groups.id'))
+#     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_category_feature')
+#     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_category_feature')
+#     double_features_rel = db.relationship('GlobalProductFeaturesDouble', backref='global_product_category_feature')
+#     datetime_features_rel = db.relationship('GlobalProductFeaturesDate', backref='global_product_category_feature')
+#     boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_category_feature')
+#     string_features_recommended_rel = db.relationship('GlobalProductFeaturesStringRecommended', backref='global_product_category_feature')
+#     interger_features_recommended_rel = db.relationship('GlobalProductFeaturesIntegerRecommended', backref='global_product_category_feature')
+#     double_features_recommended_rel = db.relationship('GlobalProductFeaturesDoubleRecommended', backref='global_product_category_feature')
+#     recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_category_feature')
+#     varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_category_feature')
 
-class GlobalProductProducts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    varient = db.Column(db.Boolean)
-    products_varient_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_products')
-    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products')
+# class GlobalProductProducts(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     varient = db.Column(db.Boolean)
+#     products_varient_rel = db.relationship('GlobalProductProductsVarient', backref='global_product_products')
+#     varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products')
 
 
-class GlobalProductProductsVarient(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
-    name = db.Column(db.String(100))
-    category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
-    country_of_origin = db.Column(db.Integer, db.ForeignKey('countries.id'))
-    description_of_products = db.Column(db.String(2000)) 
-    is_product_features_added = db.Column(db.Boolean, default=False)
-    product_live = db.Column(db.Boolean, default=False)
-    product_approve = db.Column(db.Boolean, default=False)
-    master_product = db.Column(db.Integer)
-    string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_products_varient')
-    integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_products_varient')
-    double_features_rel = db.relationship('GlobalProductFeaturesDouble', backref='global_product_products_varient')
-    datetime_features_rel = db.relationship('GlobalProductFeaturesDate', backref='global_product_products_varient')
-    boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_products_varient')
-    Extra_features_rel = db.relationship('GlobalProductFeaturesExtra', backref='global_product_products_varient')
-    recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_products_varient')
-    products_image_rel = db.relationship('GlobalProductProductsImage', backref='global_product_products_varient')
-    varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products_varient')
+# class GlobalProductProductsVarient(db.Model):
+#     id = db.Column(db.Integer,primary_key=True)
+#     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
+#     name = db.Column(db.String(100))
+#     category_id = db.Column(db.Integer, db.ForeignKey('global_product_category.id'))
+#     country_of_origin = db.Column(db.Integer, db.ForeignKey('countries.id'))
+#     description_of_products = db.Column(db.String(2000)) 
+#     is_product_features_added = db.Column(db.Boolean, default=False)
+#     product_live = db.Column(db.Boolean, default=False)
+#     product_approve = db.Column(db.Boolean, default=False)
+#     master_product = db.Column(db.Integer)
+#     string_features_rel = db.relationship('GlobalProductFeaturesString', backref='global_product_products_varient')
+#     integer_features_rel = db.relationship('GlobalProductFeaturesInteger', backref='global_product_products_varient')
+#     double_features_rel = db.relationship('GlobalProductFeaturesDouble', backref='global_product_products_varient')
+#     datetime_features_rel = db.relationship('GlobalProductFeaturesDate', backref='global_product_products_varient')
+#     boolean_features_rel = db.relationship('GlobalProductFeaturesBoolean', backref='global_product_products_varient')
+#     Extra_features_rel = db.relationship('GlobalProductFeaturesExtra', backref='global_product_products_varient')
+#     recommended_features_global_rel = db.relationship('GlobalProductFeaturesRecommended', backref='global_product_products_varient')
+#     products_image_rel = db.relationship('GlobalProductProductsImage', backref='global_product_products_varient')
+#     varient_rel = db.relationship('GlobalProductVarientFeatures', backref='global_product_products_varient')
 
-class GlobalProductVarientFeatures(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    feature_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
-    product_varient_id = db.Column(db.Integer, db.ForeignKey('global_product_products_varient.id'))
+# class GlobalProductVarientFeatures(db.Model):
+#     id = db.Column(db.Integer,primary_key=True)
+#     feature_id = db.Column(db.Integer, db.ForeignKey('global_product_category_feature.id'))
+#     product_id = db.Column(db.Integer, db.ForeignKey('global_product_products.id'))
+#     product_varient_id = db.Column(db.Integer, db.ForeignKey('global_product_products_varient.id'))
 
 
 

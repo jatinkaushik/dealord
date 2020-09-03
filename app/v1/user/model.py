@@ -1,6 +1,6 @@
 from app import db
 from app.v1.product import *
-from app.v1.global_product import *
+from app.v1.global_product.model.category.category import *
 
 class UserUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
