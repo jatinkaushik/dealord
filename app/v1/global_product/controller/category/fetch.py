@@ -26,7 +26,8 @@ def fetch_category_global():
 
 def fetch_sub_category(cat_id):
     parent_check = GlobalProductCategory.query.filter_by(parent=cat_id)
-    
+    if not parent_check:
+        return "category_not_found"
     sub_category = []
     for i in parent_check:
         obj = {

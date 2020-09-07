@@ -32,10 +32,10 @@ def login_page():
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
+        return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required! "'})
 
     login_token = login(auth)
-    return login_token
+    return make_response(login_token, 200)
 
 @blu_user.route('/user', methods=["GET"])
 @cross_origin()

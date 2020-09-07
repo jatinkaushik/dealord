@@ -47,4 +47,4 @@ def create_category_route_global(current_user):
     json_data = request.json
     create_status = create_category_global(current_user, json_data)
     
-    return json.dumps(create_status)
+    return make_response(json.dumps(create_status), 201)

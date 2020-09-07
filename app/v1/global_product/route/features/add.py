@@ -44,7 +44,7 @@ def add_features_global(current_user):
     json_data = request.json
     status = feature_func_global(json_data)
 
-    return json.dumps(status)  
+    return make_response(json.dumps(status), 201)
 
 #----------------Features Groups Function -------------------
 @blu_product.route('/featuresgroups', methods=["POST"])
@@ -54,5 +54,5 @@ def feature_groups_route_global(current_user):
     json_data = request.json
     status = features_groups_global(json_data)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 201)
 

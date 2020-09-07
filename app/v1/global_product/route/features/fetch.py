@@ -48,7 +48,7 @@ def fetch_features_global(current_user, cat_id):
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)
 
 @blu_product.route('/categoryfeatureswithgroups/<cat_id>', methods=["GET"])
 @cross_origin()
@@ -62,7 +62,7 @@ def fetch_features_with_groups_global(current_user, cat_id):
     if status == "category_feature_not_found":
         return make_response('category Fearture not found', 204)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)
 
 @blu_product.route('/featuresgroups/<cat_id>', methods=["GET"])
 @cross_origin()
@@ -70,4 +70,4 @@ def fetch_features_with_groups_global(current_user, cat_id):
 def fetch_feature_groups_route_global(current_user, cat_id):
     status = fetch_features_groups_global(cat_id)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)

@@ -41,4 +41,4 @@ def fetch_product_varient_route(current_user):
     json_data = request.json
     status = fetch_product_varient(json_data)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)

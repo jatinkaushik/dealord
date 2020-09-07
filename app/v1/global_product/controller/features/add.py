@@ -2,6 +2,7 @@ import json
 from app import app, db
 from app.v1.global_product.model.category.category import *
 from app.v1.global_product.model1 import *
+from app.v1.global_product.controller.features.fetch import *
 
 def feature_func_global(json_data): 
     # try:
@@ -12,8 +13,8 @@ def feature_func_global(json_data):
             if features['is_recommendation'] == True:
                 recommendation_data(features['recommended_options'],feature_model.id,features['type'])
         # cat_id = 
-        # status = fetch_category_features_global(json_data[0]['category_id'])
-        return "status" 
+        status = fetch_category_features_global(json_data[0]['category_id'])
+        return status
 
     # except:
         # return 'Something Went Wrong'

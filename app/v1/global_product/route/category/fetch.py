@@ -47,7 +47,7 @@ def fetch_category_route_global(current_user):
     if status == "category_not_found":
         return make_response('Category not found', 204)
     
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)
 
 
 #--------------Fetch Sub category With parent id---------------
@@ -58,5 +58,7 @@ def fetch_category_route_global(current_user):
 def fetch_sub_category_route(cat_id):
     # json_data = request.json
     status = fetch_sub_category(cat_id)
+    if status == "category_not_found":
+        return make_response('Category not found', 204)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 200)

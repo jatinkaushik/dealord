@@ -47,4 +47,4 @@ def delete_category_route_global(current_user):
     if status == "category_not_found":
         return make_response('Category not found', 204)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 202)

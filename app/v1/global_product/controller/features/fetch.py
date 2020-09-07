@@ -79,6 +79,7 @@ def fetch_category_with_groups_features_global(cat_id):
     # try:
 
         fetch_features = GlobalProductCategoryFeature.query.filter_by(category_id=cat_id)
+        
         cat_features = {
             "features": [],
             "features_groups": []
@@ -108,6 +109,7 @@ def fetch_features_groups_global(cat_id):
     try:
         cat_features = []
         features_group = GlobalProductFeaturesGroups.query.filter_by(sub_category_id=cat_id)
+
         for i in features_group:
             obj = {
                 "id" : i.id,

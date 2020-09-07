@@ -21,7 +21,7 @@ def token_required(f):
         if not token:
             return jsonify({'message' : 'Token is missing!'}), 401
 
-        try: 
+        try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
             from app.v1.user import UserUser as JK
             current_user = JK.query.filter_by(id=data['id']).first()
@@ -42,8 +42,8 @@ blu_product = NestedBlueprint(blu_v1, '/globalproduct')
 def add_product_data_global_route(current_user):
     json_data =request.json
     status = add_product_global(json_data)
-
-    return json.dumps(status)
+     
+    return make_response(json.dumps(status), 201)
             
 @blu_product.route('/initializing_product',methods=["POST"])
 @cross_origin()
@@ -53,7 +53,7 @@ def add_product_with_image_route(current_user):
     json_data = request.form
     status = add_product_with_image(images,json_data)
 
-    return json.dumps(status)
+    return make_response(json.dumps(status), 201)
     
 #------------------ Product Features Data----------------------
 
@@ -65,4 +65,4 @@ def product_features_route(current_user):
     product_varient_id = json_data['product_varient_id']
     status = product_features(json_data,product_varient_id)
 
-    return status
+    return make_response(json.dumps(status), 201)
