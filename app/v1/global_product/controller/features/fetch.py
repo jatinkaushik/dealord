@@ -89,15 +89,15 @@ def fetch_category_with_groups_features_global(cat_id):
             obj = {
                 "id" : i.id,
                 "name": i.name,
-                "type": i.features_datatype_id,
+                "datatype": i.features_datatype_id,
                 "category_id": i.category_id,
                 "unit": i.unit_types_id if i.unit_types_id != None else False,
                 "groups_id": i.features_groups_id,
                 "is_required": i.feature_required,
                 "filterable": i.filterable,
-                "is_recommendation": i.recommendation if i.recommendation != None else False,
+                "is_options": i.recommendation if i.recommendation != None else False,
                 "recommendation_value": None,
-                "recommendation_options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
+                "options": fetch_recommended_features(i.id, i.features_datatype_id, i.recommendation),
                 "value": None
                 # "features_units": fetch_feature_units_global(i.unit_types_id)
             }
