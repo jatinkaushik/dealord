@@ -1,8 +1,10 @@
 from app import db
+from app.v1.company.model import *
 
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     employee_id = db.Column(db.Integer, unique= True)
+    company_id = db.Column(db.Integer,db.ForeignKey('company_company.id'))
     name = db.Column(db.String(30))
     email = db.Column(db.String(40))
     primary_phone_no = db.Column(db.String(15))

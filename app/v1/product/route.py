@@ -8,7 +8,7 @@ from app.v1 import blu_v1
 from functools import wraps
 import jwt
 # from app.v1.user import User
-
+ 
 #========================= Token Verification ==========================
 
 def token_required(f):

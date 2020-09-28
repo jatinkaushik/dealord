@@ -308,7 +308,7 @@ def add_product(json_data):
 def add_product_data(json_data):
     try:
         temp = json_data['product']
-        addproduct = Products(name = temp['name'],category_id = temp['category_id'])
+        addproduct = Products(name = temp['name'],category_id = temp['category_id'],company_id=temp['company_id'])
         db.session.add(addproduct)
         db.session.commit()
         product_id = addproduct.id

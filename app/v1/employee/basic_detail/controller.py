@@ -5,8 +5,7 @@ from app.v1.employee.basic_detail import *
 
 def employee_basic(json_data):
     # try:
-        employee_basic_detail = Employee(name=json_data['name'], email=json_data['email'],
-                                  employee_id=json_data['employee_id'], primary_phone_no=json_data['primary_phone_no'])
+        employee_basic_detail = Employee(name=json_data['name'], email=json_data['email'],company_id=json_data['company_id'],employee_id=json_data['employee_id'], primary_phone_no=json_data['primary_phone_no'])
         db.session.add(employee_basic_detail)
         db.session.commit()
         return 'Done'
@@ -21,6 +20,7 @@ def fetch_employee_basic(json_data):
             obj = {
                 "id": i.id,
                 "name": i.name,
+                "company_id":i.company_id,
                 "employee_id": i.employee_id,
                 "primary_phone_no": i.primary_phone_no,
                 "email": i.email

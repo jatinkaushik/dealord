@@ -1,5 +1,6 @@
 from app import db
 from app.v1.user.model import *
+from app.v1.company.model import *
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +42,7 @@ class Products(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     name =db.Column(db.String(100))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    company_id = db.Column(db.Integer,db.ForeignKey('company_company.id'))
     string_features_rel = db.relationship('String_Features', backref='products')
     integer_features_rel = db.relationship('Integer_Features', backref='products')
     double_features_rel = db.relationship('Double_Features', backref='products')

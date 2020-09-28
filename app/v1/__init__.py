@@ -9,3 +9,6 @@ from .global_product import *
 from .employee import *
 # from .countries import *
 from .general_data import *
+from .company import *
+from .customers import *
+from .vendors import *
