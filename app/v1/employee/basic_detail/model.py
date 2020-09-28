@@ -25,8 +25,8 @@ class EmployeePersonalDetail(db.Model):
 class Address(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.employee_id'))
-    address_line1 = db.Column(db.String(50))
-    address_line2 = db.Column(db.String(50))
+    address_line = db.Column(db.String(50))
+    # address_line2 = db.Column(db.String(50))
     city = db.Column(db.String(30))
     state = db.Column(db.String(30))
     country = db.Column(db.String(30))

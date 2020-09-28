@@ -9,8 +9,8 @@ class CustomersCustomer(db.Model):
 class CustomersAddress(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('customers_customer.id'))
-    address_line_1 = db.Column(db.String(100))
-    address_line_2 = db.Column(db.String(100))
+    address_line = db.Column(db.String(100))
+    # address_line_2 = db.Column(db.String(100))
     district = db.Column(db.String(30))
     city_town = db.Column(db.String(30))
     landmark = db.Column(db.String(50))

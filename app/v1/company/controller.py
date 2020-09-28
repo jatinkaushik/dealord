@@ -12,7 +12,6 @@ def create_company(current_user, json_data):
             info = company_info(json_data['company_info'],company_model.id)
         if 'company_address' in json_data:
             address = company_address(json_data['company_address'],company_model.id)
-        # return fetch_category_global()
         return "done"
 
     # except:
@@ -37,7 +36,30 @@ def fetch_company(company_id):
 
 def company_info(json_data,company_id):
     try:
-        country_info_obj = CompanyInfo(company_id= company_id,legal_name = json_data['legal_name'],gstin_no = json_data['gstin_no'],cin_no = json_data['cin_no'],website = json_data['website'],email = json_data['email'],phone_no = json_data['phone_no'],fax = json_data['fax']) 
+        legal_name, gstin_no, cin_no, website,email,phone_no,fax = None,None,None,None,None,None,None
+        if('legal_name' in  json_data and json_data['legal_name'] != None):
+            legal_name = json_data['legal_name']
+        if('gstin_no' in  json_data and json_data['gstin_no'] != None):
+            gstin_no = json_data['gstin_no']
+        if('cin_no' in  json_data and json_data['cin_no'] != None):
+            cin_no = json_data['cin_no']
+        if('website' in  json_data and json_data['website'] != None):
+            website = json_data['website']
+        if('email' in  json_data and json_data['email'] != None):
+            email = json_data['email']
+        if('phone_no' in  json_data and json_data['phone_no'] != None):
+            phone_no = json_data['phone_no']
+        if('fax' in  json_data and json_data['fax'] != None):
+            fax = json_data['fax']
+        country_info_obj = CompanyInfo(
+            company_id= company_id,
+            legal_name = legal_name,
+            gstin_no = gstin_no,
+            cin_no = cin_no,
+            website = website,
+            email = email,
+            phone_no = phone_no,
+            fax = fax) 
         db.session.add(country_info_obj)
         db.session.commit()
         return "done"
@@ -64,8 +86,31 @@ def fetch_company_info(company_id):
         return 'Something Went Wrong'
 
 def company_address(json_data,company_id):
+    address_line, district, city_town, landmark,pin_code,state,country = None,None,None,None,None,None,None
+    if('address_line' in  json_data and json_data['address_line'] != None):
+        address_line = json_data['address_line']
+    if('district' in  json_data and json_data['district'] != None):
+        district = json_data['district']
+    if('city_town' in  json_data and json_data['city_town'] != None):
+        city_town = json_data['city_town']
+    if('landmark' in  json_data and json_data['landmark'] != None):
+        landmark = json_data['landmark']
+    if('pin_code' in  json_data and json_data['pin_code'] != None):
+        pin_code = json_data['pin_code']
+    if('state' in  json_data and json_data['state'] != None):
+        state = json_data['state']
+    if('country' in  json_data and json_data['country'] != None):
+        country = json_data['country']
     try:
-        company_address_obj = CompanyAddress(company_id= company_id,address_line_1 = json_data['address_line_1'],address_line_2 = json_data['address_line_2'],district = json_data['district'],city_town = json_data['city_town'],landmark = json_data['landmark'],state = json_data['state'],country = json_data['country'],pin_code = json_data['pin_code'])
+        company_address_obj = CompanyAddress(
+            company_id= company_id,
+            address_line = address_line,
+            district = district,
+            city_town = city_town,
+            landmark = landmark,
+            state = state,
+            country = country,
+            pin_code = pin_code)
         db.session.add(company_address_obj)
         db.session.commit()
         return "done"
