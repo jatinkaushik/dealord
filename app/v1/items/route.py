@@ -1,7 +1,7 @@
 from flask import render_template, flash, request, url_for, redirect, session, jsonify, make_response
 import json
 from app import app
-from app.v1.customers.controller import *
+from app.v1.items.controller import *
 import datetime
 from flask_cors import CORS, cross_origin
 from app.NestedBlueprint import NestedBlueprint
@@ -34,67 +34,43 @@ def token_required(f):
 
     return decorated
 
-blu_customers = NestedBlueprint(blu_v1, '/customers')
+blu_items = NestedBlueprint(blu_v1, '/items')
 
-# ------------------ create New category ------------------
 
-@blu_customers.route('/customer', methods=["POST"])
+@blu_items.route('/items', methods=["POST"])
 @cross_origin()
 @token_required
-def create_customer_route(current_user):
+def add_product_route(current_user):
     json_data = request.json
-    create_status = create_customer(json_data)
+    create_status = add_product(json_data)
     
     return make_response(json.dumps(create_status), 200)
 
-@blu_customers.route('/customer', methods=["PUT"])
+@blu_items.route('/items', methods=["GET"])
 @cross_origin()
 @token_required
-def edit_customer_route(current_user):
+def fetch_product_route(current_user):
     json_data = request.json
-    create_status = edit_customer(json_data)
+    create_status = fetch_product(json_data)
     
     return make_response(json.dumps(create_status), 200)
 
-@blu_customers.route('/customer/<customer_id>', methods=["GET"])
+@blu_items.route('/items', methods=["PUT"])
 @cross_origin()
 @token_required
-def fetch_customer_route(current_user,customer_id):
-    create_status = fetch_customer(customer_id)
-    
-    return make_response(json.dumps(create_status), 200)
-
-@blu_customers.route('/customerinfo', methods=["POST"])
-@cross_origin()
-@token_required
-def customer_info_route(current_user):
+def edit_product_route(current_user):
     json_data = request.json
-    create_status = customer_info(json_data)
+    create_status = edit_product(json_data)
     
     return make_response(json.dumps(create_status), 200)
 
-@blu_customers.route('/customerinfo/<customer_id>', methods=["GET"])
+@blu_items.route('/items', methods=["DELETE"])
 @cross_origin()
 @token_required
-def fetch_customer_info_route(current_user,customer_id):
-    create_status = fetch_customer_info(customer_id)
-    
-    return make_response(json.dumps(create_status), 200)
-
-@blu_customers.route('/customeraddress', methods=["POST"])
-@cross_origin()
-@token_required
-def customer_address_route(current_user):
+def delete_product_route(current_user):
     json_data = request.json
-    create_status = customer_address(json_data)
+    create_status = delete_product(json_data)
     
     return make_response(json.dumps(create_status), 200)
 
-@blu_customers.route('/customeraddress/<customer_id>', methods=["GET"])
-@cross_origin()
-@token_required
-def fetch_customer_address_route(current_user,customer_id):
-    create_status = fetch_customer_address(customer_id)
-    
-    return make_response(json.dumps(create_status), 200)
 

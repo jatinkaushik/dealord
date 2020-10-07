@@ -164,8 +164,7 @@ def fetch_all_company_info(company_id):
             }
         obj3 = {
                 "id": fetch_company_address.id,
-                "address_line_1":fetch_company_address.address_line_1,
-                "address_line_2":fetch_company_address.address_line_2,
+                "address_line_1":fetch_company_address.address_line,
                 "district":fetch_company_address.district,
                 "city_town":fetch_company_address.city_town,
                 "landmark":fetch_company_address.landmark,
@@ -199,6 +198,7 @@ def edit_company_permission(json_data):
         
         if 'description' in json_data:
             edit_permission.description = json_data['description']
+        db.session.add(edit_permission)
         db.session.commit()
         return "done"
     except:
@@ -220,7 +220,7 @@ def fetch_company_permission():
     except:
         return 'Something Went Wrong'
 
-def add_company_roles_route(json_data):
+def add_company_roles(json_data):
     try:
         add_roles = CompanyRoles(name = json_data['name'],display_name = json_data['display_name'],description = json_data['description'])
         db.session.add(add_roles)
@@ -229,17 +229,94 @@ def add_company_roles_route(json_data):
     except:
         return 'Something Went Wrong'
 
-def edit_company_roles_route(json_data):
+def edit_company_roles(json_data):
     try:
-        edit_permission = CompanyRoles.query.filter_by(id=json_data['id']).first()
+        edit_roles = CompanyRoles.query.filter_by(id=json_data['id']).first()
         if 'name' in json_data:
-            edit_permission.name = json_data['name']
-        if 'permission_name' in json_data:
-            edit_permission.permission_name = json_data['permission_name']
-        
+            edit_roles.name = json_data['name']
+        if 'display_name' in json_data:
+            edit_roles.display_name = json_data['display_name']
         if 'description' in json_data:
-            edit_permission.description = json_data['description']
+            edit_roles.description = json_data['description']
+        db.session.add(edit_roles)
         db.session.commit()
         return "done"
+    except:
+        return 'Something Went Wrong'
+
+def fetch_company_roles():
+    try:
+        fetch_roles = CompanyRoles.query.all()
+        role = []
+        for i in fetch_role:
+                obj = {
+                    "id" : i.id,
+                    "name": i.name,
+                    "display_name":i.display_name,
+                    "description":i.description
+                }
+                role.append(obj)
+        return role
+    except:
+        return 'Something Went Wrong'
+
+def add_permission_roles(json_data):
+    try:
+        add_permission_roles = PermissionRoleConnect(roles_id = json_data['roles_id'],permission_id = json_data['permission_id'])
+        db.session.add(add_permission_roles)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
+
+def edit_permission_roles(json_data):
+    try:
+        edit_permission_roles = PermissionRoleConnect.query.filter_by(roles_id=json_data['roles_id']).first()
+        if 'roles_id' in json_data:
+            edit_permission_roles.roles_id = json_data['roles_id']
+        if 'permission_id' in json_data:
+            edit_permission_roles.permission_id = json_data['permission_id']
+        db.session.add(edit_permission_roles)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
+
+def add_users_roles(json_data):
+    try:
+        add_user_roles = CompanyRoleUser(company_id = json_data['company_id'],roles_id = json_data['roles_id'],user_id = json_data['user_id'])
+        db.session.add(add_user_roles)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
+
+def edit_users_roles(json_data):
+    try:
+        edit_users_roles = CompanyRoleUser.query.filter_by(company_id=json_data['company_id'],user_id = json_data['user_id']).first()
+        if 'roles_id' in json_data:
+            edit_users_roles.roles_id = json_data['roles_id']
+        if 'user_id' in json_data:
+            edit_users_roles.user_id = json_data['user_id']
+        db.session.add(edit_users_roles)
+        db.session.commit()
+        return "done"
+    except:
+        return 'Something Went Wrong'
+
+def fetch_roles_users(json_data):
+    try:
+        fetch_roles_users = CompanyRoleUser.query.filter_by(company_id=json_data['company_id'],user_id = json_data['user_id']).first()
+        fetch_roles_permission = CompanyRoleUser.query.filter_by().first(id=fetch_roles_users.roles_id).first()
+        # roles = []
+        roles = {
+            "id" : fetch_roles_users.id,
+            "company_id": fetch_roles_users.company_id,
+            "user_id":fetch_roles_users.user_id,
+            "roles_id":fetch_roles_users.roles_id,
+            "role":fetch_roles_permission.display_name
+        }
+
+        return roles
     except:
         return 'Something Went Wrong'

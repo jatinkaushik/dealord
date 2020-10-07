@@ -30,10 +30,10 @@ class CompanyAddress(db.Model):
     pin_code = db.Column(db.String(30))
 
 
-class CompanyUsers(db.Model):
-    id = db.Column(db.Integer,primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
-    company_id = db.Column(db.Integer, db.ForeignKey('company_company.id'))
+# class CompanyUsers(db.Model):
+#     id = db.Column(db.Integer,primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
+#     company_id = db.Column(db.Integer, db.ForeignKey('company_company.id'))
     
 
 class CompanyRoles(db.Model):
@@ -57,5 +57,5 @@ class CompanyRoleUser(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
     roles_id = db.Column(db.Integer, db.ForeignKey('company_roles.id'))
-
+    company_id = db.Column(db.Integer, db.ForeignKey('company_company.id'))
 

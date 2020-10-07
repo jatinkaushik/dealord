@@ -126,7 +126,6 @@ def edit_company_permission_route(current_user):
 @cross_origin()
 @token_required
 def fetch_company_permission_route(current_user):
-    json_data = request.json
     create_status = fetch_company_permission()
     
     return make_response(json.dumps(create_status), 201)
@@ -136,7 +135,15 @@ def fetch_company_permission_route(current_user):
 @token_required
 def create_company_roles_route(current_user):
     json_data = request.json
-    create_status = add_company_roles_route(json_data)
+    create_status = add_company_roles(json_data)
+    
+    return make_response(json.dumps(create_status), 201)
+
+@blu_company.route('/companyroles', methods=["GET"])
+@cross_origin()
+@token_required
+def fetch_company_roles_route(current_user):
+    create_status = fetch_company_roles()
     
     return make_response(json.dumps(create_status), 201)
 
@@ -145,6 +152,34 @@ def create_company_roles_route(current_user):
 @token_required
 def edit_company_roles_route(current_user):
     json_data = request.json
-    create_status = edit_company_roles_route(json_data)
+    create_status = edit_company_roles(json_data)
+    
+    return make_response(json.dumps(create_status), 201)
+
+
+@blu_company.route('/permissionroles', methods=["POST"])
+@cross_origin()
+@token_required
+def add_permission_roles_route(current_user):
+    json_data = request.json
+    create_status = add_permission_roles(json_data)
+    
+    return make_response(json.dumps(create_status), 201)
+
+@blu_company.route('/permissionroles', methods=["EDIT"])
+@cross_origin()
+@token_required
+def edit_permission_roles_route(current_user):
+    json_data = request.json
+    create_status = edit_permission_roles(json_data)
+    
+    return make_response(json.dumps(create_status), 201)
+
+@blu_company.route('/usersroles', methods=["POST"])
+@cross_origin()
+@token_required
+def add_users_roles_route(current_user):
+    json_data = request.json
+    create_status = add_users_roles(json_data)
     
     return make_response(json.dumps(create_status), 201)

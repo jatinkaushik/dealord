@@ -12,3 +12,4 @@ from .general_data import *
 from .company import *
 from .customers import *
 from .vendors import *
+from .items import *
