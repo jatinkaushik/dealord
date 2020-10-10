@@ -181,7 +181,9 @@ def fetch_all_company_info(company_id):
 
 def add_company_permission(json_data):
     try:
-        add_permission = CompanyRolePermissions(name = json_data['name'],permission_name = json_data['permission_name'],description = json_data['description'])
+        add_permission = CompanyRolePermissions(name = json_data['name'],
+            permission_name = json_data['permission_name'],
+            description = json_data['description'])
         db.session.add(add_permission)
         db.session.commit()
         return "done"
