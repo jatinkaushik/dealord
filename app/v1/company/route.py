@@ -180,6 +180,6 @@ def edit_permission_roles_route(current_user):
 @token_required
 def add_users_roles_route(current_user):
     json_data = request.json
-    create_status = add_users_roles(json_data)
+    create_status = add_users_roles(json_data) 
     
     return make_response(json.dumps(create_status), 201)

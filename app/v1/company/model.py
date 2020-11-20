@@ -13,7 +13,7 @@ class CompanyInfo(db.Model):
     gstin_no = db.Column(db.String(100))
     cin_no = db.Column(db.String(100))
     website = db.Column(db.String(100))
-    email = db.Column(db.String(30))
+    email = db.Column(db.String(30)) 
     phone_no = db.Column(db.String(20))
     fax = db.Column(db.String(30))
 
